@@ -6,7 +6,7 @@ import { Storage } from '@ionic/storage';
  */
 @Injectable()
 export class Settings {
-  private SETTINGS_KEY: string = '_settings';
+  private SETTINGS_KEY: string = 'user';
 
   settings: any;
 
@@ -47,6 +47,7 @@ export class Settings {
   }
 
   setValue(key: string, value: any) {
+    console.log(this._defaults);
     this.settings[key] = value;
     return this.storage.set(this.SETTINGS_KEY, this.settings);
   }

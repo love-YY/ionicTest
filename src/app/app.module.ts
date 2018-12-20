@@ -48,7 +48,12 @@ export function provideSettings(storage: Storage) {
         deps: [HttpClient]
       }
     }),
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp,{
+      mode:'ios',
+      iconMode:'ios',
+      backButtonText:'',
+      tabsHideOnSubPages: 'true'
+    }),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
