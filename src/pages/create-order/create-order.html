@@ -1,0 +1,138 @@
+<!--
+  Generated template for the CreateOrderPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>新建订单</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-buttons text-center>
+            <button ion-button>
+              <ion-icon name="checkbox-outline"></ion-icon>提交
+            </button>
+          </ion-buttons>
+        </ion-col>
+        <ion-col>
+          <ion-buttons text-center>
+            <button ion-button (click)="saveOrder()">
+              <ion-icon name="cloud-download"></ion-icon>保存
+            </button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <form [formGroup]="createForm">
+    <ion-list>
+      <ion-item>
+        <ion-label>订单类型</ion-label>
+        <ion-select formControlName="orderType" okText="确定" cancelText="取消">
+          <ion-option value="xidi">洗涤</ion-option>
+          <ion-option value="miejun">灭菌</ion-option>
+          <ion-option value="zulin">租赁</ion-option>
+        </ion-select>
+      </ion-item>
+      <button ion-item>
+        <ion-label>售达方</ion-label>
+        <ion-input placeholder="Text Input" formControlName="salePartyName"></ion-input>
+      </button>
+      <button ion-item>
+        <ion-label>送达方</ion-label>
+        <ion-input placeholder="Text Input" formControlName="shiptoPartyName"></ion-input>
+      </button>
+      <button ion-item>
+        <ion-label>付款方</ion-label>
+        <ion-input placeholder="Text Input" formControlName="payerName"></ion-input>
+      </button>
+      <button ion-item>
+        <ion-label>开票方</ion-label>
+        <ion-input placeholder="Text Input" formControlName="billtoPartyName"></ion-input>
+      </button>
+      <button ion-item>
+        <ion-label required>业务员</ion-label>
+        <ion-input placeholder="Text Input" formControlName="salesmanName"></ion-input>
+      </button>
+      <ion-item>
+        <ion-label>备注</ion-label>
+        <ion-textarea></ion-textarea>
+      </ion-item>
+      <button ion-item>
+        <ion-label required>销售组织</ion-label>
+        <ion-input placeholder="Text Input" formControlName="companyName"></ion-input>
+      </button>
+      <button ion-item>
+        <ion-label required>分销渠道</ion-label>
+        <ion-input placeholder="Text Input" formControlName="distrChannelName"></ion-input>
+      </button>
+      <button ion-item>
+        <ion-label required>事业部</ion-label>
+        <ion-input placeholder="Text Input" formControlName="busiUnitName"></ion-input>
+      </button>
+      <button ion-item>
+        <ion-label required>销售大区</ion-label>
+        <ion-input placeholder="Text Input" formControlName="saleAreaName"></ion-input>
+      </button>
+    </ion-list>
+  </form>
+  <ion-list>
+    <ion-list-header>订单明细</ion-list-header>
+    <ion-card *ngFor="let detail of orderDetail;let i = index">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <p>{{detail.goodsDesc}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-6>
+              <span class="code">编码</span>
+              <span>{{detail.goodsCode}}</span>
+            </ion-col>
+            <ion-col col-6>
+              <span class="asscode">助记码</span>
+              <span>{{detail.assistantCode}}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-8 offset-4>
+              <ion-row>
+                <ion-col col-3 class="detail-num">
+                  <p style="height: 100%;">数量</p>
+                </ion-col>
+                <ion-col col-3>
+                  <button class="numBtn" ion-button small icon-only round [disabled]="detail.orderNum<=1" (click)="detailNumMinus(detail)">
+                    <ion-icon name="remove"></ion-icon>
+                  </button>
+                </ion-col>
+                <ion-col col-3>
+                  <input style="width: 100%;" type="number" [(ngModel)]="detail.orderNum">
+                </ion-col>
+                <ion-col col-3>
+                  <button class="numBtn" ion-button small icon-only round (click)="detailNumAdd(detail)">
+                    <ion-icon name="add"></ion-icon>
+                  </button>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+</ion-content>
+<ion-footer>
+  1233
+</ion-footer>
