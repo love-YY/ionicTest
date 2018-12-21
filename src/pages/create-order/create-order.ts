@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,ModalController } from 'ionic-angular';
 import {FormGroup,FormBuilder,Validators} from "@angular/forms";
 import {Api} from "../../providers";
 
@@ -27,15 +27,16 @@ export class CreateOrderPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public fb:FormBuilder,
-    public api:Api
+    public api:Api,
+    private modalCtrl:ModalController
   ) {
     this.createForm = fb.group({
-      orderType:['',Validators.required],
+      orderType:[''],
       salePartyName:[{value:'',disabled:true}],
       shiptoPartyName:[{value:'',disabled:true}],
       payerName:[{value:'',disabled:true}],
       billtoPartyName:[{value:'',disabled:true}],
-      salesmanName:[{value:'',disabled:true}],
+      salesmanName:[{value:"",disabled:false},Validators.required],
       memo:[''],
       companyName:[{value:'',disabled:true}],
       distrChannelName:[{value:'',disabled:true}],
@@ -48,9 +49,12 @@ export class CreateOrderPage {
 
 
   ionViewDidLoad() {
+    console.log(this.createForm)
     console.log('ionViewDidLoad CreateOrderPage');
   }
   saveOrder(){
+    console.log(this.createForm);
+    this.createForm.patchValue({salesmanName:"xixi"})
     console.log(this.orderDetail);
     this.api.post('order-platform/app/order/placeorder/addorder',{},{withCredentials:true,headers:{'Content-Type':'application/json'}})
       .subscribe((res:any)=>{
@@ -58,6 +62,13 @@ export class CreateOrderPage {
       },(err)=>{
         console.log(err);
       })
+  }
+  chooseModal(){
+    let chooseModal = this.modalCtrl.create('ChooseModalPage',{title:'123'});
+    chooseModal.onDidDismiss((item)=>{
+      console.log(item);
+    })
+    chooseModal.present();
   }
   detailNumAdd(detail:any){
     detail.orderNum ++;

@@ -17,6 +17,16 @@ page-create-order {
             padding-top: .5rem;
           }
         }
+        .detail-num-input{
+
+          input{
+            padding-top: .5rem;
+            text-align: center;
+          }
+        }
       }
     }
+  .error{
+    background: #ff0;
+  }
 }
