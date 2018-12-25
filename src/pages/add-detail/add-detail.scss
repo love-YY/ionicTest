@@ -1,0 +1,29 @@
+page-add-detail {
+  .card{
+    .card-content{
+      .code{
+        background: #ff0;
+      }
+      .asscode{
+        background: #ff0;
+      }
+      .numBtn{
+        margin: 0;
+        border-radius: 50%;
+      }
+      .detail-num{
+        p{
+          height: 100%;
+          padding-top: .5rem;
+        }
+      }
+      .detail-num-input{
+
+        input{
+          padding-top: .5rem;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

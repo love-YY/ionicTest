@@ -6,7 +6,7 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>新建订单</ion-title>
+    <ion-title>新建订单{{user}}</ion-title>
   </ion-navbar>
   <ion-toolbar>
     <ion-grid>
@@ -43,27 +43,42 @@
           <ion-option value="zulin">租赁</ion-option>
         </ion-select>
       </ion-item>
-      <button ion-item (click)="chooseModal()">
+      <ion-item>
         <ion-label>售达方</ion-label>
         <ion-input placeholder="Text Input" formControlName="salePartyName"></ion-input>
-      </button>
-      <button ion-item>
+        <button ion-button  icon-only clear item-end (click)="chooseModal()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </ion-item>
+      <ion-item>
         <ion-label>送达方</ion-label>
         <ion-input placeholder="Text Input" formControlName="shiptoPartyName"></ion-input>
-      </button>
-      <button ion-item>
+        <button ion-button  icon-only clear item-end (click)="chooseModal()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </ion-item>
+      <ion-item>
         <ion-label>付款方</ion-label>
         <ion-input placeholder="Text Input" formControlName="payerName"></ion-input>
-      </button>
-      <button ion-item>
+        <button ion-button  icon-only clear item-end (click)="chooseModal()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </ion-item>
+      <ion-item>
         <ion-label>开票方</ion-label>
         <ion-input placeholder="Text Input" formControlName="billtoPartyName"></ion-input>
-      </button>
-      <button ion-item>
+        <button ion-button  icon-only clear item-end (click)="chooseModal()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </ion-item>
+      <ion-item>
         <ion-label>业务员</ion-label>
         <ion-input placeholder="Text Input" [formControlName]="'salesmanName'"></ion-input>
         <ion-note item-end>123</ion-note>
-      </button>
+        <button ion-button  icon-only clear item-end (click)="chooseModal()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </ion-item>
       <ion-item>
         <ion-label>备注</ion-label>
         <ion-textarea></ion-textarea>
@@ -139,7 +154,7 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons end>
-      <button ion-button>添加明细</button>
+      <button ion-button (click)="addDetail()">添加明细</button>
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>

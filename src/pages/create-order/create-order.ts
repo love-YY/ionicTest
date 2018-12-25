@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,ModalController } from 'ionic-angular';
 import {FormGroup,FormBuilder,Validators} from "@angular/forms";
 import {Api} from "../../providers";
+import {Storage} from "@ionic/storage";
 
 /**
  * Generated class for the CreateOrderPage page.
@@ -17,6 +18,7 @@ import {Api} from "../../providers";
 })
 export class CreateOrderPage {
   createForm:FormGroup;
+  user:any;
   orderDetail:any=[
     {goodsDesc:'一曲',goodsCode:123,assistantCode:456,orderNum:5},
     {goodsDesc:'一曲',goodsCode:123,assistantCode:456,orderNum:5},
@@ -28,7 +30,8 @@ export class CreateOrderPage {
     public navParams: NavParams,
     public fb:FormBuilder,
     public api:Api,
-    private modalCtrl:ModalController
+    private modalCtrl:ModalController,
+    public storage:Storage
   ) {
     this.createForm = fb.group({
       orderType:[''],
@@ -36,7 +39,7 @@ export class CreateOrderPage {
       shiptoPartyName:[{value:'',disabled:true}],
       payerName:[{value:'',disabled:true}],
       billtoPartyName:[{value:'',disabled:true}],
-      salesmanName:[{value:"",disabled:false},Validators.required],
+      salesmanName:[{value:"",disabled:true},Validators.required],
       memo:[''],
       companyName:[{value:'',disabled:true}],
       distrChannelName:[{value:'',disabled:true}],
@@ -51,6 +54,9 @@ export class CreateOrderPage {
   ionViewDidLoad() {
     console.log(this.createForm)
     console.log('ionViewDidLoad CreateOrderPage');
+    this.storage.get('user').then((data)=>{
+      this.user = data.userId;
+    })
   }
   saveOrder(){
     console.log(this.createForm);
@@ -76,6 +82,11 @@ export class CreateOrderPage {
   }
   detailNumMinus(detail:any){
     detail.orderNum --;
+  }
+  /*
+  * 添加明细*/
+  addDetail(){
+    this.navCtrl.push('AddDetailPage')
   }
 
 }

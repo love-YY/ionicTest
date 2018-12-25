@@ -1,0 +1,73 @@
+<!--
+  Generated template for the ShopModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="closeShopModal()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button>
+        <ion-icon name="trash"></ion-icon>清空所有产品
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item-group>
+      <ion-card *ngFor="let detail of shopPro;let i = index">
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <p>{{detail.goodsDesc}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-6>
+                <span class="code">编码</span>
+                <span>{{detail.goodsCode}}</span>
+              </ion-col>
+              <ion-col col-6>
+                <span class="asscode">助记码</span>
+                <span>{{detail.assistantCode}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-7 offset-5>
+                <ion-row>
+                  <ion-col col-3 class="detail-num">
+                    <p style="height: 100%;">数量</p>
+                  </ion-col>
+                  <ion-col col-3 text-center>
+                    <button class="numBtn" ion-button small icon-only round [disabled]="detail.orderNum<=1" (click)="detailNumMinus(detail)">
+                      <ion-icon name="remove"></ion-icon>
+                    </button>
+                  </ion-col>
+                  <ion-col col-3 class="detail-num-input">
+                    <input style="width: 100%;" type="number" [(ngModel)]="detail.orderNum">
+                  </ion-col>
+                  <ion-col col-3 text-center>
+                    <button class="numBtn" ion-button small icon-only round (click)="detailNumAdd(detail)">
+                      <ion-icon name="add"></ion-icon>
+                    </button>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item-group>
+  </ion-list>
+</ion-content>
