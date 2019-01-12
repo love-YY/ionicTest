@@ -3,11 +3,11 @@
   <ion-navbar>
     <!--<ion-title>{{ 'LIST_MASTER_TITLE' | translate }}</ion-title>-->
     <ion-title>我的订单</ion-title>
-    <ion-buttons end>
+    <!--<ion-buttons end>
       <button ion-button icon-only (click)="addItem()">
         <ion-icon name="add"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons>-->
   </ion-navbar>
 
 </ion-header>
@@ -15,21 +15,21 @@
 <ion-content>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let item of currentItems">
-      <button ion-item>
+    <!--<ion-item-sliding *ngFor="let item of currentItems">-->
+      <button ion-item *ngFor="let item of currentItems" (click)="openItem(item.orderStatus)">
         <ion-avatar item-start>
           <img [src]="item.profilePic" />
         </ion-avatar>
         <h2>{{item.name}}</h2>
-        <p>{{item.about}}</p>
+        <p *ngIf="item.about">{{item.about}}</p>
         <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
       </button>
 
-      <ion-item-options>
-        <button ion-button color="danger" (click)="deleteItem(item)">
+      <!--<ion-item-options>
+        <button ion-button color="danger">
           {{ 'DELETE_BUTTON' | translate }}
         </button>
-      </ion-item-options>
-    </ion-item-sliding>
+      </ion-item-options>-->
+    <!--</ion-item-sliding>-->
   </ion-list>
 </ion-content>

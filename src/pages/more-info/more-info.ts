@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {ChangePasswordPage} from "../change-password/change-password";
 
 /**
  * Generated class for the MoreInfoPage page.
@@ -15,11 +16,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MoreInfoPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams
+  ) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MoreInfoPage');
+  }
+  openItem(){
+    console.log('change password');
+    this.navCtrl.push('ChangePasswordPage');
   }
 
 }

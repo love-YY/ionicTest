@@ -92,4 +92,7 @@ export class SettingsPage {
   ngOnChanges() {
     console.log('Ng All Changes');
   }
+  openItem(){
+    this.navCtrl.push('SearchRefundPage',{})
+  }
 }

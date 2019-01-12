@@ -1,0 +1,38 @@
+<!--
+  Generated template for the ChooseDeptModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>科室选择</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="selectCancel()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-item>
+      <ion-label>科室名称</ion-label>
+      <ion-input type="text" [(ngModel)]="customerDeptName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>科室编码</ion-label>
+      <ion-input type="text" [(ngModel)]="customerDeptCode"></ion-input>
+    </ion-item>
+    <button ion-button block (click)="search()">搜索</button>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let dept of depts">
+      <p>{{dept.customerDeptName}}</p>
+      <p><span>编码</span>{{dept.customerDeptCode}}</p>
+      <button ion-button icon-only round clear item-end (click)="add(dept)">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+</ion-content>

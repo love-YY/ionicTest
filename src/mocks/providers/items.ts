@@ -16,39 +16,34 @@ export class Items {
   constructor() {
     let items = [
       {
-        "name": "Burt Bear",
+        "name": "暂存订单",
         "profilePic": "assets/img/speakers/bear.jpg",
-        "about": "Burt is a Bear."
+        "orderStatus":"N"
       },
       {
-        "name": "Charlie Cheetah",
-        "profilePic": "assets/img/speakers/cheetah.jpg",
-        "about": "Charlie is a Cheetah."
-      },
-      {
-        "name": "Donald Duck",
+        "name": "接收中订单",
         "profilePic": "assets/img/speakers/duck.jpg",
-        "about": "Donald is a Duck."
+        "orderStatus":'R'
       },
       {
-        "name": "Eva Eagle",
+        "name": "已下订单",
+        "profilePic": "assets/img/speakers/cheetah.jpg",
+        "orderStatus":'S'
+      },
+      {
+        "name": "待发货确认订单",
         "profilePic": "assets/img/speakers/eagle.jpg",
-        "about": "Eva is an Eagle."
+        "orderStatus":"D"
       },
       {
-        "name": "Ellie Elephant",
+        "name": "全部销售订单",
         "profilePic": "assets/img/speakers/elephant.jpg",
-        "about": "Ellie is an Elephant."
+        "orderStatus":'all'
       },
       {
-        "name": "Molly Mouse",
+        "name": "全部销退订单",
         "profilePic": "assets/img/speakers/mouse.jpg",
-        "about": "Molly is a Mouse."
-      },
-      {
-        "name": "Paul Puppy",
-        "profilePic": "assets/img/speakers/puppy.jpg",
-        "about": "Paul is a Puppy."
+        "orderStatus":'B'
       }
     ];
 

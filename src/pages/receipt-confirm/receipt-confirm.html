@@ -1,0 +1,236 @@
+<!--
+  Generated template for the ReceiptConfirmPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>收货确认</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="selectCancel()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content >
+  <ion-segment [(ngModel)]="pet" >
+    <ion-segment-button value="orderDetail" >
+      订单物料
+    </ion-segment-button>
+    <ion-segment-button value="orderTitle">
+      订单抬头
+    </ion-segment-button>
+  </ion-segment>
+  <!--<ion-tabs tabsPlacement="top">
+    <ion-tab [tabTitle]="'订单物料'" [root]="'ReceiptOrderDetailPage'" [rootParams]="{data:123}"></ion-tab>
+    <ion-tab [tabTitle]="'订单抬头'" [root]="'ReceiptOrderTitlePage'"></ion-tab>
+  </ion-tabs>-->
+  <div [ngSwitch]="pet">
+    <div *ngSwitchCase="'orderDetail'">
+      <ion-card *ngFor="let detail of receiptDetail">
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <p>{{detail.goodsDesc}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-6>
+                <span class="code">编码</span>
+                <span>{{detail.goodsCode | code}}</span>
+              </ion-col>
+              <ion-col col-6>
+                <span class="asscode">助记码</span>
+                <span>{{detail.assistantCode}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-6>
+                <span class="code">下单数</span>
+                <span>{{detail.orderNum}}</span>
+              </ion-col>
+              <ion-col col-6>
+                <span class="asscode">发货数</span>
+                <span>{{detail.sapDeliveryNum}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="receipt-btn-row">
+              <ion-col col-6 col-md-6 style="padding: 0;">
+                <ion-row>
+                  <ion-col col-4 class="detail-num">
+                    <p style="height: 100%;font-size: 1.2rem">收货数</p>
+                  </ion-col>
+                  <ion-col text-center>
+                    <button class="numBtn" ion-button clear icon-only round (click)="receiptNumMinus(detail)" [disabled]="detail.recDeliveryNum<=1">
+                      <ion-icon class="my_icon" name="remove-circle"></ion-icon>
+                    </button>
+                  </ion-col>
+                  <ion-col class="detail-num-input">
+                    <ion-input style="width: 100%;" type="number" [(ngModel)]="detail.recDeliveryNum"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <button class="numBtn my_addbtn" ion-button icon-only round clear (click)="receiptNumAdd(detail)">
+                      <ion-icon class="my_icon" name="add-circle"></ion-icon>
+                    </button>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col col-6 col-md-6 style="padding: 0;">
+                <ion-row>
+                  <ion-col col-4 class="detail-num">
+                    <p style="height: 100%;font-size: 1.2rem">退回数</p>
+                  </ion-col>
+                  <ion-col text-center>
+                    <button class="numBtn" ion-button clear icon-only round (click)="backNumMinus(detail)" [disabled]="detail.unRecNum<=1">
+                      <ion-icon class="my_icon" name="remove-circle"></ion-icon>
+                    </button>
+                  </ion-col>
+                  <ion-col class="detail-num-input">
+                    <ion-input style="width: 100%;" type="number" [(ngModel)]="detail.unRecNum"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <button class="numBtn my_addbtn" ion-button icon-only round clear (click)="backNumAdd(detail)">
+                      <ion-icon class="my_icon" name="add-circle"></ion-icon>
+                    </button>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <!--<span class="code" style="display: inline-block">备注</span>-->
+              <ion-label col-2 style="padding: 0">备注</ion-label>
+              <ion-textarea class="receipt-memo" [(ngModel)]="detail.recDeliveryMemo"></ion-textarea>
+            </ion-row>
+            <ion-row>
+              <ion-col text-end>
+                <button ion-button small color="danger" (click)="receiptSingleDetail(detail)">收货</button>
+              </ion-col>
+            </ion-row>
+            <!--<ion-row>
+              <ion-col col-7 offset-5>
+                <ion-row *ngIf="detail.orderNum||detail.orderNum=='';else addBlock">
+                  <ion-col col-3 class="detail-num">
+                    <p style="height: 100%;">数量</p>
+                  </ion-col>
+                  <ion-col col-3 text-center>
+                    <button class="numBtn" ion-button clear icon-only round (click)="detailNumMinus(detail)">
+                      <ion-icon class="my_icon" name="remove-circle"></ion-icon>
+                    </button>
+                  </ion-col>
+                  <ion-col col-3 class="detail-num-input">
+                    &lt;!&ndash; <input style="width: 100%;" type="number" (blur)="orderNumChange($event,detail)" [(ngModel)]="detail.orderNum">&ndash;&gt;
+                    <ion-input style="width: 100%;" type="number" (ionBlur)="orderNumChange($event,detail)"></ion-input>
+                  </ion-col>
+                  <ion-col col-3>
+                    <button class="numBtn my_addbtn" ion-button icon-only round clear (click)="detailNumAdd(detail)">
+                      <ion-icon class="my_icon" name="add-circle"></ion-icon>
+                    </button>
+                  </ion-col>
+                </ion-row>
+                <ng-template #addBlock>
+                  <ion-row *ngIf="!detail.orderNum">
+                    <ion-col col-3 text-center offset-9>
+                      <button class="numBtn" ion-button clear icon-only round (click)="addShop(detail)">
+                        <ion-icon class="my_icon" name="add-circle"></ion-icon>
+                      </button>
+                    </ion-col>
+                  </ion-row>
+                </ng-template>
+              </ion-col>
+            </ion-row>-->
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div *ngSwitchCase="'orderTitle'">
+      <form [formGroup]="receiptForm">
+        <ion-list>
+          <ion-item>
+            <ion-label>订单类型</ion-label>
+            <ion-select formControlName="orderType" okText="确定" cancelText="取消">
+              <ion-option value="xidi">洗涤</ion-option>
+              <ion-option value="miejun">灭菌</ion-option>
+              <ion-option value="zulin">租赁</ion-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>客户</ion-label>
+            <ion-input placeholder="Text Input" formControlName="customerName"></ion-input>
+            <!--<button ion-button  icon-only clear item-end (click)="chooseModal()">
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>-->
+          </ion-item>
+          <ion-item>
+            <ion-label>科室</ion-label>
+            <ion-input placeholder="Text Input" formControlName="customerDeptName"></ion-input>
+            <!--<button ion-button  icon-only clear item-end (click)="chooseDeptModal()">
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>-->
+          </ion-item>
+          <!--<ion-item>
+            <ion-label>付款方</ion-label>
+            <ion-input placeholder="Text Input" formControlName="payerName"></ion-input>
+            <button ion-button  icon-only clear item-end (click)="chooseModal()">
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+          </ion-item>
+          <ion-item>
+            <ion-label>开票方</ion-label>
+            <ion-input placeholder="Text Input" formControlName="billtoPartyName"></ion-input>
+            <button ion-button  icon-only clear item-end (click)="chooseModal()">
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+          </ion-item>-->
+          <ion-item>
+            <ion-label>业务员</ion-label>
+            <ion-input placeholder="Text Input" [formControlName]="'salesmanName'"></ion-input>
+            <!--<ion-note item-end>123</ion-note>-->
+            <!--<button ion-button  icon-only clear item-end (click)="chooseCustomerModal()">
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>-->
+          </ion-item>
+          <ion-item>
+            <ion-label>备注</ion-label>
+            <ion-textarea placeholder="memo" [formControlName]="'memo'"></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-label required>销售组织</ion-label>
+            <ion-input placeholder="销售组织" formControlName="companyName"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label required>分销渠道</ion-label>
+            <ion-input placeholder="分销渠道" formControlName="distrChannelName"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label required>事业部</ion-label>
+            <ion-input placeholder="分销渠道" formControlName="busiUnitName"></ion-input>
+          </ion-item>
+          <!--<ion-item>
+            <ion-label required>销售大区</ion-label>
+            <ion-input placeholder="分销渠道" formControlName="saleAreaName"></ion-input>
+          </ion-item>-->
+          <ion-item>
+            <ion-label>有退回物料</ion-label>
+            <ion-checkbox item-end [formControlName]="'isCancel'"></ion-checkbox>
+          </ion-item>
+        </ion-list>
+      </form>
+    </div>
+  </div>
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons text-center>
+      <button ion-button color="dark">
+        <ion-icon name="md-checkmark"></ion-icon>收完
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

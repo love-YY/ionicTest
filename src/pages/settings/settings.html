@@ -8,7 +8,7 @@
 
 <ion-content>
 
-  <form [formGroup]="form" *ngIf="settingsReady">
+  <!--<form [formGroup]="form" *ngIf="settingsReady">
     <ion-list *ngIf="page == 'main'">
       <ion-item>
         <ion-label>{{ 'SETTINGS_OPTION1' | translate }}</ion-label>
@@ -40,6 +40,32 @@
         <ion-input formControlName="option4"></ion-input>
       </ion-item>
     </ion-list>
-  </form>
+  </form>-->
+  <ion-list>
+    <button ion-item (click)="openItem()" >
+      <ion-avatar item-start>
+        <img [src]="'assets/img/speakers/cheetah.jpg'" />
+      </ion-avatar>
+      <h2>退代洗订单</h2>
+      <!--<ion-note item-end>123</ion-note>-->
+      <!--<ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>-->
+    </button>
+    <button ion-item (click)="openItem()" >
+      <ion-avatar item-start>
+        <img [src]="'assets/img/speakers/cheetah.jpg'" />
+      </ion-avatar>
+      <h2>退灭菌订单</h2>
+      <!--<ion-note item-end>123</ion-note>-->
+      <!--<ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>-->
+    </button>
+    <button ion-item (click)="openItem()" >
+      <ion-avatar item-start>
+        <img [src]="'assets/img/speakers/cheetah.jpg'" />
+      </ion-avatar>
+      <h2>退租赁订单</h2>
+      <!--<ion-note item-end>123</ion-note>-->
+      <!--<ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>-->
+    </button>
+  </ion-list>
 
 </ion-content>

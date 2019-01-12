@@ -1,0 +1,128 @@
+<!--
+  Generated template for the SearchRefundPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!--<ion-menu [content]="content" side="right">
+  <ion-content >
+    <ion-list>
+      <ion-item menuClose detail-none>Close Menu</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>-->
+<ion-header #header>
+
+  <ion-navbar>
+    <ion-title>查询可退订单</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar #toolbar class="my-toolbar" [@openClose]="showToolBar ? 'open' : 'closed'"
+  (@openClose.done)="toolbarDone($event)">
+    <ion-item>
+      <ion-label>交货单号</ion-label>
+      <ion-input type="text" clearInput="true"></ion-input>
+    </ion-item>
+    <ion-grid class="my_refund_s_grid">
+      <ion-row class="my_refund_s_row">
+        <ion-col col-6 ion-item class="my_refund_s_col">
+          <ion-label>日期</ion-label>
+          <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+        </ion-col>
+        <ion-col col-6 ion-item class="my_refund_s_col">
+          <ion-label>至</ion-label>
+          <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-item>
+      <ion-label>客户</ion-label>
+      <ion-input type="text" clearInput="true" ></ion-input>
+    </ion-item>
+    <button ion-button block  (click)="searchRefund()">搜索</button>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-card *ngFor="let refund of refundData;">
+    <ion-card-header class="my_cards_header">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6>
+            <p>交货单号:{{refund.returnNo}}</p>
+          </ion-col>
+          <ion-col col-6>
+            <p>销售单号:{{refund.initialOrderNo}}</p>
+          </ion-col>
+          <!--<ion-col col-1 text-end style="padding: 0;">
+            <button style="height: 1.5rem;margin: 0;" ion-button icon-only clear item-end>
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+          </ion-col>-->
+        </ion-row>
+      </ion-grid>
+    </ion-card-header>
+    <ion-card-content class="my_cards_content">
+      <ion-grid>
+        <ion-row style="color: #ccc;">
+          <ion-col col-4>
+            下单人
+          </ion-col>
+          <ion-col col-5>
+            日期
+          </ion-col>
+          <ion-col col-3>
+            类型
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-4>
+            {{refund.returnPersonName}}
+          </ion-col>
+          <ion-col col-5>
+            {{refund.createDate}}
+          </ion-col>
+          <ion-col col-3>
+            {{refund.orderType}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            送达方:{{refund.shiptoPartyName}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            售达方:{{refund.salePartyName}}
+          </ion-col>
+        </ion-row>
+        <ion-row class="my_refund_row_btn">
+          <!--<ion-col text-end *ngSwitchCase="'save'">
+            <button ion-button small color="danger" (click)="deleteOrder()">删除</button>
+            <button ion-button small color="danger" (click)="editOrder()">编辑</button>
+            <button ion-button small color="danger" (click)="submitOrder()">提交</button>
+          </ion-col>
+          <ion-col text-end *ngSwitchCase="'submit'">
+            <button ion-button small color="danger" (click)="cancelOrder()">作废</button>
+          </ion-col>
+          <ion-col text-end *ngSwitchCase="'back'">
+            <button ion-button small color="danger" (click)="checkOriginalOrder()">查看原销售单</button>
+          </ion-col>
+          <ion-col text-end *ngSwitchCase="'shipped'">
+            <button ion-button small color="danger" (click)="receiptConfirm()">收货确认</button>
+          </ion-col>-->
+          <ion-col text-end>
+            <button ion-button small color="danger" (click)="chaneToBack()">转退</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

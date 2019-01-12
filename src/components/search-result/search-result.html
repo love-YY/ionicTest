@@ -1,0 +1,85 @@
+<!-- Generated template for the SearchResultComponent component -->
+<ion-card *ngFor="let srch of dataArr">
+  <ion-card-header class="my_cards_header">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-6>
+          {{srch.orderNo}}
+        </ion-col>
+        <ion-col col-4 offset-1 text-end>
+          状态:{{srch.orderStatus|status}}
+        </ion-col>
+        <ion-col col-1 text-end style="padding: 0;">
+          <button style="height: 1.5rem;margin: 0;" ion-button icon-only clear item-end (click)="checkOrder(srch)">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-header>
+  <ion-card-content class="my_cards_content">
+    <ion-grid>
+      <ion-row style="color: #ccc;">
+        <ion-col col-4>
+          下单人
+        </ion-col>
+        <ion-col col-5>
+          日期
+        </ion-col>
+        <ion-col col-3>
+          类型
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4>
+          {{srch.createUserName}}
+        </ion-col>
+        <ion-col col-5>
+          {{srch.createDate|date:'yyyy-MM-dd'}}
+        </ion-col>
+        <ion-col col-3>
+          {{srch.orderType|orderType}}
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="srch.orderStatus=='B'">
+        <ion-col>
+          销售单号:
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          科室:{{srch.customerDeptName}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          客户:{{srch.customerName}}
+        </ion-col>
+      </ion-row>
+      <ion-row [ngSwitch]="srch.orderStatus">
+        <ion-col text-end *ngSwitchCase="'N'">
+          <button ion-button small color="danger" (click)="deleteOrder(srch)">删除</button>
+          <button ion-button small color="danger" (click)="editOrder(srch)">编辑</button>
+          <button ion-button small color="danger" (click)="submitOrder()">提交</button>
+        </ion-col>
+        <ion-col text-end *ngSwitchCase="'R'">
+          <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
+        </ion-col>
+        <ion-col text-end *ngSwitchCase="'S'">
+          <button ion-button small color="danger" (click)="cancelOrder()">作废</button>
+        </ion-col>
+        <ion-col text-end *ngSwitchCase="'B'">
+          <button ion-button small color="danger" (click)="checkOriginalOrder()">查看原销售单</button>
+        </ion-col>
+        <ion-col text-end *ngSwitchCase="'D'">
+          <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col text-end>
+          <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ion-card>

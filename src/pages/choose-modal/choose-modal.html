@@ -6,7 +6,7 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>选择</ion-title>
+    <ion-title>客户选择</ion-title>
     <ion-buttons start>
       <button ion-button icon-only (click)="selectCancel()">
         <ion-icon name="arrow-back"></ion-icon>
@@ -15,23 +15,23 @@
   </ion-navbar>
   <ion-toolbar>
     <ion-item>
-      <ion-label>售达方</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-label>客户名称</ion-label>
+      <ion-input type="text" [(ngModel)]="customerName"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>编码</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-label>客户编码</ion-label>
+      <ion-input type="text" [(ngModel)]="customerCode"></ion-input>
     </ion-item>
     <button ion-button block (click)="search()">搜索</button>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-item>
-      <p>SS售达方</p>
-      <p><span>编码</span>SSSSSXXXS</p>
-      <button ion-button small icon-only round item-end (click)="add()">
-        <ion-icon name="add"></ion-icon>
+    <ion-item *ngFor="let goodsOwner of goodsOwners">
+      <p>{{goodsOwner.customerName}}</p>
+      <p><span>编码</span>{{goodsOwner.customerCode}}</p>
+      <button ion-button icon-only clear item-end (click)="add(goodsOwner)">
+        <ion-icon name="add-circle"></ion-icon>
       </button>
     </ion-item>
   </ion-list>

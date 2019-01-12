@@ -1,0 +1,40 @@
+page-refund-order {
+  .card{
+    .card-content{
+      padding: 0;
+      .code{
+        background: #ff0;
+      }
+      .asscode{
+        background: #ff0;
+      }
+      .numBtn{
+        margin: 0;
+        border-radius: 50%;
+        height: 2.1rem;
+        .my_icon{
+          padding: 0;
+        }
+      }
+      .detail-num{
+        p{
+          height: 100%;
+          padding-top: .5rem;
+        }
+      }
+      .detail-num-input{
+        ion-input{
+          input{
+            margin: 0;
+            padding-top: .5rem;
+            text-align: center;
+          }
+        }
+        input{
+          padding-top: .5rem;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

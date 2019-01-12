@@ -50,16 +50,16 @@
                     <p style="height: 100%;">数量</p>
                   </ion-col>
                   <ion-col col-3 text-center>
-                    <button class="numBtn" ion-button small icon-only round [disabled]="detail.orderNum<=1" (click)="detailNumMinus(detail)">
-                      <ion-icon name="remove"></ion-icon>
+                    <button class="numBtn" ion-button clear icon-only round (click)="detailNumMinus(detail)">
+                      <ion-icon class="my_icon" name="remove-circle"></ion-icon>
                     </button>
                   </ion-col>
                   <ion-col col-3 class="detail-num-input">
                     <input style="width: 100%;" type="number" [(ngModel)]="detail.orderNum">
                   </ion-col>
                   <ion-col col-3 text-center>
-                    <button class="numBtn" ion-button small icon-only round (click)="detailNumAdd(detail)">
-                      <ion-icon name="add"></ion-icon>
+                    <button class="numBtn" ion-button clear icon-only round (click)="detailNumAdd(detail)">
+                      <ion-icon class="my_icon" name="add-circle"></ion-icon>
                     </button>
                   </ion-col>
                 </ion-row>

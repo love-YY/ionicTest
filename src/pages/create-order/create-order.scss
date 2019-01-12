@@ -10,6 +10,10 @@ page-create-order {
         .numBtn{
           margin: 0;
           border-radius: 50%;
+          height: 2.1rem;
+          .my_icon{
+            padding: 0;
+          }
         }
         .detail-num{
           p{
@@ -18,7 +22,13 @@ page-create-order {
           }
         }
         .detail-num-input{
-
+          ion-input{
+            input{
+              margin: 0;
+              padding-top: .5rem;
+              text-align: center;
+            }
+          }
           input{
             padding-top: .5rem;
             text-align: center;

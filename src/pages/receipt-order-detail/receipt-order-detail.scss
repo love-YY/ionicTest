@@ -1,0 +1,56 @@
+page-receipt-order-detail {
+  .card{
+    .card-content{
+      padding: 0;
+      .code{
+        background: #ff0;
+      }
+      .asscode{
+        background: #ff0;
+      }
+      .numBtn{
+        margin: 0;
+        border-radius: 50%;
+        height: 2.1rem;
+        font-size: 1.2rem;
+        .my_icon{
+          padding: 0;
+        }
+        /*&.my_addbtn{
+          ion-icon{
+            padding-left: 0;
+          }
+        }*/
+      }
+      .detail-num{
+        p{
+          height: 100%;
+          padding-top: .5rem;
+        }
+      }
+      .detail-num-input{
+        ion-input{
+          input{
+            margin: 0;
+            padding-top: .5rem;
+            text-align: center;
+          }
+        }
+        /*input{
+          padding-top: .5rem;
+          text-align: center;
+        }*/
+      }
+      .receipt-btn-row{
+        ion-col{
+          padding: 0;
+        }
+      }
+      .receipt-memo{
+        textarea{
+          border: 1px solid #ccc;
+        }
+      }
+    }
+  }
+}

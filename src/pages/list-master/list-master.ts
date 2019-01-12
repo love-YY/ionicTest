@@ -46,9 +46,16 @@ export class ListMasterPage {
   /**
    * Navigate to the detail page for this item.
    */
-  openItem(item: Item) {
-    this.navCtrl.push('ItemDetailPage', {
+  openItem(orderStatus:any) {
+    /*this.navCtrl.push('ItemDetailPage', {
       item: item
-    });
+    });*/
+    /*if(orderStatus=='allRefund'||orderStatus=='allSale'){
+
+    }else{
+      this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus});
+    }*/
+    this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus});
+
   }
 }

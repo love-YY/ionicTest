@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,ViewController
+import { IonicPage, NavController, NavParams,ViewController,Events
 } from 'ionic-angular';
 
 /**
@@ -15,16 +15,15 @@ import { IonicPage, NavController, NavParams,ViewController
   templateUrl: 'shop-modal.html',
 })
 export class ShopModalPage {
-  shopPro:any=[
-    {goodsDesc:'一曲',goodsCode:123,assistantCode:456,orderNum:5},
-    {goodsDesc:'一曲',goodsCode:123,assistantCode:456,orderNum:5},
-    {goodsDesc:'一曲',goodsCode:123,assistantCode:456,orderNum:5}
-  ];
+  shopPro:any=[];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public viewCtrl:ViewController
+    public viewCtrl:ViewController,
+    public events:Events
   ) {
+    console.log(navParams.data);
+    this.shopPro = navParams.data.shopDetails;
   }
 
   ionViewDidLoad() {
@@ -32,6 +31,19 @@ export class ShopModalPage {
   }
   closeShopModal(){
     this.viewCtrl.dismiss();
+  }
+  detailNumMinus(detail){
+    detail.orderNum--;
+    this.events.publish('shopMinus',detail);
+    if(detail.orderNum<1){
+      this.shopPro = this.shopPro.filter(res=>res.goodsId !=detail.goodsId);
+      this.events.publish('shopDel',detail);
+    }
+  }
+  detailNumAdd(detail:any){
+    detail.orderNum++;
+    this.events.publish("shopAdd",detail);
+
   }
 
 }

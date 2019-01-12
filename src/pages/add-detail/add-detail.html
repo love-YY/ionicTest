@@ -8,19 +8,25 @@
 
   <ion-navbar>
     <ion-title>选择物料</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-  <ion-toolbar class="my-toolbar" *ngIf="hidenTool">
+  <ion-toolbar class="my-toolbar" *ngIf="hidenTool" [@openClose]="isOpen ? 'open' : 'closed'"
+               (@openClose.done)="toolbarDone($event)">
     <ion-item>
       <ion-label>物料名称</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" [(ngModel)]="goodsDesc"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>物料编码</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" [(ngModel)]="goodsCode"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>助记码</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" [(ngModel)]="assistantCode"></ion-input>
     </ion-item>
     <button ion-button block (click)="searchPro()">搜索</button>
   </ion-toolbar>
@@ -31,7 +37,7 @@
 <ion-content (ionScroll)="my_scroll($event)">
   <ion-list>
     <ion-item-group>
-      <ion-card *ngFor="let detail of selectProducts.detail;let i = index">
+      <ion-card *ngFor="let detail of selectPros;let i = index">
         <ion-card-content>
           <ion-grid>
             <ion-row>
@@ -42,7 +48,7 @@
             <ion-row>
               <ion-col col-6>
                 <span class="code">编码</span>
-                <span>{{detail.goodsCode}}</span>
+                <span>{{detail.goodsCode|code}}</span>
               </ion-col>
               <ion-col col-6>
                 <span class="asscode">助记码</span>
@@ -51,24 +57,34 @@
             </ion-row>
             <ion-row>
               <ion-col col-7 offset-5>
-                <ion-row>
+                <ion-row *ngIf="detail.orderNum||detail.orderNum=='';else addBlock">
                   <ion-col col-3 class="detail-num">
                     <p style="height: 100%;">数量</p>
                   </ion-col>
                   <ion-col col-3 text-center>
-                    <button class="numBtn" ion-button small icon-only round [disabled]="detail.orderNum<=1" (click)="detailNumMinus(detail)">
-                      <ion-icon name="remove"></ion-icon>
+                    <button class="numBtn" ion-button clear icon-only round (click)="detailNumMinus(detail)">
+                      <ion-icon class="my_icon" name="remove-circle"></ion-icon>
                     </button>
                   </ion-col>
                   <ion-col col-3 class="detail-num-input">
-                    <input style="width: 100%;" type="number" [(ngModel)]="detail.orderNum">
+                   <!-- <input style="width: 100%;" type="number" (blur)="orderNumChange($event,detail)" [(ngModel)]="detail.orderNum">-->
+                    <ion-input style="width: 100%;" type="number" [(ngModel)]="detail.orderNum" (ionBlur)="orderNumChange($event,detail)"></ion-input>
                   </ion-col>
-                  <ion-col col-3 text-center>
-                    <button class="numBtn" ion-button small icon-only round (click)="detailNumAdd(detail)">
-                      <ion-icon name="add"></ion-icon>
+                  <ion-col col-3>
+                    <button class="numBtn my_addbtn" ion-button icon-only round clear (click)="detailNumAdd(detail)">
+                      <ion-icon class="my_icon" name="add-circle"></ion-icon>
                     </button>
                   </ion-col>
                 </ion-row>
+                <ng-template #addBlock>
+                  <ion-row *ngIf="!detail.orderNum ||!detail.orderNum==''">
+                    <ion-col col-3 text-center offset-9>
+                      <button class="numBtn" ion-button clear icon-only round (click)="addShop(detail)">
+                        <ion-icon class="my_icon" name="add-circle"></ion-icon>
+                      </button>
+                    </ion-col>
+                  </ion-row>
+                </ng-template>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -95,13 +111,13 @@
       </button>
     </ion-buttons>
     <ion-buttons start>
-      <span>物料种类:{{selectProducts.type}}</span>
+      <span>物料种类:{{shopDetails.length}}</span>
     </ion-buttons>
     <ion-buttons start>
-      <span>物料总数量</span>
+      <span>物料总数量:{{shopDetailsTotal}}</span>
     </ion-buttons>
     <ion-buttons end>
-      <button ion-button>加入订单</button>
+      <button ion-button (click)="detailAddOrder()" >加入订单</button>
     </ion-buttons>
   </ion-navbar>
 </ion-footer>
