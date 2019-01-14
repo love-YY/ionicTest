@@ -20,11 +20,13 @@ import {trigger,state,style,transition,animate} from "@angular/animations";
       // ...
       state('open', style({
         top:`0px`,
-        display:'block'
+        display:'block',
+        opacity:1
       })),
       state('closed', style({
         top:`-300px`,
-        display:'none'
+        display:'none',
+        opacity:0
       })),
       transition('open => closed', [
         animate('.2s')
@@ -98,4 +100,5 @@ export class SearchRefundPage {
   toolbarDone(e:any){
     this.content.resize();
   }
+
 }

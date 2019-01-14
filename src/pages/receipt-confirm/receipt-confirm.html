@@ -107,9 +107,19 @@
               <ion-label col-2 style="padding: 0">备注</ion-label>
               <ion-textarea class="receipt-memo" [(ngModel)]="detail.recDeliveryMemo"></ion-textarea>
             </ion-row>
-            <ion-row>
+            <ion-row *ngIf="!detail.returnFlag">
               <ion-col text-end>
                 <button ion-button small color="danger" (click)="receiptSingleDetail(detail)">收货</button>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="detail.returnFlag=='A'">
+              <ion-col text-end>
+                <ion-badge >全部收货</ion-badge>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="detail.returnFlag=='P'">
+              <ion-col text-end>
+                <ion-badge >部分收货</ion-badge>
               </ion-col>
             </ion-row>
             <!--<ion-row>
@@ -228,7 +238,7 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons text-center>
-      <button ion-button color="dark">
+      <button ion-button color="dark" (click)="receiptOver()">
         <ion-icon name="md-checkmark"></ion-icon>收完
       </button>
     </ion-buttons>

@@ -62,12 +62,16 @@ export class SearchOrderPage {
     let loading = this.loadingCtrl.create({
       content:'加载中...'
     });
+    console.log(loading);
     loading.present();
     this.api.post('order-platform/app/order/placeorder/query/queryorderheader',{orderStatus:this.orderStatus})
       .subscribe((res:any):any=>{
         console.log(res);
         if(res.type=='SUCCESS'){
           this.searchedOrder  = res.data;
+          /*if(document.querySelector('ion-loading')){
+            document.querySelector('ion-loading').remove()
+          }*/
           loading.dismiss();
         }else{
           console.log(res);

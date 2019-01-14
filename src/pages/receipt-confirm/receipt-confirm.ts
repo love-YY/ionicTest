@@ -85,6 +85,27 @@ export class ReceiptConfirmPage {
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           console.log(res.data);
+          detail = res.data;
+        }else{
+          console.log(res.msg);
+        }
+      })
+  }
+  receiptOver(){
+    let arr = this.receiptDetail.filter(res=>res.returnFlag=='P');
+    if(arr.length>=1){
+      this.navParams.data.order.isCancel = 1;
+      this.receiptForm.get('isCancel').setValue(1);
+    }else{
+      this.receiptForm.get('isCancel').setValue(0);
+    }
+    let data = this.receiptForm.getRawValue();
+    data.details = this.receiptDetail;
+    console.log(JSON.stringify(data));
+    this.api.post(`order-platform/app/order/placeorder/confirmorder`,data)
+      .subscribe((res:any)=>{
+        if(res.type=='SUCCESS'){
+          this.navCtrl.pop();
         }else{
           console.log(res.msg);
         }
