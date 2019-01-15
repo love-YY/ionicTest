@@ -54,11 +54,11 @@
     <ion-card-header class="my_cards_header">
       <ion-grid>
         <ion-row>
-          <ion-col col-6>
-            <p>交货单号:{{refund.returnNo}}</p>
+          <ion-col col-12 col-md-6>
+            <p>交货单号:{{refund.deliveryNo}}</p>
           </ion-col>
-          <ion-col col-6>
-            <p>销售单号:{{refund.initialOrderNo}}</p>
+          <ion-col col-12 col-md-6>
+            <p>销售单号:{{refund.orderNo}}</p>
           </ion-col>
           <!--<ion-col col-1 text-end style="padding: 0;">
             <button style="height: 1.5rem;margin: 0;" ion-button icon-only clear item-end>
@@ -86,20 +86,20 @@
             {{refund.returnPersonName}}
           </ion-col>
           <ion-col col-5>
-            {{refund.createDate}}
+            {{refund.createDate |date:'yyyy-MM-dd'}}
           </ion-col>
           <ion-col col-3>
-            {{refund.orderType}}
+            {{refund.orderType |orderType}}
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            送达方:{{refund.shiptoPartyName}}
+            送达方:{{refund.customerDeptName}}
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            售达方:{{refund.salePartyName}}
+            售达方:{{refund.customerName}}
           </ion-col>
         </ion-row>
         <ion-row class="my_refund_row_btn">
@@ -118,7 +118,7 @@
             <button ion-button small color="danger" (click)="receiptConfirm()">收货确认</button>
           </ion-col>-->
           <ion-col text-end>
-            <button ion-button small color="danger" (click)="chaneToBack()">转退</button>
+            <button ion-button small color="danger" (click)="chaneToBack(refund)">转退</button>
           </ion-col>
         </ion-row>
       </ion-grid>

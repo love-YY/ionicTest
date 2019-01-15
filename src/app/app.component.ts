@@ -84,9 +84,9 @@ export class MyApp {
       this.translate.use('en'); // Set your language here
     }
 
-    this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
+    /*this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
       this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
-    });
+    });*/
   }
 
   openPage(page) {

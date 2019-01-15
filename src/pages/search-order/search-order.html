@@ -26,18 +26,19 @@
         <ion-row>
           <ion-col col-4>
             <ion-select formControlName="orderType" placeholder="请选择类型" class="my_select" cancelText="取消" okText="确认" (ionChange)="typeChange()">
-              <ion-option value="xidi">代洗</ion-option>
-              <ion-option value="miejun">灭菌</ion-option>
-              <ion-option value="zulin">租赁</ion-option>
+              <ion-option value="W">代洗</ion-option>
+              <ion-option value="S">灭菌</ion-option>
+              <ion-option value="R">租赁</ion-option>
             </ion-select>
           </ion-col>
           <ion-col col-4>
             <ion-select formControlName="orderStatus" class="my_select" placeholder="请选择状态" cancelText="取消" okText="确认" (ionChange)="statusChange()">
               <ion-option value="N">暂存</ion-option>
               <ion-option value="R">接收中</ion-option>
-              <ion-option value="S">已下</ion-option>
+              <ion-option value="S">已提交</ion-option>
               <ion-option value="D">待发货</ion-option>
-              <ion-option value="all">全部</ion-option>
+              <ion-option value="B">已退</ion-option>
+              <ion-option value="">全部</ion-option>
             </ion-select>
           </ion-col>
           <ion-col col-4>

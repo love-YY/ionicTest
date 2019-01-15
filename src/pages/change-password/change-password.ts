@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {FormGroup,FormBuilder,Validators} from "@angular/forms";
 import {Storage} from "@ionic/storage";
 import {Api} from "../../providers";
+import {HttpClient} from "@angular/common/http";
 
 enum formName {
   userId = '用户id',
@@ -32,7 +33,8 @@ export class ChangePasswordPage {
     public navParams: NavParams,
     public fb:FormBuilder,
     public storage:Storage,
-    public api:Api
+    public api:Api,
+    public http:HttpClient
   ) {
     this.changePwdFrom = this.fb.group({
       userId:['',Validators.required],
@@ -43,7 +45,8 @@ export class ChangePasswordPage {
     });
     storage.get('user').then((data:any)=>{
       this.changePwdFrom.get('userId').setValue(data.userId);
-    })
+    });
+
 
   }
 
@@ -56,7 +59,7 @@ export class ChangePasswordPage {
       this.changePwdFrom.controls[ i ].markAsDirty();
       this.changePwdFrom.controls[ i ].updateValueAndValidity();
       if(this.changePwdFrom.controls[i].hasError('required')){
-        console.log(this.changePwdFrom.get(i))
+        console.log(this.changePwdFrom.get(i));
         console.log(`${formName[i]}不能为空`);
       }
     }
@@ -66,6 +69,7 @@ export class ChangePasswordPage {
     }
     if(this.changePwdFrom.valid){
       console.log(11111);
+      console.log(this.changePwdFrom.getRawValue());
       this.api.post('order-platform/sys/system/modifyPassword',this.changePwdFrom.getRawValue())
         .subscribe((res:any)=>{
           console.log(res);

@@ -26,9 +26,9 @@
       <ion-item>
         <ion-label>订单类型</ion-label>
         <ion-select formControlName="orderType" okText="确定" cancelText="取消">
-          <ion-option value="xidi">洗涤</ion-option>
-          <ion-option value="miejun">灭菌</ion-option>
-          <ion-option value="zulin">租赁</ion-option>
+          <ion-option value="W">洗涤</ion-option>
+          <ion-option value="S">灭菌</ion-option>
+          <ion-option value="R">租赁</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
@@ -152,7 +152,7 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons end>
-      <button ion-button (click)="addRefundDetail()">添加销退明细</button>
+      <button ion-button (click)="addRefundDetail(detail)">添加销退明细</button>
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>

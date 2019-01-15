@@ -47,6 +47,9 @@ export class StatusPipe implements PipeTransform{
       case 'V':
         status = '作废';
         break;
+      case 'F':
+        status = '完成';
+        break;
       default:
         status= '未知';
         break;
@@ -62,13 +65,13 @@ export class OrderTypePipe implements PipeTransform{
   transform(value){
     let type:any;
     switch (value){
-      case 'xidi':
+      case 'W':
         type = '洗涤';
         break;
-      case 'miejun':
+      case 'S':
         type = '灭菌';
         break;
-      case 'zulin':
+      case 'R':
         type = '租赁';
         break;
       default:

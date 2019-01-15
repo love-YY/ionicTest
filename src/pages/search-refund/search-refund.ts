@@ -58,11 +58,10 @@ export class SearchRefundPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SearchRefundPage');
-    console.log(this.toolbar._elementRef.nativeElement.offsetHeight);
     this.toolbarheight = this.toolbar._elementRef.nativeElement.offsetHeight;
   }
-  chaneToBack(){
-    this.api.post(`order-platform/app/order/returnorder/salescvtrtnorder?orderId=126`,{})
+  chaneToBack(refund:any){
+    this.api.post(`order-platform/app/order/returnorder/salescvtrtnorder?orderId=${refund.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           this.navCtrl.push('RefundOrderPage',{order:res.data});
@@ -72,7 +71,7 @@ export class SearchRefundPage {
   }
   //搜索
   searchRefund(){
-    this.api.post(`order-platform/app/order/returnorder/query/queryreturnorderheader`,{})
+    this.api.post(`order-platform/app/order/placeorder/query/queryretiredorderList`,{})
       .subscribe((res:any)=>{
         console.log(res);
         if(res.type=='SUCCESS'){
@@ -84,8 +83,6 @@ export class SearchRefundPage {
 
   }
   showSearch(){
-    console.log(this.toolbar);
-    console.log(this.toolbar.nativeElement);
     /*if(this.toolbar){
       this.toolbar._elementRef.nativeElement.style.opacity  = 0;
       this.toolbar._elementRef.nativeElement.style.display  = 'none';

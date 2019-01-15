@@ -30,7 +30,7 @@ export class RefundOrderPage {
     public events:Events
   ) {
     this.refundOrderForm = fb.group({
-      orderId: [''],
+      initialOrderId: [''],
       orderType:[{value:'',disabled:true}],
       customerId:[''],
       customerCode:[''],
@@ -57,6 +57,7 @@ export class RefundOrderPage {
       saleAreaCode:[''],
       saleAreaName:[{value:'',disabled:true}]
     });
+    console.log(navParams.data.order);
     this.refundOrderForm.patchValue(navParams.data.order);
     // this.refundOrderDetail = navParams.data.order.returnOrderDetailes;
     events.subscribe('addrRefundDetail',(data)=>{
@@ -78,8 +79,8 @@ export class RefundOrderPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad RefundOrderPage');
   }
-  addRefundDetail(){
-    this.api.post(`order-platform/app/order/returnorder/query/querycanrtnmaterial`,{requestVo:{orderId:126}})
+  addRefundDetail(detail:any){
+    this.api.post(`order-platform/app/order/returnorder/query/querycanrtnmaterial`,{requestVo:{orderId:this.refundOrderForm.get('initialOrderId').value}})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           res.data.forEach((data:any)=>{

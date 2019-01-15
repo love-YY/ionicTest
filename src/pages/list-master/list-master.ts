@@ -50,12 +50,12 @@ export class ListMasterPage {
     /*this.navCtrl.push('ItemDetailPage', {
       item: item
     });*/
-    /*if(orderStatus=='allRefund'||orderStatus=='allSale'){
-
+    if(orderStatus==''||orderStatus=='B'){
+      this.navCtrl.push('SearchAllPage',{orderStatus:orderStatus})
     }else{
       this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus});
-    }*/
-    this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus});
+    }
+    // this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus});
 
   }
 }

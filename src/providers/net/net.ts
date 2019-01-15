@@ -43,10 +43,10 @@ export class NetProvider implements HttpInterceptor{
     //     }*/oken
     const newReq = req.clone({
       url: url,
-      /*setHeaders:{
-        'Authorization':`Bearer ${this.tokenService.get().token}`,
-        'Content-Type':'application/json'
-      }*/
+      withCredentials:true,
+      setHeaders:{
+        'Content-Type':'application/json',
+      }
     });
     return next.handle(newReq).pipe(
       mergeMap((event: any) => {

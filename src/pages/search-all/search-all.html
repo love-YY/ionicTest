@@ -1,0 +1,72 @@
+<!--
+  Generated template for the SearchAllPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>订单查询</ion-title>
+  </ion-navbar>
+  <ion-toolbar #toolbar class="my-toolbar">
+    <form [formGroup]="searchAllForm">
+      <ion-grid class="my_refund_s_grid">
+        <ion-row class="my_refund_s_row">
+          <ion-col col-6 ion-item class="my_refund_s_col">
+            <!--<ion-label>类型</ion-label>-->
+            <ion-select class="my_select" [formControlName]="'orderType'"  placeholder="请选择类型" cancelText="取消" okText="确认">
+              <ion-option value="W">代洗</ion-option>
+              <ion-option value="S">灭菌</ion-option>
+              <ion-option value="R">租赁</ion-option>
+            </ion-select>
+          </ion-col>
+          <ion-col col-6 ion-item class="my_refund_s_col">
+            <!--<ion-label>状态</ion-label>-->
+            <ion-select class="my_select" style="flex: 1" [formControlName]="'orderStatus'" placeholder="请选择状态" cancelText="取消" okText="确认">
+              <ion-option value="N">暂存</ion-option>
+              <ion-option value="R">接收中</ion-option>
+              <ion-option value="S">已提交</ion-option>
+              <ion-option value="D">待发货</ion-option>
+              <ion-option value="B">已退</ion-option>
+              <ion-option value="">全部</ion-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-item>
+        <ion-label>单据号</ion-label>
+        <ion-input type="text" clearInput="true" [formControlName]="'orderNo'"></ion-input>
+      </ion-item>
+      <ion-grid class="my_refund_s_grid">
+        <ion-row class="my_refund_s_row">
+          <ion-col col-6 ion-item class="my_refund_s_col">
+            <ion-label>日期</ion-label>
+            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+          </ion-col>
+          <ion-col col-6 ion-item class="my_refund_s_col">
+            <ion-label>至</ion-label>
+            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-item>
+        <ion-label>客户</ion-label>
+        <ion-input type="text" clearInput="true" [formControlName]="'customerDeptName'" ></ion-input>
+      </ion-item>
+      <button ion-button block  (click)="searchOrder()">搜索</button>
+    </form>
+
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+
+    </ion-refresher-content>
+  </ion-refresher>
+  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)"></search-result>
+
+</ion-content>

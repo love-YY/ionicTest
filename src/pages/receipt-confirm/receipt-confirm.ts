@@ -85,7 +85,9 @@ export class ReceiptConfirmPage {
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           console.log(res.data);
-          detail = res.data;
+          for(let item in res.data){
+            detail[item] = res.data[item];
+          }
         }else{
           console.log(res.msg);
         }

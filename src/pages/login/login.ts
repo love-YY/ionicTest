@@ -5,6 +5,7 @@ import { IonicPage, NavController, ToastController,LoadingController } from 'ion
 import { User,Settings } from '../../providers';
 import { MainPage } from '../';
 import {Storage} from "@ionic/storage";
+import {Api} from "../../providers";
 
 @IonicPage()
 @Component({
@@ -30,7 +31,8 @@ export class LoginPage {
     public translateService: TranslateService,
     public setting:Settings,
     public storage:Storage,
-    public loadingCtrl:LoadingController
+    public loadingCtrl:LoadingController,
+    public api:Api
     ) {
 
     this.translateService.get('LOGIN_ERROR').subscribe((value) => {
@@ -45,7 +47,37 @@ export class LoginPage {
       duration:5000
     });
     loading.present();
-    this.user.login(this.account).subscribe((resp:any) => {
+    this.api.post('order-platform/sys/system/login',this.account)
+      .subscribe((resp:any)=>{
+        console.log(resp);
+        loading.dismiss();
+        if(resp.errtype=='S'){
+          this.storage.set('user',resp.data).then((res)=>{
+            console.log(res);
+          });
+          // this.navCtrl.push(MainPage);
+          this.navCtrl.setRoot(MainPage,{},{
+            animate: true,
+            direction: 'forward'
+          });
+        }else {
+          let toast = this.toastCtrl.create({
+            message: resp.errmsg,
+            duration: 3000,
+            position: 'top',
+            cssClass:'error'
+          });
+          toast.present();
+        }
+      },(err:any)=>{
+        let toast = this.toastCtrl.create({
+          message: this.loginErrorString,
+          duration: 3000,
+          position: 'top'
+        });
+        toast.present();
+      });
+    /*this.user.login(this.account).subscribe((resp:any) => {
       console.log(resp);
       loading.dismiss();
       if(resp.errtype=='S'){
@@ -76,6 +108,6 @@ export class LoginPage {
         position: 'top'
       });
       toast.present();
-    });
+    });*/
   }
 }

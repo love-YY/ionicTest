@@ -107,12 +107,14 @@
               <ion-label col-2 style="padding: 0">备注</ion-label>
               <ion-textarea class="receipt-memo" [(ngModel)]="detail.recDeliveryMemo"></ion-textarea>
             </ion-row>
-            <ion-row *ngIf="!detail.returnFlag">
+            <ion-row >
               <ion-col text-end>
-                <button ion-button small color="danger" (click)="receiptSingleDetail(detail)">收货</button>
+                <button *ngIf="!detail.returnFlag" ion-button small color="danger" (click)="receiptSingleDetail(detail)">收货</button>
+                <button *ngIf="detail.returnFlag=='A'" ion-button small color="danger" (click)="receiptSingleDetail(detail)">全部收货</button>
+                <button *ngIf="detail.returnFlag=='P'" ion-button small color="danger" (click)="receiptSingleDetail(detail)">部分收货</button>
               </ion-col>
             </ion-row>
-            <ion-row *ngIf="detail.returnFlag=='A'">
+            <!--<ion-row *ngIf="detail.returnFlag=='A'">
               <ion-col text-end>
                 <ion-badge >全部收货</ion-badge>
               </ion-col>
@@ -121,7 +123,7 @@
               <ion-col text-end>
                 <ion-badge >部分收货</ion-badge>
               </ion-col>
-            </ion-row>
+            </ion-row>-->
             <!--<ion-row>
               <ion-col col-7 offset-5>
                 <ion-row *ngIf="detail.orderNum||detail.orderNum=='';else addBlock">

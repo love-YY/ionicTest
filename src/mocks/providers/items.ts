@@ -38,7 +38,7 @@ export class Items {
       {
         "name": "全部销售订单",
         "profilePic": "assets/img/speakers/elephant.jpg",
-        "orderStatus":'all'
+        "orderStatus":''
       },
       {
         "name": "全部销退订单",

@@ -17,7 +17,7 @@ import {ReceiptConfirmPage} from "../receipt-confirm/receipt-confirm";
   templateUrl: 'search-order.html',
 })
 export class SearchOrderPage {
-  orderStatus:any='all';
+  orderStatus:any='';
   orderType:any = 'a';
   searchedOrder:any = [];
   searchForm:FormGroup;
@@ -38,7 +38,7 @@ export class SearchOrderPage {
       orderType:[''],
       createDate:['']
     });
-    if(navParams.data.orderStatus=='all'||navParams.data.orderStatus=='allRefund'){
+    if(navParams.data.orderStatus==''){
       this.searchForm.controls['orderStatus'].reset({value:navParams.data.orderStatus,disabled:false})
     }else{
       this.searchForm.patchValue({orderStatus:navParams.data.orderStatus});
@@ -58,38 +58,59 @@ export class SearchOrderPage {
   ionViewDidEnter(){
     this.searchOrder();
   }
-  searchOrder(){
+  searchOrder(params?:any){
     let loading = this.loadingCtrl.create({
       content:'加载中...'
     });
     console.log(loading);
     loading.present();
-    this.api.post('order-platform/app/order/placeorder/query/queryorderheader',{orderStatus:this.orderStatus})
-      .subscribe((res:any):any=>{
-        console.log(res);
-        if(res.type=='SUCCESS'){
-          this.searchedOrder  = res.data;
-          /*if(document.querySelector('ion-loading')){
-            document.querySelector('ion-loading').remove()
-          }*/
-          loading.dismiss();
-        }else{
+    if(params){
+      this.api.post('order-platform/app/order/placeorder/query/queryorderheader',params)
+        .subscribe((res:any):any=>{
           console.log(res);
-          loading.dismiss();
-        }
-      })
+          if(res.type=='SUCCESS'){
+            this.searchedOrder  = res.data;
+            /*if(document.querySelector('ion-loading')){
+              document.querySelector('ion-loading').remove()
+            }*/
+            loading.dismiss();
+          }else{
+            console.log(res);
+            loading.dismiss();
+          }
+        })
+    }else{
+      this.api.post('order-platform/app/order/placeorder/query/queryorderheader',{orderStatus:this.orderStatus})
+        .subscribe((res:any):any=>{
+          console.log(res);
+          if(res.type=='SUCCESS'){
+            this.searchedOrder  = res.data;
+            /*if(document.querySelector('ion-loading')){
+              document.querySelector('ion-loading').remove()
+            }*/
+            loading.dismiss();
+          }else{
+            console.log(res);
+            loading.dismiss();
+          }
+        })
+    }
+
   }
   //类型
   typeChange():void{
     console.log(this.searchForm.getRawValue());
+    this.searchOrder(this.searchForm.getRawValue())
   }
   //日期
   dateChange():void{
     console.log(this.searchForm.getRawValue());
+    this.searchOrder(this.searchForm.getRawValue())
   }
   //状态
   statusChange():void{
     console.log(this.searchForm.getRawValue());
+    this.searchOrder(this.searchForm.getRawValue())
   }
   //删除订单
   deleteOrder(order:any):void{

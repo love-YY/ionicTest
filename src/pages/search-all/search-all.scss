@@ -1,0 +1,45 @@
+page-search-all {
+  .my-toolbar{
+    padding: 0;
+    transition: all 2s;
+    ion-item{
+      min-height: 0;
+      ion-label{
+        margin: 0;
+      }
+    }
+  }
+  .my_refund_s_grid{
+    padding: 0;
+    background: #fff;
+    padding-left: 16px;
+    .my_refund_s_row{
+      border-bottom: 1px solid #c8c7cc;
+      .my_refund_s_col{
+        padding-left: 0;
+        min-height:0;
+        .item-inner{
+          border-bottom: none;
+        }
+        @media all and (max-width:350px) {
+          ion-datetime{
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+  }
+  .my_select{
+    max-width: 100%;
+    padding: 5px;
+    flex: 1;
+  }
+  .my_cards_header{
+    padding: 0;
+  }
+  .my_cards_content{
+    padding-bottom: 0;
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
