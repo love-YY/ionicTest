@@ -3,6 +3,7 @@ import { IonicPage, ModalController, NavController } from 'ionic-angular';
 
 import { Item } from '../../models/item';
 import { Items } from '../../providers';
+import {SearchReceiptPage} from "../search-receipt/search-receipt";
 
 @IonicPage()
 @Component({
@@ -50,8 +51,15 @@ export class ListMasterPage {
     /*this.navCtrl.push('ItemDetailPage', {
       item: item
     });*/
-    if(orderStatus==''||orderStatus=='B'){
+    if(orderStatus==''){
       this.navCtrl.push('SearchAllPage',{orderStatus:orderStatus})
+    }else if(orderStatus=='D'){
+      this.navCtrl.push('SearchReceiptPage',{orderStatus:orderStatus});
+    }else if(orderStatus=='B'){
+      this.navCtrl.push('SearchAllRefundPage');
+    }else if(orderStatus=='allDelivery'){
+      console.log(111);
+      this.navCtrl.push('SearchAllDeliveryPage');
     }else{
       this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus});
     }

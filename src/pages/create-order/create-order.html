@@ -38,22 +38,25 @@
       <ion-item>
         <ion-label>订单类型</ion-label>
         <ion-select formControlName="orderType" okText="确定" cancelText="取消">
-          <ion-option value="W">洗涤</ion-option>
+          <ion-option *ngFor="let item of orderTypes[ordertype]" [value]="item.type">{{item.value}}</ion-option>
+          <!--<ion-option value="W">洗涤</ion-option>
           <ion-option value="S">灭菌</ion-option>
-          <ion-option value="R">租赁</ion-option>
+          <ion-option value="R">租赁</ion-option>-->
         </ion-select>
       </ion-item>
       <ion-item>
         <ion-label>客户</ion-label>
-        <ion-input placeholder="客户" formControlName="customerName"></ion-input>
-        <button ion-button  icon-only clear item-end (click)="chooseModal()" *ngIf="sale_order_type">
+        <ion-input placeholder="客户" formControlName="customerName" (ionChange)="customerChange($event)" clearInput="true"></ion-input>
+        <ion-note item-end style="color: #f00;" *ngIf="createForm.get('customerId').dirty&&createForm.get('customerId').errors"><ion-icon name="alert"></ion-icon></ion-note>
+        <button class="create-order-btn" ion-button  icon-only clear item-end (click)="chooseModal()" *ngIf="sale_order_type">
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
       </ion-item>
       <ion-item>
         <ion-label>科室</ion-label>
         <ion-input placeholder="科室" formControlName="customerDeptName"></ion-input>
-        <button ion-button  icon-only clear item-end (click)="chooseDeptModal()" *ngIf="sale_order_type">
+        <ion-note item-end style="color: #f00;" *ngIf="createForm.get('customerDeptId').dirty&&createForm.get('customerDeptId').errors"><ion-icon name="alert"></ion-icon></ion-note>
+        <button class="create-order-btn" ion-button  icon-only clear item-end (click)="chooseDeptModal()" *ngIf="sale_order_type">
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
       </ion-item>
@@ -75,25 +78,29 @@
         <ion-label>业务员</ion-label>
         <ion-input placeholder="业务员" [formControlName]="'salesmanName'"></ion-input>
         <!--<ion-note item-end>123</ion-note>-->
-        <button ion-button  icon-only clear item-end (click)="chooseCustomerModal()" *ngIf="sale_order_type">
+        <ion-note item-end style="color: #f00;" *ngIf="createForm.get('salesmanCode').dirty&&createForm.get('salesmanCode').errors"><ion-icon name="alert"></ion-icon></ion-note>
+        <button class="create-order-btn" ion-button  icon-only clear item-end (click)="chooseCustomerModal()" *ngIf="sale_order_type">
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
       </ion-item>
       <ion-item>
         <ion-label>备注</ion-label>
-        <ion-textarea [formControlName]="'memo'" rows="3" clearInput="true"></ion-textarea>
+        <ion-textarea  [formControlName]="'memo'" rows="3" clearInput="true"></ion-textarea>
       </ion-item>
       <ion-item>
         <ion-label required>销售组织</ion-label>
         <ion-input placeholder="销售组织" formControlName="companyName"></ion-input>
+        <ion-note item-end style="color: #f00;" *ngIf="createForm.get('companyId').dirty&&createForm.get('companyId').errors"><ion-icon name="alert"></ion-icon></ion-note>
       </ion-item>
       <ion-item>
         <ion-label required>分销渠道</ion-label>
         <ion-input placeholder="分销渠道" formControlName="distrChannelName"></ion-input>
+        <ion-note item-end style="color: #f00;" *ngIf="createForm.get('distrChannelId').dirty&&createForm.get('distrChannelId').errors"><ion-icon name="alert"></ion-icon></ion-note>
       </ion-item>
       <ion-item>
         <ion-label required>事业部</ion-label>
         <ion-input placeholder="分销渠道" formControlName="busiUnitName"></ion-input>
+        <ion-note item-end style="color: #f00;" *ngIf="createForm.get('busiUnitId').dirty&&createForm.get('busiUnitId').errors"><ion-icon name="alert"></ion-icon></ion-note>
       </ion-item>
       <!--<ion-item>
         <ion-label required>销售大区</ion-label>
@@ -121,6 +128,11 @@
                 <span class="asscode">助记码</span>
                 <span>{{detail.assistantCode}}</span>
               </ion-col>
+            </ion-row>
+            <ion-row>
+              <!--<span class="code" style="display: inline-block">备注</span>-->
+              <ion-label col-2 style="padding: 0">备注</ion-label>
+              <ion-textarea [disabled]="!sale_order_type" class="receipt-memo" [(ngModel)]="detail.memo"></ion-textarea>
             </ion-row>
             <ion-row *ngIf="!sale_order_type">
               <ion-col>

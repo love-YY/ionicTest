@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,ModalController,Events,ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,ModalController,Events,ToastController, } from 'ionic-angular';
 import {FormGroup,FormBuilder,Validators} from "@angular/forms";
 import {Api} from "../../providers";
 import {Storage} from "@ionic/storage";
@@ -26,6 +26,12 @@ export class CreateOrderPage {
   salePartyName:''
   };
   orderDetail:any=[];
+  ordertype:any;
+  orderTypes={
+    W:[{type:'W',value:'洗涤'},{type:'F',value:'免费'}],
+    S:[{value:'灭菌',type:'S'}],
+    R:[{value:'租赁',type:'R'}]
+  };
   sale_order_type:boolean = true;
   constructor(
     public navCtrl: NavController,
@@ -40,102 +46,168 @@ export class CreateOrderPage {
   ) {
     this.createForm = fb.group({
       orderId: [''],
-      orderType:[{value:'',disabled:true}],
-      customerId:[''],
+      orderType:[{value:''}],
+      customerId:['',Validators.required],
       customerCode:[''],
       customerName:[{value:'',disabled:true}],
-      customerDeptId:[''],
+      customerDeptId:['',Validators.required],
       customerDeptCode:[''],
       customerDeptName:[{value:'',disabled:true}],
       payerName:[{value:'',disabled:true}],
       billtoPartyName:[{value:'',disabled:true}],
       salesmanId:[''],
-      salesmanCode:[''],
+      salesmanCode:['',Validators.required],
       salesmanName:[{value:"",disabled:true},Validators.required],
       memo:[''],
-      companyId:[''],
+      companyId:['',Validators.required],
       companyCode:[''],
       companyName:[{value:'',disabled:true}],
-      distrChannelId:[''],
+      distrChannelId:['',Validators.required],
       distrChannelCode:[''],
       distrChannelName:[{value:'',disabled:true}],
-      busiUnitId:[''],
+      busiUnitId:['',Validators.required],
       busiUnitCode:[''],
       busiUnitName:[{value:'',disabled:true}],
       saleAreaId:[''],
       saleAreaCode:[''],
-      saleAreaName:[{value:'',disabled:true}]
+      saleAreaName:[{value:'',disabled:true}],
+      orderGenResource:['']
     });
     console.log(navParams);
-    if(navParams.data.type=='check'){
-      if(navParams.data.order.orderStatus=='N'){
+    events.subscribe('detailAddOrder',(data)=>{
+      this.orderDetail = data;
+    });
+    if(this.navParams.data.type=='check'){
+      if(this.navParams.data.order.orderStatus=='N'){
         this.sale_order_type = true;
       }else{
         this.sale_order_type = false;
         this.createForm.controls['memo'].reset({value:'',disabled:true});
+        this.createForm.controls['orderType'].reset({value:'',disabled:true})
       }
-      this.createForm.patchValue(navParams.data.order);
-      this.orderDetail = navParams.data.order.details;
-    }else{
-      this.createForm.patchValue({orderType:navParams.data.orderType});
-      this.createForm.patchValue(navParams.data.moreData);
     }
-    // this.createForm.patchValue({orderType:"xidi"});
-    events.subscribe('detailAddOrder',(data)=>{
-      this.orderDetail = data;
-    })
+
   }
 
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreateOrderPage');
-    /*this.storage.get('user').then((data)=>{
-      console.log(data);
-      this.api.post(`order-platform/app/order/placeorder/query/newInitOrder?companyId=${data.companyId}`,{})
-        .subscribe((res:any)=>{
-          console.log(res);
-          if(res.type=='SUCCESS'){
-            this.createForm.patchValue(res.data);
-          }else{
-            let toast = this.toastCtrl.create({
-              message: res.msg,
-              duration: 3000,
-              position: 'top'
-            });
-            toast.present();
-          }
-        },(err:any)=>{
-          console.log(err);
-          this.navCtrl.pop();
-        })
-    })*/
+    if(this.navParams.data.type=='check'){
+      /*if(this.navParams.data.order.orderStatus=='N'){
+        this.sale_order_type = true;
+      }else{
+        this.sale_order_type = false;
+        this.createForm.controls['memo'].reset({value:'',disabled:true});
+        this.createForm.controls['orderType'].reset({value:'',disabled:true})
+      }*/
+      this.createForm.patchValue(this.navParams.data.order);
+      this.ordertype = this.navParams.data.order.orderGenResource;
+      this.orderDetail = this.navParams.data.order.details;
+    }else{
+      this.createForm.patchValue({orderGenResource:this.navParams.data.orderType});
+      this.createForm.patchValue({orderType:this.navParams.data.orderType});
+      this.ordertype = this.navParams.data.orderType;
+      this.createForm.patchValue(this.navParams.data.moreData);
+      console.log(this.navParams.data.moreData);
+    }
   }
   //保存订单
   saveOrder(){
-    let orderData = this.createForm.getRawValue();
-    orderData['details'] = this.orderDetail;
-    console.log(orderData);
-    /*console.log(JSON.stringify(orderData));
-    console.log(JSON.stringify(orderData));*/
-    this.api.post('order-platform/app/order/placeorder/addorder',orderData,{withCredentials:true,headers:{'Content-Type':'application/json'}})
-      .subscribe((res:any)=>{
-        console.log(res);
-        this.navCtrl.pop();
-      },(err)=>{
-        console.log(err);
+    for (const i in this.createForm.controls) {
+      this.createForm.controls[ i ].markAsDirty();
+      this.createForm.controls[ i ].updateValueAndValidity();
+
+    }
+    if(!this.createForm.valid){
+      this.myService.createToast({
+        message:'表单输入不完整',
+        position:'top',
+        cssClass:'warning',
+        duration:2000
       })
+    }else{
+      let orderData = this.createForm.getRawValue();
+      orderData['details'] = this.orderDetail;
+      console.log(orderData);
+      console.log(JSON.stringify(orderData));
+      this.myService.createLoading({
+        content:'保存中...'
+      });
+      this.api.post('order-platform/app/order/placeorder/addorder',orderData,{withCredentials:true,headers:{'Content-Type':'application/json'}})
+        .subscribe((res:any)=>{
+          console.log(res);
+          this.myService.dismissLoading();
+          if(res.type=='SUCCESS'){
+            this.myService.createToast({
+              message:'保存成功',
+              position:'top',
+              duration:1000,
+              cssClass:'success'
+            });
+            /*console.log(this.navParams.get('saveCallback'));
+            if(this.navParams.get('saveCallback')){
+              this.navParams.get('saveCallback')(res.data).then(()=>{
+                this.navCtrl.pop();
+              })
+            }else{
+              this.navCtrl.pop();
+            }*/
+            if(this.navParams.get('type')=='check'){
+              this.events.publish('saveOrder',res.data);
+              this.navCtrl.pop();
+            }else{
+              this.navCtrl.pop();
+            }
+
+          }else{
+            console.log(res.msg);
+          }
+        },(err)=>{
+          console.log(err);
+        })
+    }
+
   }
   submitOrder(){
-    let orderData = this.createForm.getRawValue();
-    orderData['details'] = this.orderDetail;
-    console.log(orderData);
-    this.api.post('order-platform/app/order/placeorder/submitorder',orderData,{withCredentials:true,headers:{'Content-Type':'application/json'}})
-      .subscribe((res:any)=>{
-        console.log(res);
-        this.navCtrl.pop()
-      },(err)=>{
-        console.log(err);
-      })
+    for (const i in this.createForm.controls) {
+      this.createForm.controls[ i ].markAsDirty();
+      this.createForm.controls[ i ].updateValueAndValidity();
+    }
+    if(!this.createForm.valid){
+      this.myService.createToast({
+        message:'表单输入不完整',
+        position:'top',
+        cssClass:'warning',
+        duration:2000
+      });
+    }else{
+      let orderData = this.createForm.getRawValue();
+      orderData['details'] = this.orderDetail;
+      console.log(orderData);
+      this.myService.createLoading({
+        content:'提交中...'
+      });
+      this.api.post('order-platform/app/order/placeorder/submitorder',orderData)
+        .subscribe((res:any)=>{
+          console.log(res);
+          this.myService.dismissLoading();
+          if(res.type=='SUCCESS'){
+            this.myService.createToast({
+              message:'提交成功',
+              position:'top',
+              duration:1000,
+              cssClass:'success'
+            });
+            this.navCtrl.pop();
+
+          }else{
+            console.log(res.msg);
+          }
+
+        },(err)=>{
+          console.log(err);
+        })
+    }
   }
   //选择客户
   chooseModal(){
@@ -146,21 +218,32 @@ export class CreateOrderPage {
       this.saleParty.salePartyName = goodsOwner.goodsownerName;*/
       console.log(customer);
       if(customer){
-        this.createForm.patchValue(customer);
+        this.createForm.patchValue(customer,{emitEvent:true});
       }
 
     });
     chooseModal.present();
   }
+  //客户改变
+  customerChange(e:any){
+      this.createForm.patchValue({customerDeptId:'',customerDeptCode:'',customerDeptName:'',salesmanId:'',salesmanCode:'',salesmanName:''})
+
+  }
   //选择科室
   chooseDeptModal(){
     if(!this.createForm.controls['customerId'].value){
-      let toast = this.toastCtrl.create({
+      /*let toast = this.toastCtrl.create({
         message: '请先选择客户',
         duration: 3000,
         position: 'top'
       });
-      toast.present();
+      toast.present();*/
+      this.myService.createToast({
+        message: '请先选择客户',
+        duration: 3000,
+        position: 'top',
+        cssClass:'warning'
+      });
       return;
     }
     let chooseDeptModal = this.modalCtrl.create('ChooseDeptModalPage',{customerId:this.createForm.controls['customerId'].value});
@@ -175,22 +258,34 @@ export class CreateOrderPage {
   //选择业务员
   chooseCustomerModal(){
     if(!this.createForm.controls['customerId'].value){
-      let toast = this.toastCtrl.create({
+      /*let toast = this.toastCtrl.create({
         message: '请先选择客户',
         duration: 3000,
         position: 'top'
       });
-      toast.present();
+      toast.present();*/
+      this.myService.createToast({
+        message: '请先选择客户',
+        duration: 3000,
+        position: 'top',
+        cssClass:'warning'
+      });
       return;
     }
     if(!this.createForm.controls['customerDeptId'].value){
-      let toast = this.toastCtrl.create({
+      /*let toast = this.toastCtrl.create({
         message: '请先选择科室',
         duration: 3000,
         position: 'top',
         cssClass:'error'
       });
-      toast.present();
+      toast.present();*/
+      this.myService.createToast({
+        message: '请先选择客户',
+        duration: 3000,
+        position: 'top',
+        cssClass:'warning'
+      });
       return;
     }
     console.log(this.createForm.controls['customerId'].value);
@@ -219,7 +314,7 @@ export class CreateOrderPage {
   /*
   * 添加明细*/
   addDetail(){
-    this.navCtrl.push('AddDetailPage',{orderDetail:this.orderDetail})
+    this.navCtrl.push('AddDetailPage',{orderDetail:this.orderDetail,orderGenResource:this.createForm.get('orderGenResource').value})
   }
 
 }

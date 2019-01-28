@@ -1,5 +1,5 @@
 <!--
-  Generated template for the SearchOrderPage page.
+  Generated template for the SearchAllRefundPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -9,30 +9,21 @@
   <ion-navbar>
     <ion-title>订单查询</ion-title>
   </ion-navbar>
-  <ion-toolbar>
-    <!--<ion-buttons start>
-      <ion-select [(ngModel)]="status">
-        <ion-option value="save">暂存</ion-option>
-      </ion-select>
-    </ion-buttons>
-    <ion-buttons >
-      456
-    </ion-buttons>
-    <ion-buttons end>
-      675
-    </ion-buttons>-->
-    <form [formGroup]="searchForm">
-      <ion-grid>
-        <ion-row>
-          <ion-col col-4>
-            <ion-select formControlName="orderGenResource" placeholder="请选择类型" class="my_select" cancelText="取消" okText="确认" (ionChange)="typeChange()" >
+  <ion-toolbar #toolbar class="my-toolbar">
+    <form [formGroup]="searchAllRefundForm">
+      <ion-grid class="my_refund_s_grid">
+        <ion-row class="my_refund_s_row">
+          <ion-col ion-item class="my_refund_s_col">
+            <!--<ion-label>类型</ion-label>-->
+            <ion-select class="my_select" [formControlName]="'orderType'"  placeholder="请选择类型" cancelText="取消" okText="确认">
               <ion-option value="W">代洗</ion-option>
               <ion-option value="S">灭菌</ion-option>
               <ion-option value="R">租赁</ion-option>
             </ion-select>
           </ion-col>
-          <ion-col col-4>
-            <ion-select formControlName="orderStatus" class="my_select" placeholder="请选择状态" cancelText="取消" okText="确认" (ionChange)="statusChange()">
+          <!--<ion-col col-6 ion-item class="my_refund_s_col">
+            &lt;!&ndash;<ion-label>状态</ion-label>&ndash;&gt;
+            <ion-select class="my_select" style="flex: 1" [formControlName]="'orderStatus'" placeholder="请选择状态" cancelText="取消" okText="确认">
               <ion-option value="N">暂存</ion-option>
               <ion-option value="R">接收中</ion-option>
               <ion-option value="S">已提交</ion-option>
@@ -40,27 +31,44 @@
               <ion-option value="B">已退</ion-option>
               <ion-option value="">全部</ion-option>
             </ion-select>
+          </ion-col>-->
+        </ion-row>
+      </ion-grid>
+      <ion-item>
+        <ion-label>单据号</ion-label>
+        <ion-input type="text" clearInput="true" [formControlName]="'orderNo'"></ion-input>
+      </ion-item>
+      <ion-grid class="my_refund_s_grid">
+        <ion-row class="my_refund_s_row">
+          <ion-col col-6 ion-item class="my_refund_s_col">
+            <ion-label>日期</ion-label>
+            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
           </ion-col>
-          <ion-col col-4>
-            <ion-datetime formControlName="createDate" class="my_datetime" displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择" (ionChange)="dateChange()" ></ion-datetime>
+          <ion-col col-6 ion-item class="my_refund_s_col">
+            <ion-label>至</ion-label>
+            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-item>
+        <ion-label>客户</ion-label>
+        <ion-input type="text" clearInput="true" [formControlName]="'customerDeptName'" ></ion-input>
+      </ion-item>
+      <button ion-button block  (click)="searchRefundorder()">搜索</button>
     </form>
-  </ion-toolbar>
-</ion-header>
-<ion-content>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content>
 
-    </ion-refresher-content>
-  </ion-refresher>
-  <!--<ion-card *ngFor="let srch of searchedOrder">
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-card *ngFor="let srch of refundOrderHeader">
     <ion-card-header class="my_cards_header">
       <ion-grid>
         <ion-row>
           <ion-col col-6>
-            {{srch.orderNo}}
+            {{srch.returnNo}}
           </ion-col>
           <ion-col col-4 offset-1 text-end>
             状态:{{srch.orderStatus|status}}
@@ -97,9 +105,9 @@
             {{srch.orderType|orderType}}
           </ion-col>
         </ion-row>
-        <ion-row *ngIf="srch.orderStatus=='B'">
+        <ion-row >
           <ion-col>
-            销售单号:
+            原销售单号:{{srch.initialOrderNo}}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -118,11 +126,11 @@
             <button ion-button small color="danger" (click)="editOrder(srch)">编辑</button>
             <button ion-button small color="danger" (click)="submitOrder()">提交</button>
           </ion-col>
-          <ion-col text-end *ngSwitchCase="'R'">
+          <!--<ion-col text-end *ngSwitchCase="'R'">
             <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
-          </ion-col>
+          </ion-col>-->
           <ion-col text-end *ngSwitchCase="'S'">
-            <button ion-button small color="danger" (click)="cancelOrder()">作废</button>
+            <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
           </ion-col>
           <ion-col text-end *ngSwitchCase="'B'">
             <button ion-button small color="danger" (click)="checkOriginalOrder()">查看原销售单</button>
@@ -131,17 +139,12 @@
             <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <!--<ion-row>
           <ion-col text-end>
             <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
           </ion-col>
-        </ion-row>
+        </ion-row>-->
       </ion-grid>
     </ion-card-content>
-  </ion-card>-->
-  <!--<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>-->
-  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (edit)="editOrder($event)"></search-result>
-
+  </ion-card>
 </ion-content>

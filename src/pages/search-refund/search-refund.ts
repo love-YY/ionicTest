@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import { IonicPage, NavController, NavParams,LoadingController,Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,LoadingController,Content,Loading } from 'ionic-angular';
 import {FormGroup,FormBuilder} from "@angular/forms";
 import {Api} from "../../providers";
 import {trigger,state,style,transition,animate} from "@angular/animations";
@@ -42,15 +42,17 @@ export class SearchRefundPage {
   refundFrom:FormGroup;
   refundData:any = [];
   showToolBar:boolean = false;
-  @ViewChild('toolbar') toolbar;
+  // @ViewChild('toolbar') toolbar;
   @ViewChild(Content) content:Content;
   toolbarheight:any;
+  loading:Loading;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public fb:FormBuilder,
-    public api:Api
+    public api:Api,
+    public loadingCtrl:LoadingController
   ) {
     /*menuCtrl.open();*/
 
@@ -58,20 +60,22 @@ export class SearchRefundPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SearchRefundPage');
-    this.toolbarheight = this.toolbar._elementRef.nativeElement.offsetHeight;
+    this.showToolBar = true;
+    // this.toolbarheight = this.toolbar._elementRef.nativeElement.offsetHeight;
   }
   chaneToBack(refund:any){
-    this.api.post(`order-platform/app/order/returnorder/salescvtrtnorder?orderId=${refund.orderId}`,{})
+    /*this.api.post(`order-platform/app/order/returnorder/salescvtrtnorder?orderId=${refund.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           this.navCtrl.push('RefundOrderPage',{order:res.data});
         }
-    });
+    });*/
+    this.navCtrl.push('RefundOrderPage',{order:refund});
 
   }
   //搜索
   searchRefund(){
-    this.api.post(`order-platform/app/order/placeorder/query/queryretiredorderList`,{})
+    this.api.post(`order-platform/app/order/deliveryorder/query/querydeliveryheader`,{})
       .subscribe((res:any)=>{
         console.log(res);
         if(res.type=='SUCCESS'){
@@ -83,19 +87,25 @@ export class SearchRefundPage {
 
   }
   showSearch(){
-    /*if(this.toolbar){
-      this.toolbar._elementRef.nativeElement.style.opacity  = 0;
-      this.toolbar._elementRef.nativeElement.style.display  = 'none';
-    }else{
-      this.toolbar._elementRef.nativeElement.style.opacity  = 0;
-      this.toolbar._elementRef.nativeElement.style.display  = 'block';
-    }*/
     this.showToolBar = !this.showToolBar;
-
-    // this.showToolBar = !this.showToolBar;
   }
   toolbarDone(e:any){
     this.content.resize();
+  }
+  /*contentScroll(e:any){
+    console.log(e);
+    console.log(this.showToolBar);
+    this.showToolBar = !this.showToolBar;
+
+  }*/
+  ionViewWillUnload(){
+    // ;
+    console.log(this.loading);
+    /*if(this.loading.index<=0){
+      this.loading.dismiss();
+    }*/
+    /*if(this.loading)
+    this.loading.dismissAll();*/
   }
 
 }

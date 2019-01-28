@@ -9,7 +9,7 @@
   <ion-navbar>
     <ion-title>销退订单</ion-title>
   </ion-navbar>
-  <ion-toolbar>
+  <ion-toolbar *ngIf="!checked">
     <ion-buttons text-center>
       <button ion-button (click)="submitRefundOrder()">
         提交
@@ -26,9 +26,7 @@
       <ion-item>
         <ion-label>订单类型</ion-label>
         <ion-select formControlName="orderType" okText="确定" cancelText="取消">
-          <ion-option value="W">洗涤</ion-option>
-          <ion-option value="S">灭菌</ion-option>
-          <ion-option value="R">租赁</ion-option>
+          <ion-option *ngFor="let item of orderTypes[ordertype]" [value]="item.type">{{item.value}}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
@@ -99,27 +97,38 @@
               <ion-col col-10>
                 <p>{{detail.goodsDesc}}</p>
               </ion-col>
-              <ion-col col-2>
-                <button style="margin: 0" ion-button small color="danger">删除</button>
+              <ion-col col-2 *ngIf="!checked">
+                <button style="margin: 0" ion-button small color="danger" (click)="delReDetail(detail)">删除</button>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col col-6>
                 <span class="code">编码</span>
-                <span>{{detail.goodsCode}}</span>
+                <span>{{detail.goodsCode|code}}</span>
               </ion-col>
               <ion-col col-6>
                 <span class="asscode">助记码</span>
                 <span>{{detail.assistantCode}}</span>
               </ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row *ngIf="!checked">
               <ion-col col-6>
                 <span class="code">可退数量</span>
                 <span>{{detail.retiringNum}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
+              <!--<span class="code" style="display: inline-block">备注</span>-->
+              <ion-label col-2 style="padding: 0">备注</ion-label>
+              <ion-textarea [disabled]="checked" class="receipt-memo" [(ngModel)]="detail.memo"></ion-textarea>
+            </ion-row>
+            <ion-row *ngIf="checked">
+              <ion-col col-6>
+                <span class="code">数量</span>
+                <span>{{detail.returnNum}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="!checked">
               <ion-col col-7 offset-5>
                 <ion-row>
                   <ion-col col-3 class="detail-num">

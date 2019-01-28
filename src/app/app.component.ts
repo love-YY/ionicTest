@@ -4,9 +4,10 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
 
-import { MainPage,FirstRunPage ,WelcomePage} from '../pages';
+import { LoginPage} from '../pages';
 import { Settings } from '../providers';
 import {Storage} from "@ionic/storage";
+import {L} from "@angular/core/src/render3";
 
 @Component({
   template: `<!--<ion-menu [content]="content">
@@ -27,7 +28,7 @@ import {Storage} from "@ionic/storage";
   <ion-nav #content [root]="rootPage"></ion-nav>`
 })
 export class MyApp {
-  rootPage = WelcomePage;
+  rootPage = LoginPage;
 
   @ViewChild(Nav) nav: Nav;
 
@@ -47,7 +48,8 @@ export class MyApp {
 
   constructor(
     private translate: TranslateService,
-    platform: Platform, settings: Settings,
+    platform: Platform,
+    settings: Settings,
     private config: Config,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
@@ -57,7 +59,7 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
-      this.statusBar.overlaysWebView(true);
+      this.statusBar.overlaysWebView(false);
       this.splashScreen.hide();
     });
     this.initTranslate();

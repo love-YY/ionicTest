@@ -20,6 +20,8 @@ export class SearchResultComponent {
   @Output('delete') delete:EventEmitter<any> = new EventEmitter<any>();
   @Output('cancel') cancel:EventEmitter<any> = new EventEmitter<any>();
   @Output('submit') submit:EventEmitter<any> = new EventEmitter<any>();
+  @Output('edit') edit:EventEmitter<any> = new EventEmitter<any>();
+  @Output('searchDeliveryOrder') searchDeliveryOrder:EventEmitter<any> = new EventEmitter<any>();
   constructor(
     public loadingCtrl:LoadingController,
     public navCtrl:NavController,
@@ -79,14 +81,15 @@ export class SearchResultComponent {
   }
   //编辑订单
   editOrder(order):void{
-    this.api.post(`order-platform/app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
+    /*this.api.post(`order-platform/app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data});
         }else{
           console.log(res.msg);
         }
-      });
+      });*/
+    this.edit.emit(order);
   }
   //确认订单
   submitOrder():void{
@@ -97,11 +100,12 @@ export class SearchResultComponent {
     this.api.post(`order-platform/app/order/placeorder/voidorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
-          if(this.status=='all'){
+          /*if(this.status=='all'){
             order = res.data;
           }else{
             // this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId)
-          }
+          }*/
+          this.cancel.emit(res.data);
         }else{
           console.log(res.msg);
         }
@@ -123,6 +127,13 @@ export class SearchResultComponent {
           console.log(res.msg);
         }
       });
+
+  }
+  searchDelivery(order:any){
+    this.searchDeliveryOrder.emit(order);
+  }
+  //查看错误
+  checkError(order:any){
 
   }
 

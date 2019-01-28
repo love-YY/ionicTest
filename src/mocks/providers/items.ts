@@ -31,9 +31,14 @@ export class Items {
         "orderStatus":'S'
       },
       {
-        "name": "待发货确认订单",
+        "name": "待收货确认订单",
         "profilePic": "assets/img/speakers/eagle.jpg",
         "orderStatus":"D"
+      },
+      {
+        "name": "全部交货单",
+        "profilePic": "assets/img/speakers/elephant.jpg",
+        "orderStatus":'allDelivery'
       },
       {
         "name": "全部销售订单",

@@ -8,14 +8,13 @@
 
   <ion-navbar>
     <ion-title>选择物料</ion-title>
-    <ion-buttons end>
+    <!--<ion-buttons end>
       <button ion-button icon-only (click)="showSearch()">
         <ion-icon name="search"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons>-->
   </ion-navbar>
-  <ion-toolbar class="my-toolbar" *ngIf="hidenTool" [@openClose]="isOpen ? 'open' : 'closed'"
-               (@openClose.done)="toolbarDone($event)">
+  <ion-toolbar class="my-toolbar">
     <ion-item>
       <ion-label>物料名称</ion-label>
       <ion-input type="text" [(ngModel)]="goodsDesc"></ion-input>

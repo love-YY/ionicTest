@@ -14,15 +14,14 @@
 <ion-header #header>
 
   <ion-navbar>
-    <ion-title>查询可退订单</ion-title>
-    <ion-buttons end>
+    <ion-title> 查询可退订单</ion-title>
+    <!--<ion-buttons end>
       <button ion-button icon-only (click)="showSearch()">
         <ion-icon name="search"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons>-->
   </ion-navbar>
-  <ion-toolbar #toolbar class="my-toolbar" [@openClose]="showToolBar ? 'open' : 'closed'"
-  (@openClose.done)="toolbarDone($event)">
+  <ion-toolbar #toolbar class="my-toolbar">
     <ion-item>
       <ion-label>交货单号</ion-label>
       <ion-input type="text" clearInput="true"></ion-input>

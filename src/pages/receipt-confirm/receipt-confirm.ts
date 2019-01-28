@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,ViewController,ToastController } from 'ionic-angular';
 import {FormGroup,FormBuilder,Validators} from "@angular/forms";
 import {Api} from "../../providers";
+import {MyServiceProvider} from "../../providers";
 
 /**
  * Generated class for the ReceiptConfirmPage page.
@@ -19,15 +20,25 @@ export class ReceiptConfirmPage {
   pet:string = 'orderDetail';
   receiptForm:FormGroup;
   receiptDetail:any=[];
+  ordertype:any;
+  orderTypes={
+    W:[{type:'W',value:'洗涤'},{type:'F',value:'免费'}],
+    S:[{value:'灭菌',type:'S'}],
+    R:[{value:'租赁',type:'R'}]
+  };
+  orderStatus:any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public fb:FormBuilder,
     public viewCtrl:ViewController,
-    public api:Api
+    public api:Api,
+    public toastCtrl:ToastController,
+    public myService:MyServiceProvider
   ) {
     this.receiptForm = fb.group({
+      deliveryId:[],
       orderId: [''],
       orderType:[{value:'',disabled:true}],
       customerId:[''],
@@ -54,10 +65,13 @@ export class ReceiptConfirmPage {
       saleAreaId:[''],
       saleAreaCode:[''],
       saleAreaName:[{value:'',disabled:true}],
-      isCancel:[{value:0,disabled:true}]
+      isCancel:[{value:0,disabled:true}],
+      orderGenResource:['']
     });
     console.log(navParams.data.order);
+    this.orderStatus = navParams.data.order.orderStatus;
     this.receiptForm.patchValue(navParams.data.order);
+    this.ordertype = navParams.data.order.orderGenResource;
     this.receiptDetail = navParams.data.order.details;
   }
 
@@ -81,9 +95,15 @@ export class ReceiptConfirmPage {
   }
   receiptSingleDetail(detail:any){
     console.log(JSON.stringify(detail));
-    this.api.post(`order-platform/app/order/placeorder/ordermaterialconfirm`,detail)
+    this.api.post(`order-platform/app/order/deliveryorder/deliverymaterialconfirm`,detail)
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
+          this.myService.createToast({
+            message:'确认成功',
+            position:'top',
+            cssClass:'success',
+            duration:2000
+          });
           console.log(res.data);
           for(let item in res.data){
             detail[item] = res.data[item];
@@ -104,7 +124,7 @@ export class ReceiptConfirmPage {
     let data = this.receiptForm.getRawValue();
     data.details = this.receiptDetail;
     console.log(JSON.stringify(data));
-    this.api.post(`order-platform/app/order/placeorder/confirmorder`,data)
+    this.api.post(`order-platform/app/order/deliveryorder/deliveryconfirm`,data)
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           this.navCtrl.pop();

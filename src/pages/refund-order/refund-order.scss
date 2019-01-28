@@ -37,4 +37,10 @@ page-refund-order {
       }
     }
   }
+  .receipt-memo{
+    textarea{
+      border: 1px solid #ccc;
+      margin: 0;
+    }
+  }
 }

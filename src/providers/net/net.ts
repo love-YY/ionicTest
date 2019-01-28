@@ -14,14 +14,17 @@ import { Injectable,Injector,Inject } from '@angular/core';
 import {Observable} from "rxjs";
 import {mergeMap,catchError} from "rxjs/operators";
 import {of} from "rxjs/observable/of";
+import {MyServiceProvider} from "../my-service/my-service";
 
 @Injectable()
 export class NetProvider implements HttpInterceptor{
 
   loading:any;
 
+
   constructor(
-    private injector:Injector
+    private injector:Injector,
+    private myService:MyServiceProvider
   ) {
   }
 
@@ -98,45 +101,53 @@ export class NetProvider implements HttpInterceptor{
             return of(event);
           }else{
             console.log(body.errmsg || body.msg);
+            if(body.errmsg || body.msg)
+            this.myService.createToast({
+              message:body.errmsg || body.msg,
+              position:'top',
+              cssClass:'error',
+              duration:2000
+            })
           }
         }
         break;
       case 400:
         console.log(event);
         console.log('参数不对');
+        this.exceptionHanding(`${event.status}|参数不正确!`);
         break;
       case 401: // 未登录状态码
         /*this.tokenService.clear();
         this.goTo('/passport/login');*/
         console.log('登陆信息过期');
+        this.exceptionHanding(`${event.status}|登陆信息过期!`);
         break;
-      case 403:
-      /*case 400:
-        this.msg.error('400喽!');*/
       case 404:
+        this.exceptionHanding(`${event.status}|未找到!`);
+        break;
       case 500:
         console.log('服务器问题');
+        this.exceptionHanding(`${event.status}|服务器错误!`);
         // this.goTo(`/${event.status}`);
         break;
       default:
+        this.exceptionHanding(`${event.status}|未知错误!`);
         if (event instanceof HttpErrorResponse) {
-          /*if (event.error && event.error.error == 'invalid_grant') {
-            console.warn(
-              '用户名或密码错误',
-              event);
-            this.msg.error('用户名或密码错误');
-          } else{
-            console.warn(
-              event.message + '未可知错误，大部分是由于后端不支持CORS或无效配置引起',
-              event,
-            );
-            // this.msg.error('请重新登录！');
-          }*/
           console.warn(event);
         }
         break;
     }
     return of(event);
   }
-
+  exceptionHanding(message:string){
+    if(this.myService.getLoading()){
+      this.myService.dismissLoading();
+    }
+    this.myService.createToast({
+      message:message,
+      cssClass:'error',
+      position:'top',
+      duration:2000
+    });
+  }
 }

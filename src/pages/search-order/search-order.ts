@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import {FormGroup,FormBuilder,Validators} from "@angular/forms";
-import { IonicPage, NavController, NavParams,ToastController,LoadingController,Loading,ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,ToastController,LoadingController,Loading,ModalController,Events } from 'ionic-angular';
 import {Api} from "../../providers";
 import {ReceiptConfirmPage} from "../receipt-confirm/receipt-confirm";
+import {MyServiceProvider} from "../../providers";
 
 /**
  * Generated class for the SearchOrderPage page.
@@ -30,12 +31,14 @@ export class SearchOrderPage {
     public fb:FormBuilder,
     public toast:ToastController,
     public loadingCtrl:LoadingController,
-    public modalCtrl:ModalController
+    public modalCtrl:ModalController,
+    public myService:MyServiceProvider,
+    public events:Events
   ) {
     // console.log(navParams);
     this.searchForm = fb.group({
       orderStatus:[{value:'',disabled:true}],
-      orderType:[''],
+      orderGenResource:[''],
       createDate:['']
     });
     if(navParams.data.orderStatus==''){
@@ -45,53 +48,59 @@ export class SearchOrderPage {
     }
 
     this.orderStatus = navParams.data.orderStatus;
-    /*this.loading = loadingCtrl.create({
-      content:'加载中...'
-    })*/
-    // console.log(this.orderStatus)
-
+    events.subscribe('saveOrder',(order:any)=>{
+      this.searchedOrder.forEach((res)=>{
+        /*if(res.orderId==order.orderId){
+          for(let item in order){
+            res[item] = order[item];
+          }
+        }*/
+        Object.assign(res,order);
+      });
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SearchOrderPage');
-  }
-  ionViewDidEnter(){
     this.searchOrder();
   }
+  ionViewDidEnter(){
+
+  }
   searchOrder(params?:any){
-    let loading = this.loadingCtrl.create({
+    /*let loading = this.loadingCtrl.create({
       content:'加载中...'
     });
     console.log(loading);
-    loading.present();
+    loading.present();*/
+    this.myService.createLoading({
+      content:'加载中...'
+    });
     if(params){
       this.api.post('order-platform/app/order/placeorder/query/queryorderheader',params)
         .subscribe((res:any):any=>{
           console.log(res);
+          this.myService.dismissLoading();
           if(res.type=='SUCCESS'){
             this.searchedOrder  = res.data;
-            /*if(document.querySelector('ion-loading')){
-              document.querySelector('ion-loading').remove()
-            }*/
-            loading.dismiss();
           }else{
             console.log(res);
-            loading.dismiss();
           }
         })
     }else{
       this.api.post('order-platform/app/order/placeorder/query/queryorderheader',{orderStatus:this.orderStatus})
         .subscribe((res:any):any=>{
           console.log(res);
+          this.myService.dismissLoading();
           if(res.type=='SUCCESS'){
             this.searchedOrder  = res.data;
             /*if(document.querySelector('ion-loading')){
               document.querySelector('ion-loading').remove()
             }*/
-            loading.dismiss();
+            // loading.dismiss();
           }else{
             console.log(res);
-            loading.dismiss();
+            // loading.dismiss();
           }
         })
     }
@@ -140,7 +149,7 @@ export class SearchOrderPage {
   doRefresh(e:any){
     console.log(e);
     console.log('refresh');
-    this.api.post('order-platform/app/order/placeorder/query/queryorderheader',{orderStatus:this.orderStatus})
+    this.api.post('order-platform/app/order/placeorder/query/queryorderheader',this.searchForm.getRawValue())
       .subscribe((res:any):any=>{
         console.log(res);
         if(res.type=='SUCCESS'){
@@ -196,13 +205,15 @@ export class SearchOrderPage {
   }
   //作废订单
   cancelOrder(order):void{
+    console.log(order);
+    this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId);
     /*this.api.post(`order-platform/app/order/placeorder/voidorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           if(this.navParams.data.orderStatus=='all'){
             order = res.data;
           }else{
-            this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId)
+
           }
         }else{
           console.log(res.msg);
@@ -226,6 +237,25 @@ export class SearchOrderPage {
         }
       });
 
+  }
+  ///callback
+  saveOrderCallback(order){
+    debugger;
+    console.log(this.searchedOrder);
+    return new Promise((resolve,reject)=>{
+      debugger;
+      console.log(order);
+      console.log(this.searchedOrder);
+      console.log(this.searchedOrder);
+      this.searchedOrder.forEach((res)=>{
+        if(res.orderId==order.orderId){
+          for(let item in order){
+            res[item] = order[item];
+          }
+        }
+      });
+      resolve();
+    })
   }
 
 }

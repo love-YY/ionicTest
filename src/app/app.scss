@@ -14,3 +14,57 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+//自定义toast 不同状态颜色
+.error {
+  .toast-message{
+    color: #a94442;
+  }
+  .toast-wrapper {
+    background: #f2dede;
+    border: 1px solid #a94442;
+  }
+}
+.success{
+  .toast-message{
+    color: #3c763d;
+  }
+  .toast-wrapper {
+    background: #dff0d8;
+    border: 1px solid #3c763d;
+  }
+}
+.warning {
+  .toast-message{
+    color: #faad14;
+  }
+  .toast-wrapper {
+    background: #fffbe6;
+    border: 1px solid #faad14;
+  }
+}
+.tip{
+  .toast-message{
+    color: #31708f;
+  }
+  .toast-wrapper {
+    background: #d9edf7;
+    border: 1px solid #31708f;
+  }
+}
+.item-ios{
+  font-size: 1.5rem;
+}
+.toast-ios .toast-wrapper{
+  max-width: 80%;
+
+  /*&.toast-top,&.toast-middle,&.toast-bottom{
+    height: 33px;
+  }*/
+}
+.toast-ios .toast-message {
+  display:flex;
+  justify-content:center;
+  font-size: .8em;
+  padding-top: 8px;
+}

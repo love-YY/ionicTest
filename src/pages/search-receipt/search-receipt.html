@@ -1,5 +1,5 @@
 <!--
-  Generated template for the SearchOrderPage page.
+  Generated template for the SearchReceiptPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,21 +7,10 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>订单查询</ion-title>
+    <ion-title>交货单查询</ion-title>
   </ion-navbar>
   <ion-toolbar>
-    <!--<ion-buttons start>
-      <ion-select [(ngModel)]="status">
-        <ion-option value="save">暂存</ion-option>
-      </ion-select>
-    </ion-buttons>
-    <ion-buttons >
-      456
-    </ion-buttons>
-    <ion-buttons end>
-      675
-    </ion-buttons>-->
-    <form [formGroup]="searchForm">
+    <form [formGroup]="sReceiptForm">
       <ion-grid>
         <ion-row>
           <ion-col col-4>
@@ -36,7 +25,7 @@
               <ion-option value="N">暂存</ion-option>
               <ion-option value="R">接收中</ion-option>
               <ion-option value="S">已提交</ion-option>
-              <ion-option value="D">待发货</ion-option>
+              <ion-option value="D">待收货</ion-option>
               <ion-option value="B">已退</ion-option>
               <ion-option value="">全部</ion-option>
             </ion-select>
@@ -49,13 +38,10 @@
     </form>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content>
 
-    </ion-refresher-content>
-  </ion-refresher>
-  <!--<ion-card *ngFor="let srch of searchedOrder">
+
+<ion-content>
+  <ion-card *ngFor="let srch of receiptOrder">
     <ion-card-header class="my_cards_header">
       <ion-grid>
         <ion-row>
@@ -63,7 +49,7 @@
             {{srch.orderNo}}
           </ion-col>
           <ion-col col-4 offset-1 text-end>
-            状态:{{srch.orderStatus|status}}
+            状态:{{srch.orderStatus|deliveryCode}}
           </ion-col>
           <ion-col col-1 text-end style="padding: 0;">
             <button style="height: 1.5rem;margin: 0;" ion-button icon-only clear item-end (click)="checkOrder(srch)">
@@ -113,35 +99,34 @@
           </ion-col>
         </ion-row>
         <ion-row [ngSwitch]="srch.orderStatus">
-          <ion-col text-end *ngSwitchCase="'N'">
+          <!--<ion-col text-end *ngSwitchCase="'N'">
             <button ion-button small color="danger" (click)="deleteOrder(srch)">删除</button>
             <button ion-button small color="danger" (click)="editOrder(srch)">编辑</button>
             <button ion-button small color="danger" (click)="submitOrder()">提交</button>
           </ion-col>
-          <ion-col text-end *ngSwitchCase="'R'">
+          &lt;!&ndash;<ion-col text-end *ngSwitchCase="'R'">
             <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
-          </ion-col>
+          </ion-col>&ndash;&gt;
           <ion-col text-end *ngSwitchCase="'S'">
-            <button ion-button small color="danger" (click)="cancelOrder()">作废</button>
+            <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
           </ion-col>
           <ion-col text-end *ngSwitchCase="'B'">
             <button ion-button small color="danger" (click)="checkOriginalOrder()">查看原销售单</button>
-          </ion-col>
+          </ion-col>-->
           <ion-col text-end *ngSwitchCase="'D'">
             <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
           </ion-col>
+          <!--<ion-col text-end>
+            <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
+          </ion-col>-->
         </ion-row>
-        <ion-row>
+        <!--<ion-row>
           <ion-col text-end>
             <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
           </ion-col>
-        </ion-row>
+        </ion-row>-->
       </ion-grid>
     </ion-card-content>
-  </ion-card>-->
-  <!--<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>-->
-  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (edit)="editOrder($event)"></search-result>
+  </ion-card>
 
 </ion-content>

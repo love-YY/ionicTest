@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,LoadingController } from 'ionic-angular';
 import {FormGroup,FormBuilder,Validators} from "@angular/forms";
 import {Api} from "../../providers";
+import {MyServiceProvider} from "../../providers";
 
 /**
  * Generated class for the SearchAllPage page.
@@ -27,7 +28,8 @@ export class SearchAllPage {
     public navParams: NavParams,
     public fb:FormBuilder,
     public loadingCtrl:LoadingController,
-    public api:Api
+    public api:Api,
+    public myService:MyServiceProvider
   ) {
     this.searchAllForm = fb.group({
       orderNo:[''],
@@ -47,47 +49,53 @@ export class SearchAllPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SearchAllPage');
+    this.searchOrder();
   }
   ionViewDidEnter(){
-    this.searchOrder();
+
   }
 
 
   searchOrder(params?:any){
     console.log(this.searchAllForm.get('orderStatus').value);
-    let loading = this.loadingCtrl.create({
+    /*let loading = this.loadingCtrl.create({
       content:'加载中...'
     });
     console.log(loading);
-    loading.present();
+    loading.present();*/
+    this.myService.createLoading({
+      content:'加载中...'
+    });
     if(params){
       this.api.post(this.url,params)
         .subscribe((res:any):any=>{
           console.log(res);
+          this.myService.dismissLoading();
           if(res.type=='SUCCESS'){
             this.searchedOrder  = res.data;
             /*if(document.querySelector('ion-loading')){
               document.querySelector('ion-loading').remove()
             }*/
-            loading.dismiss();
+            // loading.dismiss();
           }else{
             console.log(res);
-            loading.dismiss();
+            // loading.dismiss();
           }
         })
     }else{
       this.api.post(this.url,this.searchAllForm.getRawValue())
         .subscribe((res:any):any=>{
           console.log(res);
+          this.myService.dismissLoading();
           if(res.type=='SUCCESS'){
             this.searchedOrder  = res.data;
             /*if(document.querySelector('ion-loading')){
               document.querySelector('ion-loading').remove()
             }*/
-            loading.dismiss();
+            // loading.dismiss();
           }else{
             console.log(res);
-            loading.dismiss();
+            // loading.dismiss();
           }
         })
     }
@@ -107,6 +115,32 @@ export class SearchAllPage {
         }
       })
     // this.searchOrder();
+  }
+  cancelOrder(order:any){
+    console.log(order);
+    // this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId);
+    this.searchedOrder.forEach((item:any)=>{
+      if(item.orderId==order.orderId){
+        for(let i in order){
+          item[i] = order[i];
+        }
+      }
+    })
+  }
+  searchDeliveryOrder(order:any){
+    console.log(order);
+    this.myService.createLoading({
+      content:'加载中...'
+    });
+    this.api.post('order-platform/app/order/deliveryorder/query/querydeliveryheader',{orderNo:order.orderNo})
+      .subscribe((res:any)=>{
+        this.myService.dismissLoading();
+        if(res.type=='SUCCESS'){
+          this.navCtrl.push('SearchAllDeliveryPage',{deliveryOrder:res.data,type:'saleTo'})
+        }else{
+          console.log(res.msg);
+        }
+      })
   }
 
 }

@@ -36,7 +36,7 @@ export class StatusPipe implements PipeTransform{
         status = '已提交';
         break;
       case 'D':
-        status = '待收货';
+        status = '已发货';
         break;
       case 'C':
         status = '已收货';
@@ -74,10 +74,52 @@ export class OrderTypePipe implements PipeTransform{
       case 'R':
         type = '租赁';
         break;
+      case 'F':
+        type = '免费';
+        break;
       default:
         type='未知';
         break;
     }
     return type;
+  }
+}
+@Pipe({
+  name:'deliveryCode',
+  pure:true
+})
+export class DeliveryCode implements PipeTransform{
+  transform(value){
+    let status:any;
+    switch (value){
+      case 'N':
+        status = '暂存';
+        break;
+      case 'R':
+        status = '接收中';
+        break;
+      case 'S':
+        status = '已提交';
+        break;
+      case 'D':
+        status = '待收货';
+        break;
+      case 'C':
+        status = '已收货';
+        break;
+      case 'B':
+        status = '退回';
+        break;
+      case 'V':
+        status = '作废';
+        break;
+      case 'F':
+        status = '完成';
+        break;
+      default:
+        status= '未知';
+        break;
+    }
+    return status;
   }
 }

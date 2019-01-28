@@ -51,6 +51,7 @@ export class AddDetailPage {
   shopDetails=[];
   shopDetailsTotal:any=0;
   isOpen:boolean = false;
+  orderGenResource:any;
   @ViewChild(Content) content:Content;
   constructor(
     public navCtrl: NavController,
@@ -60,6 +61,7 @@ export class AddDetailPage {
     public api:Api,
     public events:Events
   ) {
+    this.isOpen = true;
     events.subscribe('shopAdd',(data)=>{
       console.log(data);
       this.selectPros.forEach((res:any)=>{
@@ -84,6 +86,7 @@ export class AddDetailPage {
       this.calculateShopDetailTotal()
     });
     console.log(navParams.data.orderDetail);
+    this.orderGenResource = navParams.data.orderGenResource;
     this.shopDetails = navParams.data.orderDetail;
     this.calculateShopDetailTotal()
     events.subscribe('shopDel',(data)=>{
@@ -102,19 +105,24 @@ export class AddDetailPage {
       requestVo:{
         goodsCode:this.goodsCode,
         goodsDesc:this.goodsDesc,
-        assistantCode:this.assistantCode
+        assistantCode:this.assistantCode,
+        orderGenResource:this.orderGenResource
       }
     })
       .subscribe((res:any)=>{
         console.log(res);
-        this.selectPros = res.data;
-        res.data.forEach((material:any)=>{
-          this.shopDetails.forEach((detail:any)=>{
-            if(material.goodsId==detail.goodsId){
-              material.orderNum = detail.orderNum;
-            }
+        if(res.type=='SUCCESS'){
+          this.selectPros = res.data;
+          res.data.forEach((material:any)=>{
+            this.shopDetails.forEach((detail:any)=>{
+              if(material.goodsId==detail.goodsId){
+                material.orderNum = detail.orderNum;
+              }
+            })
           })
-        })
+        }else{
+          console.log(res.msg);
+        }
       })
   }
   addShop(detail:any){
@@ -187,5 +195,10 @@ export class AddDetailPage {
   toolbarDone(e:any){
     this.content.resize();
   }
+  /*scrollTo() {
+    window.addEventListener('native.keyboardshow', (e: any) => {
+      this.content.scrollTo(0, e.keyboardHeight);
+    });
+  }*/
 
 }

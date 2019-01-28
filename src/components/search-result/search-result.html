@@ -60,19 +60,19 @@
         <ion-col text-end *ngSwitchCase="'N'">
           <button ion-button small color="danger" (click)="deleteOrder(srch)">删除</button>
           <button ion-button small color="danger" (click)="editOrder(srch)">编辑</button>
-          <button ion-button small color="danger" (click)="submitOrder()">提交</button>
+          <!--<button ion-button small color="danger" (click)="submitOrder()">提交</button>-->
         </ion-col>
-        <ion-col text-end *ngSwitchCase="'R'">
-          <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
-        </ion-col>
+        <!--<ion-col text-end  *ngIf="srch.orderStatus=='R'&&srch.sapHandleStatus==null">
+          <button ion-button small color="danger" (click)="checkError(srch)">查看错误</button>
+        </ion-col>-->
         <ion-col text-end *ngSwitchCase="'S'">
-          <button ion-button small color="danger" (click)="cancelOrder()">作废</button>
+          <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
         </ion-col>
         <ion-col text-end *ngSwitchCase="'B'">
           <button ion-button small color="danger" (click)="checkOriginalOrder()">查看原销售单</button>
         </ion-col>
         <ion-col text-end *ngSwitchCase="'D'">
-          <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
+          <button ion-button small color="danger" (click)="searchDelivery(srch)">查看交货单</button>
         </ion-col>
       </ion-row>
       <!--<ion-row>

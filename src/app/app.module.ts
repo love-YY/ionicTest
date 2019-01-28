@@ -15,6 +15,8 @@ import { Settings, User, Api,MyServiceProvider } from '../providers';
 import { MyApp } from './app.component';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import { NetProvider } from '../providers/net/net';
+import { BackButtonProvider } from '../providers/back-button/back-button';
+import { AppMinimize } from '@ionic-native/app-minimize'
 const INTERCEPTOR_PROVIDES = [
   //{ provide: HTTP_INTERCEPTORS, useClass: SimpleInterceptor, multi: true},
   { provide: HTTP_INTERCEPTORS, useClass: NetProvider, multi: true}
@@ -77,11 +79,13 @@ export function provideSettings(storage: Storage) {
     Camera,
     SplashScreen,
     StatusBar,
+    AppMinimize,
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     MyServiceProvider,
-    ...INTERCEPTOR_PROVIDES
+    ...INTERCEPTOR_PROVIDES,
+    BackButtonProvider
   ]
 })
 export class AppModule { }
