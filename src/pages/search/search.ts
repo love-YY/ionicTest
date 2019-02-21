@@ -46,7 +46,7 @@ export class SearchPage {
       item: item
     });*/
     this.storage.get('user').then((data)=>{
-      this.api.post(`order-platform/app/order/placeorder/query/newInitOrder?companyId=${data.companyId}`,{})
+      this.api.post(`app/order/placeorder/query/newInitOrder?companyId=${data.companyId}`,{})
         .subscribe((res:any)=>{
           if(res.type=='SUCCESS'){
             // this.createForm.patchValue(res.data);

@@ -142,6 +142,9 @@
   <!--<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>-->
-  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (edit)="editOrder($event)"></search-result>
+  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (edit)="editOrder($event)" (checkError)="checkError($event)"></search-result>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>

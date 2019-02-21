@@ -92,7 +92,7 @@ export class SettingsPage {
   ngOnChanges() {
     console.log('Ng All Changes');
   }
-  openItem(){
-    this.navCtrl.push('SearchRefundPage',{})
+  openItem(orderType:string){
+    this.navCtrl.push('SearchRefundPage',{orderType:orderType})
   }
 }

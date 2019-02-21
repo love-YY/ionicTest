@@ -33,6 +33,8 @@ export class CreateOrderPage {
     R:[{value:'租赁',type:'R'}]
   };
   sale_order_type:boolean = true;
+  orderStatus:string;
+  showEdit:boolean = false;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -78,6 +80,9 @@ export class CreateOrderPage {
       this.orderDetail = data;
     });
     if(this.navParams.data.type=='check'){
+      if(this.navParams.data.order.orderStatus!='N'&&this.navParams.data.order.orderStatus!='V'){
+        this.showEdit = true;
+      }
       if(this.navParams.data.order.orderStatus=='N'){
         this.sale_order_type = true;
       }else{
@@ -85,6 +90,11 @@ export class CreateOrderPage {
         this.createForm.controls['memo'].reset({value:'',disabled:true});
         this.createForm.controls['orderType'].reset({value:'',disabled:true})
       }
+    }else if(this.navParams.data.type=='checkR'){
+      this.sale_order_type = true;
+      /*if(this.navParams.data.order.orderStatus!='N'||this.navParams.data.order.orderStatus!='V'){
+        this.showEdit = true;
+      }*/
     }
 
   }
@@ -100,6 +110,10 @@ export class CreateOrderPage {
         this.createForm.controls['memo'].reset({value:'',disabled:true});
         this.createForm.controls['orderType'].reset({value:'',disabled:true})
       }*/
+      this.createForm.patchValue(this.navParams.data.order);
+      this.ordertype = this.navParams.data.order.orderGenResource;
+      this.orderDetail = this.navParams.data.order.details;
+    }else if(this.navParams.data.type=='checkR'){
       this.createForm.patchValue(this.navParams.data.order);
       this.ordertype = this.navParams.data.order.orderGenResource;
       this.orderDetail = this.navParams.data.order.details;
@@ -133,7 +147,7 @@ export class CreateOrderPage {
       this.myService.createLoading({
         content:'保存中...'
       });
-      this.api.post('order-platform/app/order/placeorder/addorder',orderData,{withCredentials:true,headers:{'Content-Type':'application/json'}})
+      this.api.post('app/order/placeorder/addorder',orderData,{withCredentials:true,headers:{'Content-Type':'application/json'}})
         .subscribe((res:any)=>{
           console.log(res);
           this.myService.dismissLoading();
@@ -153,8 +167,14 @@ export class CreateOrderPage {
               this.navCtrl.pop();
             }*/
             if(this.navParams.get('type')=='check'){
-              this.events.publish('saveOrder',res.data);
-              this.navCtrl.pop();
+              if(this.navParams.get('from')=='all'){
+                this.events.publish('saveOrderAll',res.data);
+                this.navCtrl.pop();
+              }else {
+                this.events.publish('saveOrder',res.data);
+                this.navCtrl.pop();
+              }
+
             }else{
               this.navCtrl.pop();
             }
@@ -187,7 +207,7 @@ export class CreateOrderPage {
       this.myService.createLoading({
         content:'提交中...'
       });
-      this.api.post('order-platform/app/order/placeorder/submitorder',orderData)
+      this.api.post('app/order/placeorder/submitorder',orderData)
         .subscribe((res:any)=>{
           console.log(res);
           this.myService.dismissLoading();
@@ -316,5 +336,23 @@ export class CreateOrderPage {
   addDetail(){
     this.navCtrl.push('AddDetailPage',{orderDetail:this.orderDetail,orderGenResource:this.createForm.get('orderGenResource').value})
   }
-
+  /*copyOrder*/
+  copyOrder(){
+    // console.log(this.createForm.get('orderId').value);
+    let orderId = this.createForm.get('orderId').value;
+    this.myService.createLoading({
+      content:'加载中...'
+    });
+    this.api.post(`app/order/placeorder/query/copesaleorder?orderId=${orderId}`,{})
+      .subscribe((res:any)=>{
+        this.myService.dismissLoading();
+        if(res.type=='SUCCESS'){
+          this.sale_order_type = true;
+          this.createForm.patchValue(res.data);
+          this.orderDetail = res.data.details;
+        }else{
+          console.log(res);
+        }
+      })
+  }
 }

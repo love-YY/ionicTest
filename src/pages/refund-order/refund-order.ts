@@ -93,7 +93,7 @@ export class RefundOrderPage {
     console.log('ionViewDidLoad RefundOrderPage');
   }
   addRefundDetail(detail:any){
-    this.api.post(`order-platform/app/order/deliveryorder/query/deliveryretirematerial`,{requestVo:{deliveryId:this.refundOrderForm.get('deliveryId').value}})
+    this.api.post(`app/order/deliveryorder/query/deliveryretirematerial`,{requestVo:{deliveryId:this.refundOrderForm.get('deliveryId').value}})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           res.data.forEach((data:any)=>{
@@ -124,14 +124,14 @@ export class RefundOrderPage {
   }
 
   submitRefundOrder(){
-    // url:'order-platform/app/order/returnorder/addreturnorder'
+    // url:'app/order/returnorder/addreturnorder'
     this.myService.createLoading({
       content:'加载中...'
     });
     let data = this.refundOrderForm.getRawValue();
     data.returnOrderDetailes = this.refundOrderDetail;
     console.log(JSON.stringify(data));
-    this.api.post('order-platform/app/order/returnorder/addreturnorder',data)
+    this.api.post('app/order/returnorder/addreturnorder',data)
       .subscribe((res:any)=>{
         this.myService.dismissLoading();
         if(res.type=='SUCCESS'){

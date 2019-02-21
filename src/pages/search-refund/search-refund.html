@@ -22,33 +22,44 @@
     </ion-buttons>-->
   </ion-navbar>
   <ion-toolbar #toolbar class="my-toolbar">
-    <ion-item>
-      <ion-label>交货单号</ion-label>
-      <ion-input type="text" clearInput="true"></ion-input>
-    </ion-item>
-    <ion-grid class="my_refund_s_grid">
-      <ion-row class="my_refund_s_row">
-        <ion-col col-6 ion-item class="my_refund_s_col">
-          <ion-label>日期</ion-label>
-          <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
-        </ion-col>
-        <ion-col col-6 ion-item class="my_refund_s_col">
-          <ion-label>至</ion-label>
-          <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <ion-item>
-      <ion-label>客户</ion-label>
-      <ion-input type="text" clearInput="true" ></ion-input>
-    </ion-item>
-    <button ion-button block  (click)="searchRefund()">搜索</button>
+    <form [formGroup]="refundFrom">
+      <ion-item>
+        <ion-label>交货单号</ion-label>
+        <ion-input type="text" clearInput="true" [formControlName]="'deliveryNo'"></ion-input>
+      </ion-item>
+      <ion-grid class="my_refund_s_grid">
+        <ion-row class="my_refund_s_row">
+          <ion-col col-6 ion-item class="my_refund_s_col">
+            <ion-label>日期</ion-label>
+            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+          </ion-col>
+          <ion-col col-6 ion-item class="my_refund_s_col">
+            <ion-label>至</ion-label>
+            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-item>
+        <ion-label>客户</ion-label>
+        <ion-input type="text" clearInput="true" [formControlName]="'customerName'"></ion-input>
+      </ion-item>
+      <div padding-left padding-right>
+        <button ion-button block  (click)="searchRefund()" padding-left padding-right>搜索</button>
+      </div>
+
+    </form>
+
   </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-card *ngFor="let refund of refundData;">
     <ion-card-header class="my_cards_header">
       <ion-grid>
@@ -123,5 +134,7 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
-
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

@@ -54,7 +54,9 @@
         <ion-label>客户</ion-label>
         <ion-input type="text" clearInput="true" [formControlName]="'customerDeptName'" ></ion-input>
       </ion-item>
-      <button ion-button block  (click)="searchRefundorder()">搜索</button>
+      <div padding-left padding-right>
+        <button ion-button block  (click)="searchRefundorder()">搜索</button>
+      </div>
     </form>
 
   </ion-toolbar>
@@ -63,6 +65,10 @@
 
 
 <ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-card *ngFor="let srch of refundOrderHeader">
     <ion-card-header class="my_cards_header">
       <ion-grid>
@@ -147,4 +153,7 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

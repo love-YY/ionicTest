@@ -7,7 +7,6 @@ import { MainPage } from '../';
 import {Storage} from "@ionic/storage";
 import {Api} from "../../providers";
 import {MyServiceProvider} from "../../providers";
-import {BackButtonProvider} from "../../providers/back-button/back-button";
 
 @IonicPage()
 @Component({
@@ -37,20 +36,31 @@ export class LoginPage {
     public api:Api,
     public myService:MyServiceProvider,
     public platform:Platform,
-    public backButton:BackButtonProvider,
     public fb:FormBuilder
     ) {
     this.loginForm = fb.group({
-      loginName:['R20190104',Validators.required],
-      pwd:['R20190104',Validators.required]
+      loginName:['',Validators.required],
+      pwd:['',Validators.required],
+      isSave:[false]
     });
     this.translateService.get('LOGIN_ERROR').subscribe((value) => {
       this.loginErrorString = value;
-    })
-    platform.ready().then(()=>{
-      backButton.registerBackButtonAction(null);
+    });
+    storage.get('loginInfo').then((res:any)=>{
+      console.log(res);
+      if(res){
+        this.loginForm.patchValue(res);
+      }
     })
 
+    /*platform.ready().then(()=>{
+      backButton.registerBackButtonAction(null);
+    })*/
+
+  }
+  isSaveChange(e:any){
+    console.log(e);
+    this.myService.isSavePassword = e.checked;
   }
 
   // Attempt to login in through our User service
@@ -58,7 +68,7 @@ export class LoginPage {
     this.myService.createLoading({
       content:'登陆中...'
     });
-    this.api.post('order-platform/sys/system/login',this.loginForm.getRawValue())
+    this.api.post('sys/system/login',this.loginForm.getRawValue())
       .subscribe((resp:any)=>{
         console.log(resp);
         this.myService.dismissLoading();
@@ -66,6 +76,19 @@ export class LoginPage {
           this.storage.set('user',resp.data).then((res)=>{
             console.log(res);
           });
+          /**/
+          console.log(this.loginForm.get('isSave').value);
+          if(this.loginForm.get('isSave').value){
+            this.storage.set('loginInfo',this.loginForm.getRawValue()).then((res)=>{
+              console.log('已保存')
+            });
+          }else{
+            this.storage.remove('loginInfo').then((res)=>{
+              console.log(res);
+              console.log('remove');
+            })
+          }
+          this.myService.loadUserAuthor(resp.data.userId);
           // this.navCtrl.push(MainPage);
           this.navCtrl.setRoot(MainPage,{},{
             animate: true,

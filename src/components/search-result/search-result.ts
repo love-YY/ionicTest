@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {LoadingController,NavController,ToastController,ModalController} from "ionic-angular";
 import {Api} from "../../providers";
+import {MyServiceProvider} from "../../providers";
 
 /**
  * Generated class for the SearchResultComponent component.
@@ -22,12 +23,14 @@ export class SearchResultComponent {
   @Output('submit') submit:EventEmitter<any> = new EventEmitter<any>();
   @Output('edit') edit:EventEmitter<any> = new EventEmitter<any>();
   @Output('searchDeliveryOrder') searchDeliveryOrder:EventEmitter<any> = new EventEmitter<any>();
+  @Output('checkError') checkErr:EventEmitter<any> = new EventEmitter<any>();
   constructor(
     public loadingCtrl:LoadingController,
     public navCtrl:NavController,
     public api:Api,
     public toast:ToastController,
-    public modalCtrl:ModalController
+    public modalCtrl:ModalController,
+    public myService:MyServiceProvider
   ) {
     console.log('Hello SearchResultComponent Component');
   }
@@ -39,11 +42,11 @@ export class SearchResultComponent {
       duration:5000
     });
     loading.present();
-    this.api.post(`order-platform/app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
+    this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         loading.dismiss();
         if(res.type=='SUCCESS'){
-          this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data});
+          this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data,title:order.status});
           /*if(order.orderStatus=='N'){
             this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data});
           }else{
@@ -58,7 +61,7 @@ export class SearchResultComponent {
   //删除订单
   deleteOrder(order:any):void{
     console.log(order);
-    this.api.post(`order-platform/app/order/placeorder/delorder/${order.orderId}`,{})
+    this.api.post(`app/order/placeorder/delorder/${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           let toast = this.toast.create({
@@ -81,7 +84,7 @@ export class SearchResultComponent {
   }
   //编辑订单
   editOrder(order):void{
-    /*this.api.post(`order-platform/app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
+    /*this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data});
@@ -97,8 +100,12 @@ export class SearchResultComponent {
   }
   //作废订单
   cancelOrder(order):void{
-    this.api.post(`order-platform/app/order/placeorder/voidorder?orderId=${order.orderId}`,{})
+    this.myService.createLoading({
+      content:'作废中...'
+    });
+    this.api.post(`app/order/placeorder/voidorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
+        this.myService.dismissLoading();
         if(res.type=='SUCCESS'){
           /*if(this.status=='all'){
             order = res.data;
@@ -118,7 +125,7 @@ export class SearchResultComponent {
   //收货确认
   receiptConfirm(order):void{
     // this.navCtrl.push('ReceiptConfirmPage');
-    this.api.post(`order-platform/app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
+    this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           let modal = this.modalCtrl.create('ReceiptConfirmPage',{order:res.data});
@@ -134,7 +141,7 @@ export class SearchResultComponent {
   }
   //查看错误
   checkError(order:any){
-
+    this.checkErr.emit(order);
   }
 
 }

@@ -101,7 +101,7 @@ export class AddDetailPage {
     // this.content
   }
   searchPro(){
-    this.api.post('order-platform/app/order/placeorder/query/querymaterial',{
+    this.api.post('app/order/placeorder/query/querymaterial',{
       requestVo:{
         goodsCode:this.goodsCode,
         goodsDesc:this.goodsDesc,

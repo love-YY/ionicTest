@@ -2,12 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { Config, Nav, Platform } from 'ionic-angular';
+import {Config, Nav, NavController, Platform,IonicApp,App} from 'ionic-angular';
 
 import { LoginPage} from '../pages';
 import { Settings } from '../providers';
 import {Storage} from "@ionic/storage";
-import {L} from "@angular/core/src/render3";
+import {AppMinimize} from "@ionic-native/app-minimize";
 
 @Component({
   template: `<!--<ion-menu [content]="content">
@@ -48,12 +48,15 @@ export class MyApp {
 
   constructor(
     private translate: TranslateService,
-    platform: Platform,
+    private platform: Platform,
     settings: Settings,
     private config: Config,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
-    private storage:Storage
+    private storage:Storage,
+    private ionicApp:IonicApp,
+    private appMinimize:AppMinimize,
+    private appCtrl:App
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -61,6 +64,41 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(false);
       this.splashScreen.hide();
+
+      //registerBackButtonAction是系统自带的方法
+      this.platform.registerBackButtonAction(() => {
+        //获取NavController
+        let activeNav: NavController = this.appCtrl.getActiveNav();
+        /*console.log(this.appCtrl.getActiveNav());
+        console.log(this.appCtrl.getActiveNavs());*/
+        let modal = this.ionicApp._loadingPortal.getActive() ||
+          this.ionicApp._modalPortal.getActive() ||
+          this.ionicApp._toastPortal.getActive() ||
+          this.ionicApp._overlayPortal.getActive();
+        if(modal){
+          modal.dismiss();
+          return;
+        }
+
+        // 有博主说上面的方法在新的版本中被移除，但是我在测试的时候还可以继续使用，下面这段代码是新的使用方式，我也贴出来。
+        // let activeNav: NavController = this.appCtrl.getActiveNavs()[0];
+        // let modalProtal = this.appCtrl.
+        //如果可以返回上一页，则执行pop
+
+        if (activeNav.canGoBack()) {
+          activeNav.pop();
+        } else {
+          /*if (tabRef == null || tabRef._selectHistory[tabRef._selectHistory.length - 1] === tabRef.getByIndex(0).id) {
+            //执行退出
+            this.showExit();
+          } else {
+            //选择首页第一个的标签(根据自己的业务需求定制吧)
+            tabRef.select(0);
+          }*/
+          this.showExit();
+        }
+      });
+
     });
     this.initTranslate();
   }
@@ -95,5 +133,26 @@ export class MyApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+  //退出应用方法
+  private showExit(): void {
+    //如果为true，退出application
+    /*if (this.backButtonPressed) {
+      this.platform.exitApp();
+    } else {
+      //第一次按，弹出Toast
+      this.toastCtrl.create({
+        message: '再按一次退出应用',
+        duration: 2000,
+        position: 'top'
+      }).present();
+      //标记为true
+      this.backButtonPressed = true;
+      //两秒后标记为false，如果退出的话，就不会执行了
+      setTimeout(() => this.backButtonPressed = false, 2000);
+    }*/
+    //最小化application
+    this.appMinimize.minimize();
+    // this.platform.exitApp();
   }
 }

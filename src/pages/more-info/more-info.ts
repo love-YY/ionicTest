@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import {ChangePasswordPage} from "../change-password/change-password";
+import { IonicPage, NavController, NavParams,App } from 'ionic-angular';
+import {MyServiceProvider} from "../../providers";
+import {Api} from "../../providers";
 
 /**
  * Generated class for the MoreInfoPage page.
@@ -18,7 +19,10 @@ export class MoreInfoPage {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    public myService:MyServiceProvider,
+    public app:App,
+    public api:Api
   ) {
   }
 
@@ -28,6 +32,21 @@ export class MoreInfoPage {
   openItem(){
     console.log('change password');
     this.navCtrl.push('ChangePasswordPage');
+  }
+  logout(){
+    this.myService.createLoading({
+      content:'注销中...'
+    });
+    this.api.post('app/user/logout',{})
+      .subscribe((res:any)=>{
+        this.myService.dismissLoading();
+        if(res.type=='SUCCESS'){
+          // this.navCtrl.setRoot('LoginPage',{});
+          this.app.getRootNav().setRoot('LoginPage');
+        }else{
+          console.log(res.msg);
+        }
+      });
   }
 
 }

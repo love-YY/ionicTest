@@ -8,19 +8,29 @@
 
 
 <ion-content>
-  <form [formGroup]="loginForm" (submit)="doLogin()">
-    <ion-list>
-      <ion-item>
-        <ion-label fixed>用户名</ion-label>
-        <ion-input type="text" [formControlName]="'loginName'"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label fixed>密码</ion-label>
-        <ion-input type="password" [formControlName]="'pwd'" name="password"></ion-input>
-      </ion-item>
-      <div padding>
-        <button ion-button color="primary" block [disabled]="!loginForm.valid">{{ 'LOGIN_BUTTON' | translate }}</button>
-      </div>
-    </ion-list>
-  </form>
+
+  <div class="loginForm">
+    <ion-avatar>
+      <img src="assets/img/speakers/bear.jpg">
+    </ion-avatar>
+    <form [formGroup]="loginForm" (submit)="doLogin()">
+      <ion-list>
+        <ion-item>
+          <ion-label fixed>用户名</ion-label>
+          <ion-input type="text" [formControlName]="'loginName'" clearInput="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed>密码</ion-label>
+          <ion-input type="password" [formControlName]="'pwd'" name="password" clearInput="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed>记住密码</ion-label>
+          <ion-toggle [formControlName]="'isSave'" (ionChange)="isSaveChange($event)"></ion-toggle>
+        </ion-item>
+        <div padding>
+          <button ion-button color="primary" block [disabled]="!loginForm.valid">{{ 'LOGIN_BUTTON' | translate }}</button>
+        </div>
+      </ion-list>
+    </form>
+  </div>
 </ion-content>

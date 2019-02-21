@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams ,ViewController} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import { IonicPage, NavController, NavParams ,ViewController,InfiniteScroll,Content} from 'ionic-angular';
 import {Api} from "../../providers";
+import {Observable} from "rxjs/Observable";
+import {concat} from "rxjs/operators";
 
 /**
  * Generated class for the ChooseModalPage page.
@@ -21,6 +23,11 @@ export class ChooseModalPage {
   goodsOwners:any=[];
   url:any;
   type:any;
+  page:number = 1;
+  total:number;
+  enabled:boolean=true;
+  @ViewChild(InfiniteScroll) downScroll:InfiniteScroll;
+  @ViewChild(Content) content:Content;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -36,21 +43,68 @@ export class ChooseModalPage {
   selectCancel(){
     this.viewCtrl.dismiss();
   }
-  search(){
-    this.api.post('order-platform/app/order/placeorder/query/querycustomer',{
+  search():Observable<any>{
+     return this.api.post('app/order/placeorder/query/querycustomer',{
+      page:this.page,
+      limit:25,
       requestVo:{
         customerName:this.customerName,
         customerCode:this.customerCode
       }
-    })
-      .subscribe((res:any)=>{
-      console.log(res);
-      this.goodsOwners = res.data;
-    })
-
+    });
   }
   add(goodsOwner:any){
     this.viewCtrl.dismiss(goodsOwner);
+  }
+  searchCoustomer(){
+    this.downScroll.enable(true);
+    this.page =1;
+    this.goodsOwners = [];
+    this.search().subscribe((res:any)=>{
+      if(res.type=='SUCCESS'){
+        this.total = res.total;
+        this.goodsOwners = [...this.goodsOwners,...res.data];
+      }else{
+        console.log(res);
+      }
+    })
+  }
+  doRefresh(e:any){
+    this.downScroll.enable(true);
+    this.page =1;
+    this.goodsOwners=[];
+    this.search().subscribe((res:any)=>{
+      if(res.type=='SUCCESS'){
+        this.total = res.total;
+        this.goodsOwners = [...this.goodsOwners,...res.data];
+        e.complete();
+      }else{
+        console.log(res);
+        e.complete()
+      }
+    })
+  }
+  doInfinite(e:any){
+    // debugger;
+    console.log(e);
+    if(this.goodsOwners.length<this.total){
+      // debugger;
+      this.page++;
+      this.search()
+        .subscribe((res:any)=>{
+          console.log(res);
+          if(res.type=='SUCCESS'){
+            this.total = res.total;
+            this.goodsOwners = [...this.goodsOwners,...res.data];
+            e.complete();
+          }else{
+            console.log(res);
+            e.complete()
+          }
+        })
+    }else{
+      e.enable(false);
+    }
   }
 
 }

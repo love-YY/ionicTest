@@ -1,2 +1,21 @@
 page-login {
+  .loginForm{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    form{
+      width: 100%;
+    }
+    ion-avatar{
+      width: 10rem;
+    }
+    .list-ios {
+      .item-block{
+        &:first-child{
+          border-top: none;
+        }
+      }
+    }
+  }
 }

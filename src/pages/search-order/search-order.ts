@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import {FormGroup,FormBuilder,Validators} from "@angular/forms";
-import { IonicPage, NavController, NavParams,ToastController,LoadingController,Loading,ModalController,Events } from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {FormGroup,FormBuilder} from "@angular/forms";
+import { IonicPage, NavController, NavParams,ToastController,LoadingController,ModalController,Events,InfiniteScroll } from 'ionic-angular';
 import {Api} from "../../providers";
-import {ReceiptConfirmPage} from "../receipt-confirm/receipt-confirm";
+// import {ReceiptConfirmPage} from "../receipt-confirm/receipt-confirm";
 import {MyServiceProvider} from "../../providers";
+import {Observable} from "rxjs/Observable";
 
 /**
  * Generated class for the SearchOrderPage page.
@@ -22,8 +23,10 @@ export class SearchOrderPage {
   orderType:any = 'a';
   searchedOrder:any = [];
   searchForm:FormGroup;
+  page:number = 1;
+  total:number;
 
-
+  @ViewChild(InfiniteScroll) infiniteScroll:InfiniteScroll;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -50,12 +53,9 @@ export class SearchOrderPage {
     this.orderStatus = navParams.data.orderStatus;
     events.subscribe('saveOrder',(order:any)=>{
       this.searchedOrder.forEach((res)=>{
-        /*if(res.orderId==order.orderId){
-          for(let item in order){
-            res[item] = order[item];
-          }
-        }*/
-        Object.assign(res,order);
+        if(res.orderId==order.orderId){
+          Object.assign(res,order);
+        }
       });
     });
   }
@@ -67,17 +67,34 @@ export class SearchOrderPage {
   ionViewDidEnter(){
 
   }
-  searchOrder(params?:any){
+  searchOrder(){
+    this.infiniteScroll.enable(true);
+    this.page =1;
+    this.searchedOrder = [];
+    this.myService.createLoading({
+      content:'加载中...'
+    });
+    this.searchOrderRequest().subscribe((res:any)=>{
+      this.myService.dismissLoading();
+      if(res.type=='SUCCESS'){
+        this.total = res.total;
+        this.searchedOrder = [...this.searchedOrder,...res.data];
+      }else{
+        console.log(res);
+      }
+    })
+  }
+  searchOrderRequest(params?:any):Observable<any>{
     /*let loading = this.loadingCtrl.create({
       content:'加载中...'
     });
     console.log(loading);
     loading.present();*/
-    this.myService.createLoading({
+    /*this.myService.createLoading({
       content:'加载中...'
-    });
+    });*/
     if(params){
-      this.api.post('order-platform/app/order/placeorder/query/queryorderheader',params)
+      this.api.post('app/order/placeorder/query/queryorderheader',params)
         .subscribe((res:any):any=>{
           console.log(res);
           this.myService.dismissLoading();
@@ -88,43 +105,43 @@ export class SearchOrderPage {
           }
         })
     }else{
-      this.api.post('order-platform/app/order/placeorder/query/queryorderheader',{orderStatus:this.orderStatus})
-        .subscribe((res:any):any=>{
+      return this.api.post('app/order/placeorder/query/queryorderheader',{page:this.page,limit:25,requestVo:this.searchForm.getRawValue()})
+        /*.subscribe((res:any):any=>{
           console.log(res);
           this.myService.dismissLoading();
           if(res.type=='SUCCESS'){
             this.searchedOrder  = res.data;
-            /*if(document.querySelector('ion-loading')){
+            /!*if(document.querySelector('ion-loading')){
               document.querySelector('ion-loading').remove()
-            }*/
+            }*!/
             // loading.dismiss();
           }else{
             console.log(res);
             // loading.dismiss();
           }
-        })
+        })*/
     }
 
   }
   //类型
   typeChange():void{
     console.log(this.searchForm.getRawValue());
-    this.searchOrder(this.searchForm.getRawValue())
+    this.searchOrder()
   }
   //日期
   dateChange():void{
     console.log(this.searchForm.getRawValue());
-    this.searchOrder(this.searchForm.getRawValue())
+    this.searchOrder()
   }
   //状态
   statusChange():void{
     console.log(this.searchForm.getRawValue());
-    this.searchOrder(this.searchForm.getRawValue())
+    this.searchOrder()
   }
   //删除订单
   deleteOrder(order:any):void{
     /*console.log(order);
-    this.api.post(`order-platform/app/order/placeorder/delorder/${order.orderId}`,{})
+    this.api.post(`app/order/placeorder/delorder/${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           let toast = this.toast.create({
@@ -147,32 +164,48 @@ export class SearchOrderPage {
 
   }
   doRefresh(e:any){
-    console.log(e);
-    console.log('refresh');
-    this.api.post('order-platform/app/order/placeorder/query/queryorderheader',this.searchForm.getRawValue())
-      .subscribe((res:any):any=>{
+    this.infiniteScroll.enable(true);
+    this.page =1;
+    this.searchedOrder=[];
+    this.searchOrderRequest().subscribe((res:any)=>{
+      if(res.type=='SUCCESS'){
+        this.total = res.total;
+        this.searchedOrder = [...this.searchedOrder,...res.data];
+        e.complete();
+      }else{
         console.log(res);
-        if(res.type=='SUCCESS'){
-          this.searchedOrder  = res.data;
-          e.complete();
-        }else{
-          console.log(res);
-        }
-      })
-    // this.searchOrder();
+        e.complete()
+      }
+    })
   }
-  /*doInfinite(e:any){
-    setTimeout(()=>{
-      e.complete();
-    },3000)
-  }*/
+  doInfinite(e:any){
+    console.log(e);
+    if(this.searchedOrder.length<this.total){
+      // debugger;
+      this.page++;
+      this.searchOrderRequest()
+        .subscribe((res:any)=>{
+          console.log(res);
+          if(res.type=='SUCCESS'){
+            this.total = res.total;
+            this.searchedOrder = [...this.searchedOrder,...res.data];
+            e.complete();
+          }else{
+            console.log(res);
+            e.complete()
+          }
+        })
+    }else{
+      e.enable(false);
+    }
+  }
   checkOrder(order){
     let loading = this.loadingCtrl.create({
       content:'加载中...',
       duration:5000
     });
     loading.present();
-    this.api.post(`order-platform/app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
+    this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         loading.dismiss();
         if(res.type=='SUCCESS'){
@@ -190,7 +223,7 @@ export class SearchOrderPage {
   }
   //编辑订单
   editOrder(order):void{
-    this.api.post(`order-platform/app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
+    this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data});
@@ -207,7 +240,7 @@ export class SearchOrderPage {
   cancelOrder(order):void{
     console.log(order);
     this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId);
-    /*this.api.post(`order-platform/app/order/placeorder/voidorder?orderId=${order.orderId}`,{})
+    /*this.api.post(`app/order/placeorder/voidorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           if(this.navParams.data.orderStatus=='all'){
@@ -227,7 +260,7 @@ export class SearchOrderPage {
   //收货确认
   receiptConfirm(order):void{
     // this.navCtrl.push('ReceiptConfirmPage');
-    this.api.post(`order-platform/app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
+    this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           let modal = this.modalCtrl.create('ReceiptConfirmPage',{order:res.data});
@@ -237,6 +270,27 @@ export class SearchOrderPage {
         }
       });
 
+  }
+
+  checkError(order:any){
+    this.myService.createLoading({
+      content:'加载中...'
+    });
+    this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
+      .subscribe((res:any)=>{
+        this.myService.dismissLoading();
+        if(res.type=='SUCCESS'){
+          let checkErrModal = this.modalCtrl.create('CheckErrorPage',{order:res.data});
+          checkErrModal.onDidDismiss((order:any)=>{
+            if(order){
+              this.navCtrl.push('CreateOrderPage',{type:'checkR',order:res.data});
+            }
+          });
+          checkErrModal.present();
+        }else{
+          console.log(res.msg);
+        }
+      });
   }
   ///callback
   saveOrderCallback(order){

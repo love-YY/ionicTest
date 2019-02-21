@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {Platform,App,NavController,Tabs,ToastController} from "ionic-angular";
+import {Platform,App,NavController,Tabs,ToastController,Modal} from "ionic-angular";
 import { AppMinimize } from '@ionic-native/app-minimize'
 /*
   Generated class for the BackButtonProvider provider.
@@ -32,11 +32,17 @@ export class BackButtonProvider {
       let activeNav: NavController = this.appCtrl.getActiveNav();
       /*console.log(this.appCtrl.getActiveNav());
       console.log(this.appCtrl.getActiveNavs());*/
+      /*let modal = this.ionicApp._modalPortal.getActive();
+      if(modal){
+        modal.dismiss();
+        return;
+      }*/
 
       // 有博主说上面的方法在新的版本中被移除，但是我在测试的时候还可以继续使用，下面这段代码是新的使用方式，我也贴出来。
       // let activeNav: NavController = this.appCtrl.getActiveNavs()[0];
       // let modalProtal = this.appCtrl.
       //如果可以返回上一页，则执行pop
+
       if (activeNav.canGoBack()) {
         activeNav.pop();
       } else {

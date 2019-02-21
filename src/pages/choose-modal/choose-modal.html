@@ -22,10 +22,16 @@
       <ion-label>客户编码</ion-label>
       <ion-input type="text" [(ngModel)]="customerCode"></ion-input>
     </ion-item>
-    <button ion-button block (click)="search()">搜索</button>
+    <div padding-left padding-right>
+      <button ion-button block (click)="searchCoustomer()">搜索</button>
+    </div>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-list>
     <ion-item *ngFor="let goodsOwner of goodsOwners">
       <p>{{goodsOwner.customerName}}</p>
@@ -35,4 +41,8 @@
       </button>
     </ion-item>
   </ion-list>
+  <ion-infinite-scroll #scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
 </ion-content>

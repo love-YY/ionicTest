@@ -1,8 +1,10 @@
 import {Component, ViewChild} from '@angular/core';
-import { IonicPage, NavController, NavParams,LoadingController,Content,Loading } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,LoadingController,Content,Loading,InfiniteScroll } from 'ionic-angular';
 import {FormGroup,FormBuilder} from "@angular/forms";
 import {Api} from "../../providers";
 import {trigger,state,style,transition,animate} from "@angular/animations";
+import {MyServiceProvider} from "../../providers";
+import {Observable} from "rxjs/Observable";
 
 /**
  * Generated class for the SearchRefundPage page.
@@ -40,10 +42,13 @@ import {trigger,state,style,transition,animate} from "@angular/animations";
 export class SearchRefundPage {
 
   refundFrom:FormGroup;
-  refundData:any = [];
+  refundData:any[] = [];
   showToolBar:boolean = false;
+  page:number = 1;
+  total:number;
   // @ViewChild('toolbar') toolbar;
   @ViewChild(Content) content:Content;
+  @ViewChild(InfiniteScroll) infiniteScroll:InfiniteScroll
   toolbarheight:any;
   loading:Loading;
 
@@ -52,14 +57,18 @@ export class SearchRefundPage {
     public navParams: NavParams,
     public fb:FormBuilder,
     public api:Api,
-    public loadingCtrl:LoadingController
+    public loadingCtrl:LoadingController,
+    public myService:MyServiceProvider
   ) {
-    /*menuCtrl.open();*/
-
+    this.refundFrom = fb.group({
+      orderGenResource:[null],
+      customerName:[null],
+      deliveryNo:[null]
+    });
+    this.refundFrom.patchValue({orderGenResource:navParams.data.orderType});
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SearchRefundPage');
     this.showToolBar = true;
     // this.toolbarheight = this.toolbar._elementRef.nativeElement.offsetHeight;
   }
@@ -75,15 +84,36 @@ export class SearchRefundPage {
   }
   //搜索
   searchRefund(){
-    this.api.post(`order-platform/app/order/deliveryorder/query/querydeliveryheader`,{})
-      .subscribe((res:any)=>{
+    this.infiniteScroll.enable(true);
+    this.page =1;
+    this.refundData = [];
+    this.myService.createLoading({
+      content:'加载中...'
+    });
+    this.searchRefundRequest().subscribe((res:any)=>{
+      this.myService.dismissLoading();
+      if(res.type=='SUCCESS'){
+        this.total = res.total;
+        this.refundData = [...this.refundData,...res.data];
+      }else{
+        console.log(res);
+      }
+    })
+  }
+  searchRefundRequest():Observable<any>{
+    /*this.myService.createLoading({
+      content:'正在搜索...'
+    });*/
+    return this.api.post(`app/order/deliveryorder/query/querydeliveryheader`,this.refundFrom.getRawValue())
+      /*.subscribe((res:any)=>{
+        this.myService.dismissLoading();
         console.log(res);
         if(res.type=='SUCCESS'){
           this.refundData = res.data;
         }else{
           console.log(res.msg);
         }
-      })
+      })*/
 
   }
   showSearch(){
@@ -106,6 +136,42 @@ export class SearchRefundPage {
     }*/
     /*if(this.loading)
     this.loading.dismissAll();*/
+  }
+  doRefresh(e:any){
+    this.infiniteScroll.enable(true);
+    this.page =1;
+    this.refundData=[];
+    this.searchRefundRequest().subscribe((res:any)=>{
+      if(res.type=='SUCCESS'){
+        this.total = res.total;
+        this.refundData = [...this.refundData,...res.data];
+        e.complete();
+      }else{
+        console.log(res);
+        e.complete()
+      }
+    })
+  }
+  doInfinite(e:any){
+    console.log(e);
+    if(this.refundData.length<this.total){
+      // debugger;
+      this.page++;
+      this.searchRefundRequest()
+        .subscribe((res:any)=>{
+          console.log(res);
+          if(res.type=='SUCCESS'){
+            this.total = res.total;
+            this.refundData = [...this.refundData,...res.data];
+            e.complete();
+          }else{
+            console.log(res);
+            e.complete()
+          }
+        })
+    }else{
+      e.enable(false);
+    }
   }
 
 }

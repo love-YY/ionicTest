@@ -8,6 +8,11 @@
 
   <ion-toolbar>
     <ion-title>更多信息</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="logout()">
+        <ion-icon name="log-out"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
@@ -17,9 +22,29 @@
   <ion-list>
     <button ion-item (click)="openItem()" >
       <ion-avatar item-start>
-        <img [src]="'assets/img/speakers/bear.jpg'" />
+        <img [src]="'assets/img/speakers/modify_psswd.png'" />
       </ion-avatar>
       <h2>修改密码</h2>
     </button>
   </ion-list>
+  <!--<ion-grid>
+    <ion-row>
+      <ion-col col-4 text-center>
+        <button (click)="openItem()" >
+          <ion-avatar item-start>
+            <img [src]="'assets/img/speakers/bear.jpg'" />
+          </ion-avatar>
+          <h2>修改密码</h2>
+        </button>
+      </ion-col>
+      <ion-col col-4 text-center>
+        <button (click)="openItem()" >
+          <ion-avatar item-start>
+            <img [src]="'assets/img/speakers/bear.jpg'" />
+          </ion-avatar>
+          <h2>修改密码</h2>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>-->
 </ion-content>

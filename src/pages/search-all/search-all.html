@@ -53,7 +53,9 @@
         <ion-label>客户</ion-label>
         <ion-input type="text" clearInput="true" [formControlName]="'customerDeptName'" ></ion-input>
       </ion-item>
-      <button ion-button block  (click)="searchOrder()">搜索</button>
+      <div padding-left padding-right>
+        <button ion-button block  (click)="searchOrder()">搜索</button>
+      </div>
     </form>
 
   </ion-toolbar>
@@ -67,6 +69,9 @@
 
     </ion-refresher-content>
   </ion-refresher>
-  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (searchDeliveryOrder)="searchDeliveryOrder($event)"></search-result>
+  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (searchDeliveryOrder)="searchDeliveryOrder($event)" (edit)="editOrder($event)" (checkError)="checkError($event)"></search-result>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>

@@ -41,6 +41,7 @@ export class ChangePasswordPage {
   ) {
     this.changePwdFrom = this.fb.group({
       userId:['',Validators.required],
+      loginName:[{value:null,disabled:true}],
       oldPwd:['',Validators.required],
       newPwd:['',Validators.required],
       newPwd1:['',Validators.required]
@@ -48,6 +49,7 @@ export class ChangePasswordPage {
     });
     storage.get('user').then((data:any)=>{
       this.changePwdFrom.get('userId').setValue(data.userId);
+      this.changePwdFrom.get('loginName').setValue(data.loginName);
     });
 
 
@@ -73,17 +75,17 @@ export class ChangePasswordPage {
     if(this.changePwdFrom.valid){
       console.log(11111);
       console.log(this.changePwdFrom.getRawValue());
-      this.api.post('order-platform/app/user/modifysecret',this.changePwdFrom.getRawValue())
+      this.api.post('app/user/modifysecret',this.changePwdFrom.getRawValue())
         .subscribe((res:any)=>{
           console.log(res);
         })
     }
   }
-  logout(){
+  /*logout(){
     this.myService.createLoading({
       content:'注销中...'
     });
-    this.api.post('order-platform/app/user/logout',{})
+    this.api.post('app/user/logout',{})
       .subscribe((res:any)=>{
         this.myService.dismissLoading();
         if(res.type=='SUCCESS'){
@@ -93,6 +95,6 @@ export class ChangePasswordPage {
           console.log(res.msg);
         }
       })
-  }
+  }*/
 
 }

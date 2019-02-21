@@ -95,7 +95,7 @@ export class ReceiptConfirmPage {
   }
   receiptSingleDetail(detail:any){
     console.log(JSON.stringify(detail));
-    this.api.post(`order-platform/app/order/deliveryorder/deliverymaterialconfirm`,detail)
+    this.api.post(`app/order/deliveryorder/deliverymaterialconfirm`,detail)
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           this.myService.createToast({
@@ -114,24 +114,47 @@ export class ReceiptConfirmPage {
       })
   }
   receiptOver(){
-    let arr = this.receiptDetail.filter(res=>res.returnFlag=='P');
-    if(arr.length>=1){
-      this.navParams.data.order.isCancel = 1;
-      this.receiptForm.get('isCancel').setValue(1);
-    }else{
-      this.receiptForm.get('isCancel').setValue(0);
-    }
-    let data = this.receiptForm.getRawValue();
-    data.details = this.receiptDetail;
-    console.log(JSON.stringify(data));
-    this.api.post(`order-platform/app/order/deliveryorder/deliveryconfirm`,data)
+    this.myService.createLoading({
+      content:'收货中...'
+    });
+    this.api.post('app/order/deliveryorder/dlvrymtrlbatchconfirm',this.receiptDetail)
       .subscribe((res:any)=>{
+        this.myService.dismissLoading();
         if(res.type=='SUCCESS'){
-          this.navCtrl.pop();
-        }else{
+          console.log(res);
+          let arr = res.data.filter(res=>res.returnFlag=='P');
+          if(arr.length>=1){
+            this.navParams.data.order.isCancel = 1;
+            this.receiptForm.get('isCancel').setValue(1);
+          }else{
+            this.receiptForm.get('isCancel').setValue(0);
+          }
+          let data = this.receiptForm.getRawValue();
+          data.details = res.data;
+          this.myService.createLoading({
+            content:'加载中...'
+          });
+          this.api.post(`app/order/deliveryorder/deliveryconfirm`,data)
+            .subscribe((res:any)=>{
+              this.myService.dismissLoading();
+              if(res.type=='SUCCESS'){
+                this.myService.createToast({
+                  position:'top',
+                  cssClass:'success',
+                  message:'收货成功',
+                  duration:1000
+                });
+                this.navCtrl.pop();
+              }else{
+                console.log(res.msg);
+              }
+            })
+
+        }else {
           console.log(res.msg);
         }
-      })
+      });
+
   }
 
 }

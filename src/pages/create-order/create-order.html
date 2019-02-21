@@ -7,6 +7,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>新建订单</ion-title>
+    <ion-buttons end *ngIf="showEdit">
+      <button ion-button  (click)="copyOrder()">
+          复制
+      </button>
+    </ion-buttons>
   </ion-navbar>
   <ion-toolbar *ngIf="sale_order_type">
     <ion-grid>

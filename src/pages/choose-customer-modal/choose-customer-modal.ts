@@ -37,7 +37,7 @@ export class ChooseCustomerModalPage {
     this.viewCtrl.dismiss();
   }
   search(){
-    this.api.post('order-platform/app/order/placeorder/query/querysalesman',{
+    this.api.post('app/order/placeorder/query/querysalesman',{
       requestVo:{
         cusstomerId:this.customerId,
         customerDeptId:this.customerDeptId,

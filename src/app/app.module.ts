@@ -15,7 +15,6 @@ import { Settings, User, Api,MyServiceProvider } from '../providers';
 import { MyApp } from './app.component';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import { NetProvider } from '../providers/net/net';
-import { BackButtonProvider } from '../providers/back-button/back-button';
 import { AppMinimize } from '@ionic-native/app-minimize'
 const INTERCEPTOR_PROVIDES = [
   //{ provide: HTTP_INTERCEPTORS, useClass: SimpleInterceptor, multi: true},
@@ -84,8 +83,7 @@ export function provideSettings(storage: Storage) {
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     MyServiceProvider,
-    ...INTERCEPTOR_PROVIDES,
-    BackButtonProvider
+    ...INTERCEPTOR_PROVIDES
   ]
 })
 export class AppModule { }

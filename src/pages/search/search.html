@@ -20,25 +20,25 @@
     </button>
   </ion-list>-->
   <ion-list>
-    <button ion-item (click)="openItem('W')" >
+    <button ion-item (click)="openItem('W')" *userAuthor="'W'">
       <ion-avatar item-start>
-        <img [src]="'assets/img/speakers/bear.jpg'" />
+        <img [src]="'assets/img/speakers/order_wash.png'" />
       </ion-avatar>
       <h2>代洗订单</h2>
       <!--<ion-note item-end>123</ion-note>-->
       <!--<ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>-->
     </button>
-    <button ion-item (click)="openItem('S')" >
+    <button ion-item (click)="openItem('S')" *userAuthor="'S'">
       <ion-avatar item-start>
-        <img [src]="'assets/img/speakers/bear.jpg'" />
+        <img [src]="'assets/img/speakers/order_sterilized.png'" />
       </ion-avatar>
       <h2>灭菌订单</h2>
       <!--<ion-note item-end>123</ion-note>-->
       <!--<ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>-->
     </button>
-    <button ion-item (click)="openItem('R')" >
+    <button ion-item (click)="openItem('R')" *userAuthor="'R'">
       <ion-avatar item-start>
-        <img [src]="'assets/img/speakers/bear.jpg'" />
+        <img [src]="'assets/img/speakers/order_rent.png'" />
       </ion-avatar>
       <h2>租赁订单</h2>
       <!--<ion-note item-end>123</ion-note>-->

@@ -62,9 +62,9 @@
           <button ion-button small color="danger" (click)="editOrder(srch)">编辑</button>
           <!--<button ion-button small color="danger" (click)="submitOrder()">提交</button>-->
         </ion-col>
-        <!--<ion-col text-end  *ngIf="srch.orderStatus=='R'&&srch.sapHandleStatus==null">
+        <ion-col text-end  *ngIf="srch.orderStatus=='R'&&srch.sapHandleStatus=='E'">
           <button ion-button small color="danger" (click)="checkError(srch)">查看错误</button>
-        </ion-col>-->
+        </ion-col>
         <ion-col text-end *ngSwitchCase="'S'">
           <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
         </ion-col>

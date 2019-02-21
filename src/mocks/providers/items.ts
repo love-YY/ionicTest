@@ -17,37 +17,37 @@ export class Items {
     let items = [
       {
         "name": "暂存订单",
-        "profilePic": "assets/img/speakers/bear.jpg",
+        "profilePic": "assets/img/speakers/temp_storage.png",
         "orderStatus":"N"
       },
       {
         "name": "接收中订单",
-        "profilePic": "assets/img/speakers/duck.jpg",
+        "profilePic": "assets/img/speakers/receiving.png",
         "orderStatus":'R'
       },
       {
         "name": "已下订单",
-        "profilePic": "assets/img/speakers/cheetah.jpg",
+        "profilePic": "assets/img/speakers/order_placed.png",
         "orderStatus":'S'
       },
       {
         "name": "待收货确认订单",
-        "profilePic": "assets/img/speakers/eagle.jpg",
+        "profilePic": "assets/img/speakers/order_accepted.png",
         "orderStatus":"D"
       },
       {
         "name": "全部交货单",
-        "profilePic": "assets/img/speakers/elephant.jpg",
+        "profilePic": "assets/img/speakers/order_delivery.png",
         "orderStatus":'allDelivery'
       },
       {
         "name": "全部销售订单",
-        "profilePic": "assets/img/speakers/elephant.jpg",
+        "profilePic": "assets/img/speakers/order_sale.png",
         "orderStatus":''
       },
       {
         "name": "全部销退订单",
-        "profilePic": "assets/img/speakers/mouse.jpg",
+        "profilePic": "assets/img/speakers/order_cancel.png",
         "orderStatus":'B'
       }
     ];
