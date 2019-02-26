@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import { IonicPage, NavController, NavParams ,ModalController,InfiniteScroll} from 'ionic-angular';
+import { IonicPage, NavController, NavParams ,ModalController,InfiniteScroll,Events} from 'ionic-angular';
 import {FormGroup,FormBuilder} from "@angular/forms";
 import {Api} from "../../providers";
 import {MyServiceProvider} from "../../providers";
@@ -31,7 +31,8 @@ export class SearchReceiptPage {
     public modalCtrl:ModalController,
     public fb:FormBuilder,
     public api:Api,
-    public myService:MyServiceProvider
+    public myService:MyServiceProvider,
+    public event:Events
   ) {
     this.sReceiptForm = fb.group({
       orderStatus:[{value:navParams.data.orderStatus,disabled:true}],
@@ -39,6 +40,10 @@ export class SearchReceiptPage {
       createDate:['']
     });
     console.log(navParams.data.orderStatus);
+    event.subscribe('deliverySection',(data:any)=>{
+      console.log(data);
+      this.receiptOrder = this.receiptOrder.filter(res=>res.deliveryId!=data.deliveryId);
+    })
   }
 
   ionViewDidLoad() {
@@ -111,7 +116,7 @@ export class SearchReceiptPage {
     this.api.post(`app/order/deliveryorder/query/deliveryorder?deliveryId=${order.deliveryId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
-          let modal = this.modalCtrl.create('ReceiptConfirmPage',{order:res.data});
+          let modal = this.modalCtrl.create('ReceiptConfirmPage',{order:res.data,from:'section'});
           modal.present();
         }else{
           console.log(res.msg);

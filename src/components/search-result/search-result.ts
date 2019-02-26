@@ -18,6 +18,7 @@ export class SearchResultComponent {
 
   @Input() dataArr:any = [];
   @Input() status:any;
+  @Input() orderForm:string;
   @Output('delete') delete:EventEmitter<any> = new EventEmitter<any>();
   @Output('cancel') cancel:EventEmitter<any> = new EventEmitter<any>();
   @Output('submit') submit:EventEmitter<any> = new EventEmitter<any>();
@@ -46,7 +47,7 @@ export class SearchResultComponent {
       .subscribe((res:any)=>{
         loading.dismiss();
         if(res.type=='SUCCESS'){
-          this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data,title:order.status});
+          this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data,title:order.status,from:this.orderForm,name:'订单预览'});
           /*if(order.orderStatus=='N'){
             this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data});
           }else{

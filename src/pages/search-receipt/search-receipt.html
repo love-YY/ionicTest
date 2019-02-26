@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>交货单查询</ion-title>
+    <ion-title>待收货确认订单</ion-title>
   </ion-navbar>
   <ion-toolbar>
     <form [formGroup]="sReceiptForm">
@@ -91,6 +91,11 @@
         <ion-row *ngIf="srch.orderStatus=='B'">
           <ion-col>
             销售单号:
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            交货单号:{{srch.deliveryNo}}
           </ion-col>
         </ion-row>
         <ion-row>

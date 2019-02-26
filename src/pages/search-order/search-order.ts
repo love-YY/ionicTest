@@ -21,10 +21,11 @@ import {Observable} from "rxjs/Observable";
 export class SearchOrderPage {
   orderStatus:any='';
   orderType:any = 'a';
-  searchedOrder:any = [];
+  searchedOrder:any[] = [];
   searchForm:FormGroup;
   page:number = 1;
   total:number;
+  title:string = '订单查询';
 
   @ViewChild(InfiniteScroll) infiniteScroll:InfiniteScroll;
   constructor(
@@ -44,6 +45,7 @@ export class SearchOrderPage {
       orderGenResource:[''],
       createDate:['']
     });
+    this.title = navParams.data.title;
     if(navParams.data.orderStatus==''){
       this.searchForm.controls['orderStatus'].reset({value:navParams.data.orderStatus,disabled:false})
     }else{
@@ -58,6 +60,12 @@ export class SearchOrderPage {
         }
       });
     });
+    events.subscribe('submitOrder',(order:any)=>{
+      /*this.searchedOrder.forEach((res:any)=>{
+
+      });*/
+      this.searchedOrder = this.searchedOrder.filter(res=>res.orderId!=order.orderId)
+    })
   }
 
   ionViewDidLoad() {
@@ -140,28 +148,7 @@ export class SearchOrderPage {
   }
   //删除订单
   deleteOrder(order:any):void{
-    /*console.log(order);
-    this.api.post(`app/order/placeorder/delorder/${order.orderId}`,{})
-      .subscribe((res:any)=>{
-        if(res.type=='SUCCESS'){
-          let toast = this.toast.create({
-            position:'top',
-            message:'删除成功',
-            duration:2000
-          });
-          toast.present();
-          this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId)
-        }else{
-          let toast = this.toast.create({
-            position:'top',
-            message:res.msg,
-            duration:2000
-          });
-          toast.present();
-        }
-      })*/
     this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId);
-
   }
   doRefresh(e:any){
     this.infiniteScroll.enable(true);
@@ -226,7 +213,7 @@ export class SearchOrderPage {
     this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
-          this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data});
+          this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data,name:'编辑订单'});
         }else{
           console.log(res.msg);
         }
@@ -283,7 +270,7 @@ export class SearchOrderPage {
           let checkErrModal = this.modalCtrl.create('CheckErrorPage',{order:res.data});
           checkErrModal.onDidDismiss((order:any)=>{
             if(order){
-              this.navCtrl.push('CreateOrderPage',{type:'checkR',order:res.data});
+              this.navCtrl.push('CreateOrderPage',{type:'checkR',order:res.data,name:'编辑错误订单'});
             }
           });
           checkErrModal.present();

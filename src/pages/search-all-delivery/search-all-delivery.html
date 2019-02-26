@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>交货单查询</ion-title>
+    <ion-title>全部交货订单</ion-title>
   </ion-navbar>
   <ion-toolbar #toolbar class="my-toolbar" *ngIf="fromSale">
     <form [formGroup]="searchAlldeliveryForm">
@@ -15,7 +15,7 @@
         <ion-row class="my_refund_s_row">
           <ion-col ion-item class="my_refund_s_col">
             <!--<ion-label>类型</ion-label>-->
-            <ion-select class="my_select" [formControlName]="'orderType'"  placeholder="请选择类型" cancelText="取消" okText="确认">
+            <ion-select class="my_select" [formControlName]="'orderGenResource'"  placeholder="请选择类型" cancelText="取消" okText="确认">
               <ion-option value="W">代洗</ion-option>
               <ion-option value="S">灭菌</ion-option>
               <ion-option value="R">租赁</ion-option>
@@ -39,11 +39,11 @@
         <ion-row class="my_refund_s_row">
           <ion-col col-6 ion-item class="my_refund_s_col">
             <ion-label>日期</ion-label>
-            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+            <ion-datetime displayFormat="YYYY-MM-DD" [formControlName]="'startDate'" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
           </ion-col>
           <ion-col col-6 ion-item class="my_refund_s_col">
             <ion-label>至</ion-label>
-            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+            <ion-datetime displayFormat="YYYY-MM-DD" [formControlName]="'endDate'" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -112,6 +112,11 @@
         <ion-row *ngIf="srch.orderStatus=='B'">
           <ion-col>
             销售单号:
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            交货单号:{{srch.deliveryNo}}
           </ion-col>
         </ion-row>
         <ion-row>

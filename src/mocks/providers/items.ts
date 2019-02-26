@@ -26,7 +26,7 @@ export class Items {
         "orderStatus":'R'
       },
       {
-        "name": "已下订单",
+        "name": "已提交",
         "profilePic": "assets/img/speakers/order_placed.png",
         "orderStatus":'S'
       },

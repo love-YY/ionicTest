@@ -1,7 +1,9 @@
 import {Component, ViewChild,NgZone} from '@angular/core';
-import { IonicPage, NavController, NavParams,Content,ModalController,Events, } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,Content,ModalController,Events,InfiniteScroll } from 'ionic-angular';
 import {Api} from "../../providers";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {Observable} from "rxjs/Observable";
+import {MyServiceProvider} from "../../providers";
 
 /**
  * Generated class for the AddDetailPage page.
@@ -46,20 +48,24 @@ export class AddDetailPage {
     {goodsDesc:'一曲',goodsCode:123,assistantCode:456,orderNum:5},
     {goodsDesc:'一曲',goodsCode:123,assistantCode:456,orderNum:5},
     {goodsDesc:'一曲',goodsCode:123,assistantCode:456,orderNum:5}
-  ]}
+  ]};
   selectPros=[];
   shopDetails=[];
   shopDetailsTotal:any=0;
   isOpen:boolean = false;
   orderGenResource:any;
+  page:number = 1;
+  total:number;
   @ViewChild(Content) content:Content;
+  @ViewChild(InfiniteScroll) infiniteScroll:InfiniteScroll;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public zone:NgZone,
     public modalCtr:ModalController,
     public api:Api,
-    public events:Events
+    public events:Events,
+    public myService:MyServiceProvider
   ) {
     this.isOpen = true;
     events.subscribe('shopAdd',(data)=>{
@@ -101,7 +107,33 @@ export class AddDetailPage {
     // this.content
   }
   searchPro(){
-    this.api.post('app/order/placeorder/query/querymaterial',{
+    this.infiniteScroll.enable(true);
+    this.page =1;
+    this.selectPros = [];
+    this.myService.createLoading({
+      content:'加载中...'
+    });
+    this.searchProRequest().subscribe((res:any)=>{
+      this.myService.dismissLoading();
+      if(res.type=='SUCCESS'){
+        this.total = res.total;
+        this.selectPros = [...this.selectPros,...res.data];
+        res.data.forEach((material:any)=>{
+          this.shopDetails.forEach((detail:any)=>{
+            if(material.goodsId==detail.goodsId){
+              material.orderNum = detail.orderNum;
+            }
+          })
+        })
+      }else{
+        console.log(res);
+      }
+    })
+  }
+  searchProRequest():Observable<any>{
+    return this.api.post('app/order/placeorder/query/querymaterial',{
+      page:this.page,
+      limit:25,
       requestVo:{
         goodsCode:this.goodsCode,
         goodsDesc:this.goodsDesc,
@@ -109,7 +141,7 @@ export class AddDetailPage {
         orderGenResource:this.orderGenResource
       }
     })
-      .subscribe((res:any)=>{
+      /*.subscribe((res:any)=>{
         console.log(res);
         if(res.type=='SUCCESS'){
           this.selectPros = res.data;
@@ -123,7 +155,7 @@ export class AddDetailPage {
         }else{
           console.log(res.msg);
         }
-      })
+      })*/
   }
   addShop(detail:any){
     detail.orderNum=1;
@@ -200,5 +232,55 @@ export class AddDetailPage {
       this.content.scrollTo(0, e.keyboardHeight);
     });
   }*/
+  doRefresh(e:any){
+    this.infiniteScroll.enable(true);
+    this.page =1;
+    this.selectPros=[];
+    this.searchProRequest().subscribe((res:any)=>{
+      if(res.type=='SUCCESS'){
+        this.total = res.total;
+        this.selectPros = [...this.selectPros,...res.data];
+        res.data.forEach((material:any)=>{
+          this.shopDetails.forEach((detail:any)=>{
+            if(material.goodsId==detail.goodsId){
+              material.orderNum = detail.orderNum;
+            }
+          })
+        });
+        e.complete();
+      }else{
+        console.log(res);
+        e.complete()
+      }
+    })
+  }
+  doInfinite(e:any){
+    console.log(e);
+    if(this.selectPros.length<this.total){
+      // debugger;
+      this.page++;
+      this.searchProRequest()
+        .subscribe((res:any)=>{
+          console.log(res);
+          if(res.type=='SUCCESS'){
+            this.total = res.total;
+            this.selectPros = [...this.selectPros,...res.data];
+            res.data.forEach((material:any)=>{
+              this.shopDetails.forEach((detail:any)=>{
+                if(material.goodsId==detail.goodsId){
+                  material.orderNum = detail.orderNum;
+                }
+              })
+            });
+            e.complete();
+          }else{
+            console.log(res);
+            e.complete()
+          }
+        })
+    }else{
+      e.enable(false);
+    }
+  }
 
 }

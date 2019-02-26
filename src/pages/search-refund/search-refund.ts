@@ -63,7 +63,9 @@ export class SearchRefundPage {
     this.refundFrom = fb.group({
       orderGenResource:[null],
       customerName:[null],
-      deliveryNo:[null]
+      deliveryNo:[null],
+      startDate:[null],
+      endDate:[null]
     });
     this.refundFrom.patchValue({orderGenResource:navParams.data.orderType});
   }
@@ -104,7 +106,7 @@ export class SearchRefundPage {
     /*this.myService.createLoading({
       content:'正在搜索...'
     });*/
-    return this.api.post(`app/order/deliveryorder/query/querydeliveryheader`,this.refundFrom.getRawValue())
+    return this.api.post(`app/order/deliveryorder/query/querydeliveryheader`,{page:this.page,limit:25,requestVo:this.refundFrom.getRawValue()})
       /*.subscribe((res:any)=>{
         this.myService.dismissLoading();
         console.log(res);

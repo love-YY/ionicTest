@@ -11,10 +11,11 @@ import {
   HttpUserEvent
 } from '@angular/common/http';
 import { Injectable,Injector,Inject } from '@angular/core';
-import {Observable} from "rxjs";
-import {mergeMap,catchError} from "rxjs/operators";
-import {of} from "rxjs/observable/of";
-import {MyServiceProvider} from "../my-service/my-service";
+import { Observable } from "rxjs";
+import { mergeMap,catchError } from "rxjs/operators";
+import { of } from "rxjs/observable/of";
+import { MyServiceProvider } from "../my-service/my-service";
+import { App } from "ionic-angular";
 
 @Injectable()
 export class NetProvider implements HttpInterceptor{
@@ -24,7 +25,8 @@ export class NetProvider implements HttpInterceptor{
 
   constructor(
     private injector:Injector,
-    private myService:MyServiceProvider
+    private myService:MyServiceProvider,
+    private app:App
   ) {
   }
 
@@ -101,13 +103,18 @@ export class NetProvider implements HttpInterceptor{
             return of(event);
           }else{
             console.log(body.errmsg || body.msg);
-            if(body.errmsg || body.msg)
-            this.myService.createToast({
-              message:body.errmsg || body.msg,
-              position:'top',
-              cssClass:'error',
-              duration:2000
-            })
+            if(body.errmsg || body.msg){
+              this.myService.createToast({
+                message:body.errmsg || body.msg,
+                position:'top',
+                cssClass:'error',
+                duration:2000
+              })
+            }
+            if(body.msg =='用户会话已失效，请注销重登'){
+              this.app.getRootNav().setRoot('LoginPage');
+            }
+
           }
         }
         break;

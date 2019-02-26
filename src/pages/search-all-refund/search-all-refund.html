@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>订单查询</ion-title>
+    <ion-title>全部销退订单</ion-title>
   </ion-navbar>
   <ion-toolbar #toolbar class="my-toolbar">
     <form [formGroup]="searchAllRefundForm">
@@ -15,7 +15,7 @@
         <ion-row class="my_refund_s_row">
           <ion-col ion-item class="my_refund_s_col">
             <!--<ion-label>类型</ion-label>-->
-            <ion-select class="my_select" [formControlName]="'orderType'"  placeholder="请选择类型" cancelText="取消" okText="确认">
+            <ion-select class="my_select" [formControlName]="'orderGenResource'"  placeholder="请选择类型" cancelText="取消" okText="确认">
               <ion-option value="W">代洗</ion-option>
               <ion-option value="S">灭菌</ion-option>
               <ion-option value="R">租赁</ion-option>
@@ -36,23 +36,23 @@
       </ion-grid>
       <ion-item>
         <ion-label>单据号</ion-label>
-        <ion-input type="text" clearInput="true" [formControlName]="'orderNo'"></ion-input>
+        <ion-input type="text" clearInput="true" [formControlName]="'returnNo'"></ion-input>
       </ion-item>
       <ion-grid class="my_refund_s_grid">
         <ion-row class="my_refund_s_row">
           <ion-col col-6 ion-item class="my_refund_s_col">
             <ion-label>日期</ion-label>
-            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+            <ion-datetime displayFormat="YYYY-MM-DD" [formControlName]="'startDate'" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
           </ion-col>
           <ion-col col-6 ion-item class="my_refund_s_col">
             <ion-label>至</ion-label>
-            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+            <ion-datetime displayFormat="YYYY-MM-DD" [formControlName]="'endDate'" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
           </ion-col>
         </ion-row>
       </ion-grid>
       <ion-item>
         <ion-label>客户</ion-label>
-        <ion-input type="text" clearInput="true" [formControlName]="'customerDeptName'" ></ion-input>
+        <ion-input type="text" clearInput="true" [formControlName]="'customerName'" ></ion-input>
       </ion-item>
       <div padding-left padding-right>
         <button ion-button block  (click)="searchRefundorder()">搜索</button>
@@ -126,15 +126,15 @@
             客户:{{srch.customerName}}
           </ion-col>
         </ion-row>
-        <ion-row [ngSwitch]="srch.orderStatus">
+        <!--<ion-row [ngSwitch]="srch.orderStatus">
           <ion-col text-end *ngSwitchCase="'N'">
             <button ion-button small color="danger" (click)="deleteOrder(srch)">删除</button>
             <button ion-button small color="danger" (click)="editOrder(srch)">编辑</button>
             <button ion-button small color="danger" (click)="submitOrder()">提交</button>
           </ion-col>
-          <!--<ion-col text-end *ngSwitchCase="'R'">
+          &lt;!&ndash;<ion-col text-end *ngSwitchCase="'R'">
             <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
-          </ion-col>-->
+          </ion-col>&ndash;&gt;
           <ion-col text-end *ngSwitchCase="'S'">
             <button ion-button small color="danger" (click)="cancelOrder(srch)">作废</button>
           </ion-col>
@@ -144,7 +144,7 @@
           <ion-col text-end *ngSwitchCase="'D'">
             <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>
           </ion-col>
-        </ion-row>
+        </ion-row>-->
         <!--<ion-row>
           <ion-col text-end>
             <button ion-button small color="danger" (click)="receiptConfirm(srch)">收货确认</button>

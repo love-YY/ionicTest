@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>订单查询</ion-title>
+    <ion-title>{{title}}</ion-title>
   </ion-navbar>
   <ion-toolbar>
     <!--<ion-buttons start>
@@ -142,7 +142,7 @@
   <!--<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>-->
-  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (edit)="editOrder($event)" (checkError)="checkError($event)"></search-result>
+  <search-result [orderForm]="''" [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (edit)="editOrder($event)" (checkError)="checkError($event)"></search-result>
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>

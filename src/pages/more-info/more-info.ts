@@ -27,10 +27,8 @@ export class MoreInfoPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MoreInfoPage');
   }
   openItem(){
-    console.log('change password');
     this.navCtrl.push('ChangePasswordPage');
   }
   logout(){

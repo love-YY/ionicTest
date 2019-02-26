@@ -40,8 +40,10 @@ export class SearchAllPage {
     this.searchAllForm = fb.group({
       orderNo:[''],
       orderStatus:[{value:'',disabled:true}],
-      orderType:[''],
-      customerDeptName:['']
+      orderGenResource:[''],
+      customerDeptName:[''],
+      startDate:[null],
+      endDate:[null]
     });
     if(navParams.data.orderStatus==''){
       this.url = 'app/order/placeorder/query/queryorderheader'
@@ -52,11 +54,22 @@ export class SearchAllPage {
     }
     this.orderStatus = navParams.data.orderStatus;
     events.subscribe('saveOrderAll',(order:any)=>{
+      // debugger;
       this.searchedOrder.forEach((res)=>{
         if(res.orderId==order.orderId){
           Object.assign(res,order);
         }
       });
+      // this.searchOrder();
+    });
+    events.subscribe('submitOrderAll',(order:any)=>{
+      // debugger;
+      this.searchedOrder.forEach((res)=>{
+        if(res.orderId==order.orderId){
+          Object.assign(res,order);
+        }
+      });
+      // this.searchOrder();
     })
   }
 
@@ -68,6 +81,7 @@ export class SearchAllPage {
 
   }
   searchOrder(){
+    console.log(this.infiniteScroll);
     this.infiniteScroll.enable(true);
     this.page =1;
     this.searchedOrder = [];
@@ -84,7 +98,10 @@ export class SearchAllPage {
       }
     })
   }
-
+  //删除订单
+  deleteOrder(order:any):void{
+    this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId);
+  }
 
   searchOrderRequest(params?:any):Observable<any>{
     console.log(this.searchAllForm.get('orderStatus').value);
@@ -173,6 +190,11 @@ export class SearchAllPage {
         this.myService.dismissLoading();
         if(res.type=='SUCCESS'){
           let checkErrModal = this.modalCtrl.create('CheckErrorPage',{order:res.data});
+          checkErrModal.onDidDismiss((order:any)=>{
+            if(order){
+              this.navCtrl.push('CreateOrderPage',{type:'checkR',order:res.data,name:'编辑错误订单'});
+            }
+          });
           checkErrModal.present();
         }else{
           console.log(res.msg);
@@ -185,7 +207,7 @@ export class SearchAllPage {
     this.api.post(`app/order/placeorder/query/queryorder?orderId=${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
-          this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data,from:'all'});
+          this.navCtrl.push('CreateOrderPage',{type:'check',order:res.data,from:'all',name:'编辑订单'});
         }else{
           console.log(res.msg);
         }

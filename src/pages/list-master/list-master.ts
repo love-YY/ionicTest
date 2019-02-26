@@ -47,7 +47,7 @@ export class ListMasterPage {
   /**
    * Navigate to the detail page for this item.
    */
-  openItem(orderStatus:any) {
+  openItem(orderStatus:any,name?:string) {
     /*this.navCtrl.push('ItemDetailPage', {
       item: item
     });*/
@@ -61,7 +61,7 @@ export class ListMasterPage {
       console.log(111);
       this.navCtrl.push('SearchAllDeliveryPage');
     }else{
-      this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus});
+      this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus,title:name});
     }
     // this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus});
 

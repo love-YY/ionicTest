@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import { IonicPage, NavController, NavParams,ModalController,InfiniteScroll } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,ModalController,InfiniteScroll,Events } from 'ionic-angular';
 import {FormGroup,FormBuilder} from "@angular/forms";
 import {MyServiceProvider} from "../../providers";
 import {Api} from "../../providers";
@@ -30,18 +30,31 @@ export class SearchAllDeliveryPage {
     public fb:FormBuilder,
     public myService:MyServiceProvider,
     public api:Api,
-    public modalCtrl:ModalController
+    public modalCtrl:ModalController,
+    public event:Events
   ) {
     this.searchAlldeliveryForm = fb.group({
-      orderNo:[''],
-      orderStatus:[''],
-      orderType:[''],
-      customerDeptName:['']
+      orderNo:[null],
+      orderStatus:[null],
+      orderGenResource:[null],
+      customerDeptName:[null],
+      startDate:[null],
+      endDate:[null]
     });
     this.deliveryOrder = navParams.get('deliveryOrder');
     if(this.navParams.get('type')!='saleTo'){
       this.fromSale = true;
     }
+    event.subscribe('deliveryAll',(data:any)=>{
+      console.log(data);
+      this.searchDeliveryOrder();
+      /*this.deliveryOrder.forEach((res)=>{
+        /!*if(res.orderId==data.orderId){
+          Object.assign(res,data);
+        }*!/
+
+      });*/
+    })
 
   }
 
@@ -107,7 +120,7 @@ export class SearchAllDeliveryPage {
     /*this.myService.createLoading({
       content:'加载中...'
     });*/
-    return this.api.post('app/order/deliveryorder/query/querydeliveryheader',this.searchAlldeliveryForm.getRawValue())
+    return this.api.post('app/order/deliveryorder/query/querydeliveryheader',{page:this.page,limit:25,requestVo:this.searchAlldeliveryForm.getRawValue()})
       /*.subscribe((res:any)=>{
         console.log(res);
         this.myService.dismissLoading();
@@ -140,7 +153,7 @@ export class SearchAllDeliveryPage {
     this.api.post(`app/order/deliveryorder/query/deliveryorder?deliveryId=${order.deliveryId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
-          let modal = this.modalCtrl.create('ReceiptConfirmPage',{order:res.data});
+          let modal = this.modalCtrl.create('ReceiptConfirmPage',{order:res.data,from:'all'});
           modal.present();
         }else{
           console.log(res.msg);

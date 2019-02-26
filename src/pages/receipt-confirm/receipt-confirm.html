@@ -77,7 +77,7 @@
                     <p style="height: 100%;font-size: 1.2rem">收货数</p>
                   </ion-col>
                   <ion-col text-center>
-                    <button class="numBtn" ion-button clear icon-only round (click)="receiptNumMinus(detail)" [disabled]="detail.recDeliveryNum<=1">
+                    <button class="numBtn" ion-button clear icon-only round (click)="receiptNumMinus(detail)" [disabled]="detail.recDeliveryNum<=0">
                       <ion-icon class="my_icon" name="remove-circle"></ion-icon>
                     </button>
                   </ion-col>
@@ -97,7 +97,7 @@
                     <p style="height: 100%;font-size: 1.2rem">退回数</p>
                   </ion-col>
                   <ion-col text-center>
-                    <button class="numBtn" ion-button clear icon-only round (click)="backNumMinus(detail)" [disabled]="detail.unRecNum<=1">
+                    <button class="numBtn" ion-button clear icon-only round (click)="backNumMinus(detail)" [disabled]="detail.unRecNum<=0">
                       <ion-icon class="my_icon" name="remove-circle"></ion-icon>
                     </button>
                   </ion-col>

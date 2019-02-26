@@ -35,6 +35,7 @@ export class CreateOrderPage {
   sale_order_type:boolean = true;
   orderStatus:string;
   showEdit:boolean = false;
+  title:string = '新建订单';
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -79,8 +80,11 @@ export class CreateOrderPage {
     events.subscribe('detailAddOrder',(data)=>{
       this.orderDetail = data;
     });
+    if(this.navParams.data.name){
+      this.title = this.navParams.data.name;
+    }
     if(this.navParams.data.type=='check'){
-      if(this.navParams.data.order.orderStatus!='N'&&this.navParams.data.order.orderStatus!='V'){
+      if(this.navParams.data.order.orderStatus!='N'&&this.navParams.data.order.orderStatus!='V'&&this.navParams.data.order.orderStatus!='R'){
         this.showEdit = true;
       }
       if(this.navParams.data.order.orderStatus=='N'){
@@ -143,7 +147,6 @@ export class CreateOrderPage {
       let orderData = this.createForm.getRawValue();
       orderData['details'] = this.orderDetail;
       console.log(orderData);
-      console.log(JSON.stringify(orderData));
       this.myService.createLoading({
         content:'保存中...'
       });
@@ -167,7 +170,9 @@ export class CreateOrderPage {
               this.navCtrl.pop();
             }*/
             if(this.navParams.get('type')=='check'){
+              // debugger;
               if(this.navParams.get('from')=='all'){
+                // debugger;
                 this.events.publish('saveOrderAll',res.data);
                 this.navCtrl.pop();
               }else {
@@ -218,7 +223,21 @@ export class CreateOrderPage {
               duration:1000,
               cssClass:'success'
             });
-            this.navCtrl.pop();
+            if(this.navParams.get('type')=='check'){
+              // debugger;
+              console.log(this.navParams.get(''))
+              if(this.navParams.get('from')=='all'){
+                // debugger;
+                this.events.publish('submitOrderAll',res.data);
+                this.navCtrl.pop();
+              }else {
+                this.events.publish('submitOrder',res.data);
+                this.navCtrl.pop();
+              }
+
+            }else{
+              this.navCtrl.pop();
+            }
 
           }else{
             console.log(res.msg);
@@ -338,6 +357,8 @@ export class CreateOrderPage {
   }
   /*copyOrder*/
   copyOrder(){
+    this.title = '复制订单';
+    this.showEdit = false;
     // console.log(this.createForm.get('orderId').value);
     let orderId = this.createForm.get('orderId').value;
     this.myService.createLoading({

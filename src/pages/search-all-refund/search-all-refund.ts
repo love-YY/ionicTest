@@ -33,9 +33,12 @@ export class SearchAllRefundPage {
   ) {
     this.searchAllRefundForm = fb.group({
       orderNo:[''],
+      returnNo:[null],
       orderStatus:[{value:'',disabled:true}],
-      orderType:[''],
-      customerDeptName:['']
+      orderGenResource:[''],
+      customerName:[''],
+      startDate:[null],
+      endDate:[null]
     });
   }
 
@@ -66,7 +69,7 @@ export class SearchAllRefundPage {
     /*this.myService.createLoading({
       content:'加载中...'
     });*/
-    return this.api.post('app/order/returnorder/query/queryreturnorderheader',this.searchAllRefundForm.getRawValue())
+    return this.api.post('app/order/returnorder/query/queryreturnorderheader',{page:this.page,limit:25,requestVo:this.searchAllRefundForm.getRawValue()})
       /*.subscribe((res:any)=>{
         this.myService.dismissLoading();
         if(res.type=='SUCCESS'){
@@ -109,7 +112,6 @@ export class SearchAllRefundPage {
   doInfinite(e:any){
     console.log(e);
     if(this.refundOrderHeader.length<this.total){
-      // debugger;
       this.page++;
       this.searchRefundorderRequest()
         .subscribe((res:any)=>{
@@ -127,4 +129,7 @@ export class SearchAllRefundPage {
       e.enable(false);
     }
   }
+}
+let myAdd:(x:number,y:number)=> number = function (x:number,y:number):number {
+  return x+y;
 }

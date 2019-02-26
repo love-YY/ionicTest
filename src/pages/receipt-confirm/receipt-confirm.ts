@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,ViewController,ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,ViewController,ToastController,Events } from 'ionic-angular';
 import {FormGroup,FormBuilder,Validators} from "@angular/forms";
 import {Api} from "../../providers";
 import {MyServiceProvider} from "../../providers";
@@ -35,7 +35,8 @@ export class ReceiptConfirmPage {
     public viewCtrl:ViewController,
     public api:Api,
     public toastCtrl:ToastController,
-    public myService:MyServiceProvider
+    public myService:MyServiceProvider,
+    public event:Events
   ) {
     this.receiptForm = fb.group({
       deliveryId:[],
@@ -68,7 +69,7 @@ export class ReceiptConfirmPage {
       isCancel:[{value:0,disabled:true}],
       orderGenResource:['']
     });
-    console.log(navParams.data.order);
+    console.log(navParams.data);
     this.orderStatus = navParams.data.order.orderStatus;
     this.receiptForm.patchValue(navParams.data.order);
     this.ordertype = navParams.data.order.orderGenResource;
@@ -144,6 +145,11 @@ export class ReceiptConfirmPage {
                   message:'收货成功',
                   duration:1000
                 });
+                if(this.navParams.data.from=='all'){
+                  this.event.publish('deliveryAll',res.data);
+                }else{
+                  this.event.publish('deliverySection',res.data);
+                }
                 this.navCtrl.pop();
               }else{
                 console.log(res.msg);

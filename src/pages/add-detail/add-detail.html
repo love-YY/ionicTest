@@ -36,6 +36,11 @@
 
 
 <ion-content (ionScroll)="my_scroll($event)">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-list>
     <ion-item-group>
       <ion-card *ngFor="let detail of selectPros;let i = index">
@@ -93,6 +98,9 @@
       </ion-card>
     </ion-item-group>
   </ion-list>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>
 <ion-footer>

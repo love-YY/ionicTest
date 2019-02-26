@@ -16,7 +16,7 @@
 
   <ion-list>
     <!--<ion-item-sliding *ngFor="let item of currentItems">-->
-      <button ion-item *ngFor="let item of currentItems" (click)="openItem(item.orderStatus)">
+      <button ion-item *ngFor="let item of currentItems" (click)="openItem(item.orderStatus,item.name)">
         <ion-avatar item-start>
           <img [src]="item.profilePic" />
         </ion-avatar>

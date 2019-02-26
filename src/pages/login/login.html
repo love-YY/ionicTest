@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ 'LOGIN_TITLE' | translate }}</ion-title>
+    <ion-title>登陆</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -10,8 +10,8 @@
 <ion-content>
 
   <div class="loginForm">
-    <ion-avatar>
-      <img src="assets/img/speakers/bear.jpg">
+    <ion-avatar style="padding: 5px;">
+      <img src="assets/img/speakers/realcan-logo-mini.png">
     </ion-avatar>
     <form [formGroup]="loginForm" (submit)="doLogin()">
       <ion-list>
@@ -28,7 +28,7 @@
           <ion-toggle [formControlName]="'isSave'" (ionChange)="isSaveChange($event)"></ion-toggle>
         </ion-item>
         <div padding>
-          <button ion-button color="primary" block [disabled]="!loginForm.valid">{{ 'LOGIN_BUTTON' | translate }}</button>
+          <button ion-button color="primary" block [disabled]="!loginForm.valid">登 陆</button>
         </div>
       </ion-list>
     </form>

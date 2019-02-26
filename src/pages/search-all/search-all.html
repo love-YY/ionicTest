@@ -6,7 +6,7 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>订单查询</ion-title>
+    <ion-title>全部销售订单</ion-title>
   </ion-navbar>
   <ion-toolbar #toolbar class="my-toolbar">
     <form [formGroup]="searchAllForm">
@@ -14,7 +14,7 @@
         <ion-row class="my_refund_s_row">
           <ion-col col-6 ion-item class="my_refund_s_col">
             <!--<ion-label>类型</ion-label>-->
-            <ion-select class="my_select" [formControlName]="'orderType'"  placeholder="请选择类型" cancelText="取消" okText="确认">
+            <ion-select class="my_select" [formControlName]="'orderGenResource'"  placeholder="请选择类型" cancelText="取消" okText="确认">
               <ion-option value="W">代洗</ion-option>
               <ion-option value="S">灭菌</ion-option>
               <ion-option value="R">租赁</ion-option>
@@ -41,11 +41,11 @@
         <ion-row class="my_refund_s_row">
           <ion-col col-6 ion-item class="my_refund_s_col">
             <ion-label>日期</ion-label>
-            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+            <ion-datetime displayFormat="YYYY-MM-DD" [formControlName]="'startDate'" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
           </ion-col>
           <ion-col col-6 ion-item class="my_refund_s_col">
             <ion-label>至</ion-label>
-            <ion-datetime displayFormat="YYYY-MM-DD" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
+            <ion-datetime displayFormat="YYYY-MM-DD" [formControlName]="'endDate'" [cancelText]="'取消'" [doneText]="'确认'" placeholder="日期选择"></ion-datetime>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -69,7 +69,7 @@
 
     </ion-refresher-content>
   </ion-refresher>
-  <search-result [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (searchDeliveryOrder)="searchDeliveryOrder($event)" (edit)="editOrder($event)" (checkError)="checkError($event)"></search-result>
+  <search-result [orderForm]="'all'" [status]="orderStatus" [dataArr]="searchedOrder" (delete)="deleteOrder($event)" (cancel)="cancelOrder($event)" (submit)="submitOrder($event)" (searchDeliveryOrder)="searchDeliveryOrder($event)" (edit)="editOrder($event)" (checkError)="checkError($event)"></search-result>
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
