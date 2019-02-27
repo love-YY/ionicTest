@@ -202,6 +202,7 @@ export class CreateOrderPage {
     }
 
   }
+  //提交订单
   submitOrder(){
     for (const i in this.createForm.controls) {
       this.createForm.controls[ i ].markAsDirty();
