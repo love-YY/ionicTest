@@ -23,7 +23,7 @@ export class SearchAllDeliveryPage {
   fromSale:boolean = false;
   page:number = 1;
   total:number;
-  @ViewChild(InfiniteScroll) infiniteScroll:InfiniteScroll
+  @ViewChild(InfiniteScroll) infiniteScroll:InfiniteScroll;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -45,6 +45,7 @@ export class SearchAllDeliveryPage {
     if(this.navParams.get('type')!='saleTo'){
       this.fromSale = true;
     }
+    //回传全部收货
     event.subscribe('deliveryAll',(data:any)=>{
       console.log(data);
       this.searchDeliveryOrder();

@@ -33,7 +33,7 @@ export class ListMasterPage {
       if (item) {
         this.items.add(item);
       }
-    })
+    });
     addModal.present();
   }
 
@@ -58,7 +58,6 @@ export class ListMasterPage {
     }else if(orderStatus=='B'){
       this.navCtrl.push('SearchAllRefundPage');
     }else if(orderStatus=='allDelivery'){
-      console.log(111);
       this.navCtrl.push('SearchAllDeliveryPage');
     }else{
       this.navCtrl.push('SearchOrderPage',{orderStatus:orderStatus,title:name});
@@ -67,3 +66,6 @@ export class ListMasterPage {
 
   }
 }
+
+
+

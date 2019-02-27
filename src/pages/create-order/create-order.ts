@@ -144,6 +144,15 @@ export class CreateOrderPage {
         duration:2000
       })
     }else{
+      if(this.orderDetail.length<1){
+        this.myService.createToast({
+          message:'订单明细不能为空',
+          position:'top',
+          cssClass:'warning',
+          duration:200
+        });
+        return;
+      }
       let orderData = this.createForm.getRawValue();
       orderData['details'] = this.orderDetail;
       console.log(orderData);
@@ -206,6 +215,15 @@ export class CreateOrderPage {
         duration:2000
       });
     }else{
+      if(this.orderDetail.length<1){
+        this.myService.createToast({
+          message:'订单明细不能为空',
+          position:'top',
+          cssClass:'warning',
+          duration:200
+        });
+        return;
+      }
       let orderData = this.createForm.getRawValue();
       orderData['details'] = this.orderDetail;
       console.log(orderData);

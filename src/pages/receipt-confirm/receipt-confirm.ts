@@ -88,12 +88,14 @@ export class ReceiptConfirmPage {
   selectCancel(){
     this.viewCtrl.dismiss();
   }
-  receiptNumMinus(detail:any){
+  //收货数
+  receiptNumMinus(detail:any):void{
     detail.recDeliveryNum--;
   }
   receiptNumAdd(detail:any){
     detail.recDeliveryNum++;
   }
+  //退回数
   backNumMinus(detail:any){
     detail.unRecNum--;
   }
