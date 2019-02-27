@@ -106,7 +106,7 @@ export class ChangePasswordPage {
     // debugger;
     const newPwd = control.get('newPwd');
     const newPwd1 = control.get('newPwd1');
-    return newPwd && newPwd1 && newPwd.value!=newPwd1.value?{'confirmPwd':true}:null;
+    return newPwd && newPwd1 && newPwd.value != newPwd1.value?{'confirmPwd':true}:null;
   }
 
 }

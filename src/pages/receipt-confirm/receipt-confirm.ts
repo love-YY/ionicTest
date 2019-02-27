@@ -72,6 +72,12 @@ export class ReceiptConfirmPage {
     console.log(navParams.data);
     this.orderStatus = navParams.data.order.orderStatus;
     this.receiptForm.patchValue(navParams.data.order);
+    //是否有退单
+    if(navParams.data.order.isCancel=="1"){
+      this.receiptForm.get('isCancel').patchValue(1);
+    }else{
+      this.receiptForm.get('isCancel').patchValue(0);
+    }
     this.ordertype = navParams.data.order.orderGenResource;
     this.receiptDetail = navParams.data.order.details;
   }

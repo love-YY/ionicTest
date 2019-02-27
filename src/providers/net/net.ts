@@ -20,9 +20,6 @@ import { App } from "ionic-angular";
 @Injectable()
 export class NetProvider implements HttpInterceptor{
 
-  loading:any;
-
-
   constructor(
     private injector:Injector,
     private myService:MyServiceProvider,
@@ -42,10 +39,6 @@ export class NetProvider implements HttpInterceptor{
     > {
     // 统一加上服务端前缀
     let url = req.url;
-    // let loading;
-    // set auth t/*if (!url.startsWith('https://') && !url.startsWith('http://')) {
-    //       url = environment.SERVER_URL + url;
-    //     }*/oken
     const newReq = req.clone({
       url: url,
       withCredentials:true,
