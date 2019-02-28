@@ -7,7 +7,7 @@ import {Api} from "../../providers";
  * Generated class for the MoreInfoPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigati.
+ * Ionic pages and navigation.
  */
 
 @IonicPage()
