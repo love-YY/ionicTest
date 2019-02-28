@@ -41,6 +41,7 @@ export class MoreInfoPage {
         if(res.type=='SUCCESS'){
           // this.navCtrl.setRoot('LoginPage',{});
           this.app.getRootNav().setRoot('LoginPage');
+          // delete (<any>window).launchURL;
         }else{
           console.log(res.msg);
         }

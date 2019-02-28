@@ -16,6 +16,7 @@
 // automatically applied to the <body> element in the app.
 
 //自定义toast 不同状态颜色
+//错误
 .error {
   .toast-message{
     color: #a94442;
@@ -25,6 +26,7 @@
     border: 1px solid #a94442;
   }
 }
+//成功
 .success{
   .toast-message{
     color: #3c763d;
@@ -34,6 +36,7 @@
     border: 1px solid #3c763d;
   }
 }
+//警告
 .warning {
   .toast-message{
     color: #faad14;
@@ -67,4 +70,13 @@
   justify-content:center;
   font-size: .8em;
   padding-top: 8px;
+}
+
+
+/*alert弹窗 删除按钮颜色*/
+.alert_btn_del{
+  .button-inner{
+    color: #f53d3d;
+  }
+
 }

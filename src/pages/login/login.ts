@@ -18,8 +18,8 @@ export class LoginPage {
   // If you're using the username field with or without email, make
   // sure to add it to the type
   account: { loginName: string, pwd: string } = {
-    loginName: 'R20190104__qq',
-    pwd: 'R20190104__qq'
+    loginName: 'R20190104',
+    pwd: 'R20190104'
   };
   loginForm:FormGroup;
 
@@ -71,9 +71,7 @@ export class LoginPage {
           });
           /**/
           if(this.loginForm.get('isSave').value){
-            this.storage.set('loginInfo',this.loginForm.getRawValue()).then((res)=>{
-
-            });
+            this.storage.set('loginInfo',this.loginForm.getRawValue()).then((res)=>{});
           }else{
             this.storage.remove('loginInfo').then((res)=>{
 

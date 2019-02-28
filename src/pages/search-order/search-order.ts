@@ -150,6 +150,7 @@ export class SearchOrderPage {
   deleteOrder(order:any):void{
     this.searchedOrder = this.searchedOrder.filter(data=>data.orderId!=order.orderId);
   }
+
   doRefresh(e:any){
     this.infiniteScroll.enable(true);
     this.page =1;

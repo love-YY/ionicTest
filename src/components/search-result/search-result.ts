@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {LoadingController,NavController,ToastController,ModalController} from "ionic-angular";
+import {LoadingController,NavController,ToastController,ModalController,AlertController} from "ionic-angular";
 import {Api} from "../../providers";
 import {MyServiceProvider} from "../../providers";
 
@@ -31,7 +31,8 @@ export class SearchResultComponent {
     public api:Api,
     public toast:ToastController,
     public modalCtrl:ModalController,
-    public myService:MyServiceProvider
+    public myService:MyServiceProvider,
+    public alertCtrl:AlertController
   ) {
     console.log('Hello SearchResultComponent Component');
   }
@@ -62,7 +63,42 @@ export class SearchResultComponent {
   //删除订单
   deleteOrder(order:any):void{
     console.log(order);
-    this.api.post(`app/order/placeorder/delorder/${order.orderId}`,{})
+    let delAlert = this.alertCtrl.create({
+      title:'删除订单',
+      message:'确定要删除该订单?',
+      buttons:[
+        {
+          text:'取消',
+          role:'cancel',
+          handler:()=>{
+            console.log('cancel');
+          }
+        },
+        {
+          text:'删除',
+          handler:()=>{
+            console.log('del');
+            this.api.post(`app/order/placeorder/delorder/${order.orderId}`,{})
+              .subscribe((res:any)=>{
+                if(res.type=='SUCCESS'){
+                  this.myService.createToast({
+                    message:'删除成功',
+                    position:'top',
+                    cssClass:'success',
+                    duration:2000
+                  });
+                  this.delete.emit(order);
+                }else{
+                  console.log(res);
+                }
+              })
+          },
+          cssClass:'alert_btn_del'
+        }
+      ]
+    })
+    delAlert.present();
+    /*this.api.post(`app/order/placeorder/delorder/${order.orderId}`,{})
       .subscribe((res:any)=>{
         if(res.type=='SUCCESS'){
           let toast = this.toast.create({
@@ -81,7 +117,7 @@ export class SearchResultComponent {
           });
           toast.present();
         }
-      })
+      })*/
   }
   //编辑订单
   editOrder(order):void{

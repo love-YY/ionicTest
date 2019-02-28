@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,App} from 'ionic-angular';
-import {FormGroup, FormBuilder, Validators, ValidatorFn, ValidationErrors} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, ValidatorFn, ValidationErrors, AbstractControl} from "@angular/forms";
 import {Storage} from "@ionic/storage";
 import {Api} from "../../providers";
 import {HttpClient} from "@angular/common/http";
@@ -39,40 +39,48 @@ export class ChangePasswordPage {
     public myService:MyServiceProvider,
     public app:App
   ) {
+    //响应表单以及单个formControl的验证器和表单整体的验证器
     this.changePwdFrom = this.fb.group({
       userId:['',Validators.required],
       loginName:[{value:null,disabled:true}],
       oldPwd:['',Validators.required],
       newPwd:['',Validators.required],
-      newPwd1:['',Validators.required]
+      newPwd1:['',[Validators.required]]
 
     },{validator:this.confirmValidator});
+
     storage.get('user').then((data:any)=>{
       this.changePwdFrom.get('userId').setValue(data.userId);
       this.changePwdFrom.get('loginName').setValue(data.loginName);
     });
 
   }
-
+  //钩子
   ionViewDidLoad() {
+
   }
+  //修改密码
   changePwd(){
+    /*console.log(this.changePwdFrom);
+    console.log(this.changePwdFrom.getError('required'));*/
     for (const i in this.changePwdFrom.controls) {
       this.changePwdFrom.controls[ i ].markAsDirty();
       this.changePwdFrom.controls[ i ].updateValueAndValidity();
       if(this.changePwdFrom.controls[i].hasError('required')){
-        console.log(this.changePwdFrom.get(i));
+        // console.log(this.changePwdFrom.get(i));
         console.log(`${formName[i]}不能为空`);
       }
     }
     if(this.changePwdFrom.get('newPwd').value!=this.changePwdFrom.get('newPwd1').value){
-      console.log('两次密码不一样');
+      this.myService.createToast({
+        message:'确认密码与新密码不相同',
+        cssClass:'warning',
+        position:'top',
+        duration:2000
+      });
       return;
     }
     if(this.changePwdFrom.valid){
-      console.log(11111);
-      console.log(this.changePwdFrom.getRawValue());
-
       this.api.post('app/user/modifysecret',this.changePwdFrom.getRawValue())
         .subscribe((res:any)=>{
           if(res.type=='SUCCESS'){
@@ -103,12 +111,9 @@ export class ChangePasswordPage {
   }
   //自定义验证证器（用于验证表单确认密码与新密码是否一致）
   confirmValidator:ValidatorFn = (control:FormGroup):ValidationErrors|null=>{
-    // debugger;
     const newPwd = control.get('newPwd');
     const newPwd1 = control.get('newPwd1');
     return newPwd && newPwd1 && newPwd.value != newPwd1.value?{'confirmPwd':true}:null;
   }
-
 }
-
 
