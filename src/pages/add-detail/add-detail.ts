@@ -1,5 +1,5 @@
 import {Component, ViewChild,NgZone} from '@angular/core';
-import { IonicPage, NavController, NavParams,Content,ModalController,Events,InfiniteScroll } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,Content,ModalController,Events,InfiniteScroll,AlertController } from 'ionic-angular';
 import {Api} from "../../providers";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {Observable} from "rxjs/Observable";
@@ -65,21 +65,22 @@ export class AddDetailPage {
     public modalCtr:ModalController,
     public api:Api,
     public events:Events,
-    public myService:MyServiceProvider
+    public myService:MyServiceProvider,
+    public alertCtrl:AlertController
   ) {
     this.isOpen = true;
     events.subscribe('shopAdd',(data)=>{
       console.log(data);
-      this.selectPros.forEach((res:any)=>{
+      /*this.selectPros.forEach((res:any)=>{
         if(res.goodsId==data.goodsId){
           res.orderNum = data.orderNum;
         }
-      });
+      });*/
       this.calculateShopDetailTotal()
     });
     events.subscribe('shopMinus',(data)=>{
       console.log(data);
-      this.selectPros.forEach((res:any)=>{
+      /*this.selectPros.forEach((res:any)=>{
         if(res.goodsId==data.goodsId){
           if(data.orderNum<1){
             delete  res.orderNum;
@@ -88,15 +89,16 @@ export class AddDetailPage {
           }
 
         }
-      });
+      });*/
       this.calculateShopDetailTotal()
     });
     console.log(navParams.data.orderDetail);
     this.orderGenResource = navParams.data.orderGenResource;
-    this.shopDetails = navParams.data.orderDetail;
+    // let oldOrderDetail = navParams.data.orderDetail;
+    this.shopDetails = JSON.parse(JSON.stringify(navParams.data)).orderDetail;
     this.calculateShopDetailTotal()
     events.subscribe('shopDel',(data)=>{
-      this.shopDetails=this.shopDetails.filter(res=>res.goodsId!=data.goodsId);
+      this.shopDetails=this.shopDetails.filter(res=>res.detail_index!=data.detail_index);
       this.calculateShopDetailTotal()
     })
   }
@@ -118,13 +120,13 @@ export class AddDetailPage {
       if(res.type=='SUCCESS'){
         this.total = res.total;
         this.selectPros = [...this.selectPros,...res.data];
-        res.data.forEach((material:any)=>{
+        /*res.data.forEach((material:any)=>{
           this.shopDetails.forEach((detail:any)=>{
             if(material.goodsId==detail.goodsId){
               material.orderNum = detail.orderNum;
             }
           })
-        })
+        })*/
       }else{
         console.log(res);
       }
@@ -158,28 +160,82 @@ export class AddDetailPage {
       })*/
   }
   addShop(detail:any){
-    detail.orderNum=1;
+    let addAlert = this.alertCtrl.create({
+      title:detail.goodsDesc,
+      inputs:[
+        {
+          name:'orderNum',
+          type:'number',
+          placeholder:'数量'
+        },
+        {
+          name:'memo',
+          placeholder:'备注'
+        }
+      ],
+      buttons:[
+        {
+          text: '取消',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: '添加',
+          handler: data => {
+            if(data.orderNum ==''){
+              this.myService.createToast({
+                message:'数量不能为空',
+                position:'top',
+                cssClass:'warning',
+                duration:2000
+              });
+              return;
+            }else if(data.orderNum<=0){
+              this.myService.createToast({
+                message:'数量不能小于0',
+                position:'top',
+                cssClass:'warning',
+                duration:2000
+              });
+              return;
+            }
+            console.log(data);
+            console.log({...detail,...data})
+            let addDetail = {...detail,...data};
+            addDetail.detail_index = this.shopDetails.length;
+            this.shopDetails =[...this.shopDetails,JSON.parse(JSON.stringify(addDetail))];
+            console.log(this.shopDetails)
+            this.calculateShopDetailTotal()
+          }
+        }
+      ]
+    });
+    addAlert.present();
+    // detail.orderNum=1;
+   /* detail.detail_index = this.shopDetails.length;
     this.shopDetails =[...this.shopDetails,JSON.parse(JSON.stringify(detail))];
     console.log(this.shopDetails)
-    this.calculateShopDetailTotal()
+    this.calculateShopDetailTotal()*/
   }
   detailNumMinus(detail:any){
     detail.orderNum--;
     this.shopDetails.forEach((res:any)=>{
-      if(res.goodsId==detail.goodsId){
+      if(res.detail_index==detail.detail_index){
         res.orderNum = detail.orderNum;
       }
     });
     if(detail.orderNum<1){
       delete detail.orderNum;
-      this.shopDetails = this.shopDetails.filter(res=>res.goodsId!=detail.goodsId)
+      this.shopDetails = this.shopDetails.filter(res=>res.detail_index!=detail.detail_index)
     }
     this.calculateShopDetailTotal()
   }
   detailNumAdd(detail:any){
     detail.orderNum++;
     this.shopDetails.forEach((res:any)=>{
-      if(res.goodsId==detail.goodsId){
+      if(res.detail_index==detail.detail_index){
         res.orderNum = detail.orderNum;
       }
     });

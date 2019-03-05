@@ -36,7 +36,7 @@ export class ShopModalPage {
     detail.orderNum--;
     this.events.publish('shopMinus',detail);
     if(detail.orderNum<1){
-      this.shopPro = this.shopPro.filter(res=>res.goodsId !=detail.goodsId);
+      this.shopPro = this.shopPro.filter(res=>res.detail_index !=detail.detail_index);
       this.events.publish('shopDel',detail);
     }
   }

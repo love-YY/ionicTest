@@ -45,13 +45,15 @@ export class ChangePasswordPage {
       loginName:[{value:null,disabled:true}],
       oldPwd:['',Validators.required],
       newPwd:['',Validators.required],
-      newPwd1:['',[Validators.required]]
+      newPwd1:['',[Validators.required]],
+      userName:[{value:null,disabled:true}]
 
-    },{validator:this.confirmValidator});
+    },{validator:this.confirmValidator()});
 
     storage.get('user').then((data:any)=>{
       this.changePwdFrom.get('userId').setValue(data.userId);
       this.changePwdFrom.get('loginName').setValue(data.loginName);
+      this.changePwdFrom.get('userName').setValue(data.userName);
     });
 
   }
@@ -110,10 +112,13 @@ export class ChangePasswordPage {
     }
   }
   //自定义验证证器（用于验证表单确认密码与新密码是否一致）
-  confirmValidator:ValidatorFn = (control:FormGroup):ValidationErrors|null=>{
-    const newPwd = control.get('newPwd');
-    const newPwd1 = control.get('newPwd1');
-    return newPwd && newPwd1 && newPwd.value != newPwd1.value?{'confirmPwd':true}:null;
+  confirmValidator():ValidatorFn{
+    return (control:AbstractControl):ValidationErrors|null=>{
+      const newPwd = control.get('newPwd');
+      const newPwd1 = control.get('newPwd1');
+      return newPwd && newPwd1 && newPwd.value !=newPwd1.value?{"confirmPwd":true}:null;
+    }
   }
 }
+
 

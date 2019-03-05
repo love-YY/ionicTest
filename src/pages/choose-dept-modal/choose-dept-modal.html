@@ -30,7 +30,7 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let dept of depts">
+    <ion-item *ngFor="let dept of depts" class="choose_item">
       <p>{{dept.customerDeptName}}</p>
       <p><span>编码</span>{{dept.customerDeptCode}}</p>
       <button ion-button icon-only round clear item-end (click)="add(dept)">

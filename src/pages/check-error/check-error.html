@@ -127,7 +127,7 @@
             </ion-row>
             <ion-row *ngIf="detail.sapMessage">
               <!--<span class="code" style="display: inline-block">备注</span>-->
-              <ion-label col-2 style="padding: 0">错误信息</ion-label>
+              <ion-label col-2 style="padding: 0">错误</ion-label>
               <ion-textarea [disabled]="!sale_order_type" class="receipt-memo" [(ngModel)]="detail.sapMessage"></ion-textarea>
             </ion-row>
             <ion-row *ngIf="!sale_order_type">

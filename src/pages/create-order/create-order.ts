@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,ModalController,Events,ToastController, } from 'ionic-angular';
-import {FormGroup,FormBuilder,Validators} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl} from "@angular/forms";
 import {Api} from "../../providers";
 import {Storage} from "@ionic/storage";
 import {MyServiceProvider} from "../../providers";
@@ -36,6 +36,7 @@ export class CreateOrderPage {
   orderStatus:string;
   showEdit:boolean = false;
   title:string = '新建订单';
+  token:string = '';
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -60,7 +61,7 @@ export class CreateOrderPage {
       billtoPartyName:[{value:'',disabled:true}],
       salesmanId:[''],
       salesmanCode:['',Validators.required],
-      salesmanName:[{value:"",disabled:true},Validators.required],
+      salesmanName:[{value:"",disabled:true}],
       memo:[''],
       companyId:['',Validators.required],
       companyCode:[''],
@@ -74,7 +75,8 @@ export class CreateOrderPage {
       saleAreaId:[''],
       saleAreaCode:[''],
       saleAreaName:[{value:'',disabled:true}],
-      orderGenResource:['']
+      orderGenResource:[''],
+      token:[null]
     });
     console.log(navParams);
     events.subscribe('detailAddOrder',(data)=>{
@@ -126,11 +128,22 @@ export class CreateOrderPage {
       this.createForm.patchValue({orderType:this.navParams.data.orderType});
       this.ordertype = this.navParams.data.orderType;
       this.createForm.patchValue(this.navParams.data.moreData);
+      this.token = this.navParams.data.moreData.token;
       console.log(this.navParams.data.moreData);
     }
   }
   //保存订单
   saveOrder(){
+    if(this.createForm.get('token').value !=this.token&&!this.navParams.get('type')){
+      this.myService.createToast({
+        message:'订单正在保存中，不能重复保存!',
+        position:'top',
+        cssClass:'warning',
+        duration:2000
+      });
+      return;
+    }
+    console.log(this.createForm);
     for (const i in this.createForm.controls) {
       this.createForm.controls[ i ].markAsDirty();
       this.createForm.controls[ i ].updateValueAndValidity();
@@ -157,13 +170,14 @@ export class CreateOrderPage {
       orderData['details'] = this.orderDetail;
       console.log(orderData);
       this.myService.createLoading({
-        content:'保存中...'
+        content:'保存中...',
       });
       this.api.post('app/order/placeorder/addorder',orderData,{withCredentials:true,headers:{'Content-Type':'application/json'}})
         .subscribe((res:any)=>{
           console.log(res);
           this.myService.dismissLoading();
           if(res.type=='SUCCESS'){
+            this.token ='';
             this.myService.createToast({
               message:'保存成功',
               position:'top',
@@ -366,7 +380,7 @@ export class CreateOrderPage {
   detailNumMinus(detail:any){
     detail.orderNum --;
     if(detail.orderNum<1){
-      this.orderDetail = this.orderDetail.filter(res=>res.goodsId!=detail.goodsId)
+      this.orderDetail = this.orderDetail.filter(res=>res.detail_index!=detail.detail_index)
     }
   }
   /*
@@ -396,3 +410,4 @@ export class CreateOrderPage {
       })
   }
 }
+

@@ -33,7 +33,7 @@
   </ion-refresher>
 
   <ion-list>
-    <ion-item *ngFor="let goodsOwner of goodsOwners">
+    <ion-item *ngFor="let goodsOwner of goodsOwners" class="choose_item">
       <p>{{goodsOwner.customerName}}</p>
       <p><span>编码</span>{{goodsOwner.customerCode}}</p>
       <button ion-button icon-only clear item-end (click)="add(goodsOwner)">

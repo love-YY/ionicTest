@@ -56,6 +56,11 @@
           客户:{{srch.customerName}}
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col>
+          备注:{{srch.memo}}
+        </ion-col>
+      </ion-row>
       <ion-row [ngSwitch]="srch.orderStatus">
         <ion-col text-end *ngSwitchCase="'N'">
           <button ion-button small color="danger" (click)="deleteOrder(srch)">删除</button>

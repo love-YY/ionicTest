@@ -38,7 +38,7 @@
 
 
 <ion-content>
-  <form [formGroup]="createForm">
+  <form [formGroup]="createForm" class="cretaForm">
     <ion-list>
       <ion-item>
         <ion-label>订单类型</ion-label>
@@ -51,7 +51,7 @@
       </ion-item>
       <ion-item>
         <ion-label>客户</ion-label>
-        <ion-input placeholder="客户" formControlName="customerName" (ionChange)="customerChange($event)" clearInput="true"></ion-input>
+        <ion-input placeholder="客户" formControlName="customerName" (ionChange)="customerChange($event)"></ion-input>
         <ion-note item-end style="color: #f00;" *ngIf="createForm.get('customerId').dirty&&createForm.get('customerId').errors"><ion-icon name="alert"></ion-icon></ion-note>
         <button class="create-order-btn" ion-button  icon-only clear item-end (click)="chooseModal()" *ngIf="sale_order_type">
           <ion-icon name="arrow-forward"></ion-icon>

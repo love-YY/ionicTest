@@ -9,6 +9,7 @@ export class Api {
   /*internal net pre http://192.168.74.206*/
   /*external net pre http://58.57.13.149:8083/order-platform*/
   /*external net prod http://58.56.25.210:9080*/
+  /*external net change prod http://123.232.43.114:9080*/
   url: string = 'http://58.57.13.149:8083/order-platform';
 
   constructor(public http: HttpClient) {

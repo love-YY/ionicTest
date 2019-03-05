@@ -54,7 +54,22 @@ export class ChooseModalPage {
     });
   }
   add(goodsOwner:any){
-    this.viewCtrl.dismiss(goodsOwner);
+    this.api.post('app/order/placeorder/query/querycustomerdept',{
+      requestVo:{
+        cusstomerId:goodsOwner.customerId,
+        customerDeptCode:goodsOwner.customerCode
+      }
+    }).subscribe((res:any)=>{
+      console.log(res);
+      if(res.type=='SUCCESS'){
+        let code = {...goodsOwner,...res.data[0]};
+        console.log(code);
+        this.viewCtrl.dismiss(code);
+      }else{
+        console.log(res);
+      }
+    });
+    // this.viewCtrl.dismiss(goodsOwner);
   }
   searchCoustomer(){
     this.downScroll.enable(true);
